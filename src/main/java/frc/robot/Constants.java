@@ -13,7 +13,29 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+  public static final class Gamepads {
+    public static final int DRIVER = 0;
+    // public static final int OPERATOR = 1;
   }
+
+  public static final class CAN {
+    public static final int LEFT_DRIVE_MOTOR_1 = 1;
+    public static final int LEFT_DRIVE_MOTOR_2 = 2;
+    public static final int RIGHT_DRIVE_MOTOR_1 = 3;
+    public static final int RIGHT_DRIVE_MOTOR_2 = 4;
+  }
+
+  public static final class Digital {
+    public static final int[] LEFT_DRIVE_ENCODER = {0,1};
+    public static final int[] RIGHT_DRIVE_ENCODER = {2,3};
+  }
+
+  public static final class Drive {
+    public final static double ENCODER_PULSES_PER_REVOLUTION = 360;
+    public final static double WHEEL_DIAMETER = 6;
+    public final static double DISTANCE_PER_ENCODER_PULSE = WHEEL_DIAMETER * Math.PI / ENCODER_PULSES_PER_REVOLUTION;
+
+    public final static boolean LEFT_DRIVE_INVERTED = false;
+    public final static boolean RIGHT_DRIVE_INVERTED = true;
+}
 }
