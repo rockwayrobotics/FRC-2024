@@ -29,6 +29,7 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(Gamepads.DRIVER);
+  private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
 
   private final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
 
@@ -63,8 +64,11 @@ public class RobotContainer {
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    // Controller buttons
+    // Drive Controller buttons
     m_driverController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+
+    // Operator Controller buttons
+    m_operatorController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /**
