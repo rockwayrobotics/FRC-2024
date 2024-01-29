@@ -5,9 +5,16 @@
 package frc.robot;
 
 import frc.robot.Constants.*;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
+
+import java.util.Map;
+
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -26,17 +33,34 @@ import frc.robot.commands.*;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final MotorSubsystem m_MotorSubsystem = new MotorSubsystem(); 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(Gamepads.DRIVER);
   private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
 
   private final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
+  
+  ShuffleboardTab motors = Shuffleboard.getTab("Motors");
+
+    GenericEntry talonSpeed =
+      motors.add("Talon Speed", 0)
+      .withWidget(BuiltInWidgets.kNumberSlider)
+      .withProperties(Map.of("min", -1, "max", 1)) // specify widget properties here
+      .getEntry();
+
+    GenericEntry sparkSpeed =
+      motors.add("Spark Speed", 0)
+      .withWidget(BuiltInWidgets.kNumberSlider)
+      .withProperties(Map.of("min", -1, "max", 1)) // specify widget properties here
+      .getEntry();
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
     // Configure the trigger bindings
 
     m_drivebase
@@ -66,6 +90,11 @@ public class RobotContainer {
 
     // Drive Controller buttons
     m_driverController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_driverController.x().whileTrue(new RepeatCommand(new InstantCommand(() -> m_MotorSubsystem.setTalonSpeed(talonSpeed.getDouble(0)))));
+    m_driverController.y().whileTrue(new RepeatCommand(new InstantCommand(() -> m_MotorSubsystem.setSparkSpeed(sparkSpeed.getDouble(0)))));
+    m_driverController.x().whileFalse(new InstantCommand(() -> m_MotorSubsystem.setTalonSpeed(0)));
+    m_driverController.y().whileFalse(new InstantCommand(() -> m_MotorSubsystem.setSparkSpeed(0)));
+
 
     // Operator Controller buttons
     m_operatorController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
