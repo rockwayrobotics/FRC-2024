@@ -45,16 +45,16 @@ public class LedSubsystem extends SubsystemBase {
   }
 
   private void one_spaced() {
-    var i = 0;
-    while (i < m_ledBuffer.getLength()) {
-      if (i % 2 == 0) {
-        m_ledBuffer.setRGB(i, 0, 0, 128);
-        i += 1;
-      } else {
-        m_ledBuffer.setRGB(i, 0, 128, 0);
-        i += 1;
-      }
-    }
+    // var i = 0;
+    // while (i < m_ledBuffer.getLength()) {
+    //   if (i % 2 == 0) {
+    //     m_ledBuffer.setRGB(i, 0, 0, 128);
+    //     i += 1;
+    //   } else {
+    //     m_ledBuffer.setRGB(i, 0, 128, 0);
+    //     i += 1;
+    //   }
+    // }
   }
 
   // private int counta = 0;
