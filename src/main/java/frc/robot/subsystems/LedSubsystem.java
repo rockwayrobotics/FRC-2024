@@ -99,7 +99,7 @@ public class LedSubsystem extends SubsystemBase {
       m_led.setData(m_ledBuffer);
     }
     m_previous_mode = m_mode;
-
+    // Written by enoch (I take the blame)
     if (m_mode == modes.oneSpace) {
       for (int i = 0; i < m_ledBuffer.getLength(); i = i + 1) {
         m_ledBuffer.setRGB(i, 0, 0, 0);
