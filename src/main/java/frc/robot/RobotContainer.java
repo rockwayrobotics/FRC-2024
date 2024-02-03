@@ -34,13 +34,13 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final MotorSubsystem m_MotorSubsystem = new MotorSubsystem(); 
-  private final ColourSensorSubsystem m_ColourSensorSubsystem = new ColourSensorSubsystem();
+  private final LimitswitchSubsystem m_LimitswitchSubsystem = new LimitswitchSubsystem(); 
+  private final ColourSensorSubsystem m_ColourSensorSubsystem = new ColourSensorSubsystem(); 
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(Gamepads.DRIVER);
   private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
-
-  private final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
   
   ShuffleboardTab motors = Shuffleboard.getTab("Motors");
 
@@ -55,16 +55,13 @@ public class RobotContainer {
       .withWidget(BuiltInWidgets.kNumberSlider)
       .withProperties(Map.of("min", -1, "max", 1)) // specify widget properties here
       .getEntry();
-
+  
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
 
     // Configure the trigger bindings
-
-    m_drivebase
-        .setDefaultCommand(new DriveCommand(m_driverController::getLeftY, m_driverController::getRightX, m_drivebase));
 
     configureBindings();
   }

@@ -9,6 +9,7 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 //import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -26,14 +27,8 @@ public class ColourSensorSubsystem extends SubsystemBase {
   
   private final ColorMatch m_colourMatcher = new ColorMatch();
 
-  //DigitalInput m_limitswitch;
-  //DigitalInput m_colourmark;
-
   ShuffleboardTab colours = Shuffleboard.getTab("Colours");
   
-  //When this isn't commented out it works here
-  // ShuffleboardTab digital = Shuffleboard.getTab("Digital :(");
-
     GenericEntry redValue =
       colours.add("Amount Of Red", 0)
          .getEntry();
@@ -58,23 +53,10 @@ public class ColourSensorSubsystem extends SubsystemBase {
       colours.add("Colour","nah man")
       .getEntry();
 
-  /** When this isn't commented out it works
-   
-    GenericEntry limitswitchValue =
-      digital.add("Limitswitch ;3", 0)
-         .getEntry();
-
-    GenericEntry colourmarkValue = 
-      digital.add("Colourmark :3",0)
-      .getEntry();
-    */
 
   /** Creates a new ColourSensorSubsystem. */
   public ColourSensorSubsystem() {
     m_colourSensor = new ColorSensorV3(Constants.I2C.COLOUR_SENSOR);
-
-    //m_limitswitch = new DigitalInput(Constants.Digital.LIMITSWITCH);
-    //m_colourmark = new DigitalInput(Constants.Digital.COLOURMARK);
 
     m_colourMatcher.addColorMatch(kBlueTarget);
     m_colourMatcher.addColorMatch(kGreenTarget);
@@ -84,8 +66,6 @@ public class ColourSensorSubsystem extends SubsystemBase {
 
   // This method will be called once per scheduler run
   public void periodic() {
-    //limitswitchValue.setBoolean(m_limitswitch.get());
-    //colourmarkValue.setBoolean(m_colourmark.get()); 
 
     Color detectedColour = m_colourSensor.getColor();
     double IR = m_colourSensor.getIR();
