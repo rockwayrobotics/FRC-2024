@@ -35,8 +35,11 @@ public final class Constants {
 
   // Constants for digitals pins on the roboRIO 
   public static final class Digital {
-    public static final int[] LEFT_DRIVE_ENCODER = { 0, 1 };
-    public static final int[] RIGHT_DRIVE_ENCODER = { 2, 3 };
+    public static final int[] LEFT_DRIVE_ENCODER = { 2, 3 };
+    public static final int[] RIGHT_DRIVE_ENCODER = { 4, 5 };
+
+    public static final int LIMITSWITCH = 0; 
+    public static final int COLOURMARK = 1; 
   }
 
   // Constants for the Drivebase/Robot Driving 
@@ -48,6 +51,7 @@ public final class Constants {
     public final static boolean LEFT_DRIVE_INVERTED = false;
     public final static boolean RIGHT_DRIVE_INVERTED = true;
   }
+
    // Constants for I2C ports
   public static final class I2C {
     public static final edu.wpi.first.wpilibj.I2C.Port COLOUR_SENSOR = edu.wpi.first.wpilibj.I2C.Port.kOnboard;
