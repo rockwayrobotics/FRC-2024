@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.*;
+import frc.robot.Constants.LED.modes;
 
 import java.util.Map;
 
@@ -35,7 +36,8 @@ public class RobotContainer {
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final MotorSubsystem m_MotorSubsystem = new MotorSubsystem(); 
   private final LimitswitchSubsystem m_LimitswitchSubsystem = new LimitswitchSubsystem(); 
-  private final ColourSensorSubsystem m_ColourSensorSubsystem = new ColourSensorSubsystem(); 
+  private final ColourSensorSubsystem m_ColourSensorSubsystem = new ColourSensorSubsystem();
+  private final LedSubsystem m_LedSubsystem = new LedSubsystem();  
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -87,10 +89,18 @@ public class RobotContainer {
 
     // Drive Controller buttons
     m_driverController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+
     m_driverController.x().whileTrue(new RepeatCommand(new InstantCommand(() -> m_MotorSubsystem.setTalonSpeed(talonSpeed.getDouble(0)))));
     m_driverController.y().whileTrue(new RepeatCommand(new InstantCommand(() -> m_MotorSubsystem.setSparkSpeed(sparkSpeed.getDouble(0)))));
     m_driverController.x().whileFalse(new InstantCommand(() -> m_MotorSubsystem.setTalonSpeed(0)));
     m_driverController.y().whileFalse(new InstantCommand(() -> m_MotorSubsystem.setSparkSpeed(0)));
+
+    m_driverController.a().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.Green)));
+    m_driverController.b().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.Blue)));
+    m_driverController.rightBumper().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.singleRedDot)));
+    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.oneSpace)));
+
+
 
 
     // Operator Controller buttons

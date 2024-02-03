@@ -27,10 +27,6 @@ public final class Constants {
   public static final class CAN {
     public static final int TALON_MOTOR = 1;
     public static final int SPARK_MOTOR = 2;
-    public static final int LEFT_DRIVE_MOTOR_1 = 3;
-    public static final int LEFT_DRIVE_MOTOR_2 = 4;
-    public static final int RIGHT_DRIVE_MOTOR_1 = 5;
-    public static final int RIGHT_DRIVE_MOTOR_2 = 6;
   }
 
   // Constants for digitals pins on the roboRIO 
@@ -56,4 +52,17 @@ public final class Constants {
   public static final class I2C {
     public static final edu.wpi.first.wpilibj.I2C.Port COLOUR_SENSOR = edu.wpi.first.wpilibj.I2C.Port.kOnboard;
   }
+
+  // Constants for LEDs 
+  public static final class LED {
+    public final static int LED_PWM = 0;
+    public final static int LED_LENGTH = 10;
+
+    public static enum modes {
+      Green,
+      Blue,
+      oneSpace,
+      singleRedDot
+    }
+}
 }
