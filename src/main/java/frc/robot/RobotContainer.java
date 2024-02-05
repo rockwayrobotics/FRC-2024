@@ -97,7 +97,6 @@ public class RobotContainer {
 
     m_driverController.a().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.Green)));
     m_driverController.b().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.Blue)));
-    m_driverController.rightBumper().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.singleRedDot)));
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.oneSpace)));
 
 

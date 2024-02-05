@@ -62,7 +62,6 @@ public final class Constants {
       Green,
       Blue,
       oneSpace,
-      singleRedDot
     }
 }
 }
