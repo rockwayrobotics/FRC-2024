@@ -43,20 +43,8 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(Gamepads.DRIVER);
   private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
-  
-  ShuffleboardTab motors = Shuffleboard.getTab("Motors");
-
-    GenericEntry talonSpeed =
-      motors.add("Talon Speed", 0)
-      .withWidget(BuiltInWidgets.kNumberSlider)
-      .withProperties(Map.of("min", -1, "max", 1)) // specify widget properties here
-      .getEntry();
-
-    GenericEntry sparkSpeed =
-      motors.add("Spark Speed", 0)
-      .withWidget(BuiltInWidgets.kNumberSlider)
-      .withProperties(Map.of("min", -1, "max", 1)) // specify widget properties here
-      .getEntry();
+      
+    
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -90,8 +78,8 @@ public class RobotContainer {
     // Drive Controller buttons
     m_driverController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
-    m_driverController.x().whileTrue(new RepeatCommand(new InstantCommand(() -> m_MotorSubsystem.setTalonSpeed(talonSpeed.getDouble(0)))));
-    m_driverController.y().whileTrue(new RepeatCommand(new InstantCommand(() -> m_MotorSubsystem.setSparkSpeed(sparkSpeed.getDouble(0)))));
+    m_driverController.x().whileTrue(new RepeatCommand(new InstantCommand(() -> m_MotorSubsystem.setTalonSpeed(m_MotorSubsystem.talonSpeed.getDouble(0)))));
+    m_driverController.y().whileTrue(new RepeatCommand(new InstantCommand(() -> m_MotorSubsystem.setSparkSpeed(m_MotorSubsystem.sparkSpeed.getDouble(0)))));
     m_driverController.x().whileFalse(new InstantCommand(() -> m_MotorSubsystem.setTalonSpeed(0)));
     m_driverController.y().whileFalse(new InstantCommand(() -> m_MotorSubsystem.setSparkSpeed(0)));
 
