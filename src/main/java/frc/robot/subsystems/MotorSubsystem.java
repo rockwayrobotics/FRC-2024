@@ -68,13 +68,11 @@ public class MotorSubsystem extends SubsystemBase{
   public void setTalonSpeed(double speed) {
     // Set the motor speed using the Talon SRX
     m_talon.set(TalonSRXControlMode.PercentOutput, speed); 
-    System.out.println("setting speed to " + String.valueOf(speed));
   }
 
   public void setSparkSpeed(double speed) {
     // Set the motor speed using the Spark MAX
     m_spark.set(speed); 
-    System.out.println("setting speed to " + String.valueOf(speed));
   }
 
 
