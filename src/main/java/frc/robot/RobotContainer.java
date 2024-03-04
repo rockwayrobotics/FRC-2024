@@ -67,6 +67,8 @@ public class RobotContainer {
     m_driverController.povUp().whileTrue(new ClimberCommand(m_climber, 0.5));
     m_driverController.povDown().whileTrue(new ClimberCommand(m_climber, -0.5));
 
+    m_driverController.a().whileTrue(new ShooterFlywheel(m_shooter, 0.5));
+
     // Operator Controller buttons
     m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(Constants.Shooter.ScoringMode.SPEAKER)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow))));
     m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(Constants.Shooter.ScoringMode.AMP)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow))));
@@ -74,6 +76,7 @@ public class RobotContainer {
     m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));
 
     m_operatorController.leftBumper().whileTrue(new ShooterAngle(m_shooter, 0.5));
+
   }
 
   /**
