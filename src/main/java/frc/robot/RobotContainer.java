@@ -32,6 +32,7 @@ public class RobotContainer {
   private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
 
   private final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
+  private final ClimberSubsystem m_climber = new ClimberSubsystem(); 
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.

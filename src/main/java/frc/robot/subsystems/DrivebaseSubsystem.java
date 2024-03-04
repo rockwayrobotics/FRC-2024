@@ -11,10 +11,10 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class DrivebaseSubsystem extends SubsystemBase {
 
-  CANSparkMax m_leftDriveMotor1;
-  CANSparkMax m_leftDriveMotor2;
-  CANSparkMax m_rightDriveMotor1;
-  CANSparkMax m_rightDriveMotor2;
+  CANSparkMax m_leftDriveMotorF;
+  CANSparkMax m_leftDriveMotorR;
+  CANSparkMax m_rightDriveMotorF;
+  CANSparkMax m_rightDriveMotorR;
 
   private final DifferentialDrive m_drive;
 
@@ -24,28 +24,28 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private double m_scale = 1;
 
   public DrivebaseSubsystem() {
-    m_leftDriveMotor1 = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_1, MotorType.kBrushless);
-    m_leftDriveMotor1.restoreFactoryDefaults();
-    m_leftDriveMotor1.setSmartCurrentLimit(38);
+    m_leftDriveMotorF = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_F, MotorType.kBrushless);
+    m_leftDriveMotorF.restoreFactoryDefaults();
+    m_leftDriveMotorF.setSmartCurrentLimit(38);
 
-    m_leftDriveMotor2 = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_2, MotorType.kBrushless);
-    m_leftDriveMotor2.restoreFactoryDefaults();
-    m_leftDriveMotor2.setSmartCurrentLimit(38);
+    m_leftDriveMotorR = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_R, MotorType.kBrushless);
+    m_leftDriveMotorR.restoreFactoryDefaults();
+    m_leftDriveMotorR.setSmartCurrentLimit(38);
 
-    m_rightDriveMotor1 = new CANSparkMax(Constants.CAN.RIGHT_DRIVE_MOTOR_1, MotorType.kBrushless);
-    m_rightDriveMotor1.restoreFactoryDefaults();
-    m_rightDriveMotor1.setSmartCurrentLimit(38);
+    m_rightDriveMotorF = new CANSparkMax(Constants.CAN.RIGHT_DRIVE_MOTOR_F, MotorType.kBrushless);
+    m_rightDriveMotorF.restoreFactoryDefaults();
+    m_rightDriveMotorF.setSmartCurrentLimit(38);
 
-    m_rightDriveMotor2 = new CANSparkMax(Constants.CAN.RIGHT_DRIVE_MOTOR_2, MotorType.kBrushless);
-    m_rightDriveMotor2.restoreFactoryDefaults();
-    m_rightDriveMotor2.setSmartCurrentLimit(38);
+    m_rightDriveMotorR = new CANSparkMax(Constants.CAN.RIGHT_DRIVE_MOTOR_R, MotorType.kBrushless);
+    m_rightDriveMotorR.restoreFactoryDefaults();
+    m_rightDriveMotorR.setSmartCurrentLimit(38);
 
-    m_leftDriveMotor2.follow(m_leftDriveMotor1);
-    m_leftDriveMotor1.setInverted(Constants.Drive.LEFT_DRIVE_INVERTED);
-    m_rightDriveMotor2.follow(m_rightDriveMotor2);
-    m_rightDriveMotor1.setInverted(Constants.Drive.RIGHT_DRIVE_INVERTED);
+    m_leftDriveMotorR.follow(m_leftDriveMotorF);
+    m_leftDriveMotorF.setInverted(Constants.Drive.LEFT_DRIVE_INVERTED);
+    m_rightDriveMotorR.follow(m_rightDriveMotorF);
+    m_rightDriveMotorF.setInverted(Constants.Drive.RIGHT_DRIVE_INVERTED);
 
-    m_drive = new DifferentialDrive(m_leftDriveMotor1, m_rightDriveMotor1);
+    m_drive = new DifferentialDrive(m_leftDriveMotorF, m_rightDriveMotorF);
 
     setDrivebaseIdle(IdleMode.kBrake);
     m_leftDriveEncoder = new Encoder(Constants.Digital.LEFT_DRIVE_ENCODER[0],
@@ -64,10 +64,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void setDrivebaseIdle(IdleMode setting) {
-    m_rightDriveMotor1.setIdleMode(setting);
-    m_rightDriveMotor2.setIdleMode(setting);
-    m_leftDriveMotor1.setIdleMode(setting);
-    m_leftDriveMotor2.setIdleMode(setting);
+    m_rightDriveMotorF.setIdleMode(setting);
+    m_rightDriveMotorR.setIdleMode(setting);
+    m_leftDriveMotorF.setIdleMode(setting);
+    m_leftDriveMotorR.setIdleMode(setting);
   }
 
   public void stop() {
