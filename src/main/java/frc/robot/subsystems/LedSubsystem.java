@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.LED;
 import frc.robot.Constants.LED.modes;
 
 import edu.wpi.first.wpilibj.Filesystem;
@@ -12,7 +11,6 @@ import edu.wpi.first.wpilibj.Filesystem;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -123,7 +121,6 @@ public class LedSubsystem extends SubsystemBase{
       m_ledBuffer.setRGB(i, r, g, b);
     }
 
-    m_led.setData(m_ledBuffer);
     if (++row >= image.getHeight()){
       row = 0; 
     }
