@@ -35,6 +35,7 @@ public class RobotContainer {
   private final ClimberSubsystem m_climber = new ClimberSubsystem(Constants.CAN.CLIMB);
   private final LedSubsystem m_led = new LedSubsystem();
   private final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.GEAR, Constants.CAN.LEFT_FLYWHEEL, Constants.CAN.RIGHT_FLYWHEEL);
+  private final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.CAN.BELT, Constants.CAN.LEFT_INTAKE, Constants.CAN.RIGHT_INTAKE);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -64,10 +65,12 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Driver Controller buttons
-    m_driverController.povUp().whileTrue(new ClimberCommand(m_climber, 0.5));
-    m_driverController.povDown().whileTrue(new ClimberCommand(m_climber, -0.5));
+    m_driverController.povUp().whileTrue(new ClimberCommand(m_climber, 0.2));
+    m_driverController.povDown().whileTrue(new ClimberCommand(m_climber, -0.2));
 
-    m_driverController.a().whileTrue(new ShooterFlywheel(m_shooter, 0.5));
+    m_driverController.a().whileTrue(new ShooterFlywheel(m_shooter, 0.4));
+    m_driverController.b().whileTrue(new InstantCommand(() -> m_intake.setBelt(0.2)));
+    m_driverController.x().whileTrue(new InstantCommand(() -> m_intake.setIntake(0.2)));
 
     // Operator Controller buttons
     m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(Constants.Shooter.ScoringMode.SPEAKER)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow))));
@@ -75,7 +78,7 @@ public class RobotContainer {
     m_operatorController.x().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow)));
     m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));
 
-    m_operatorController.leftBumper().whileTrue(new ShooterAngle(m_shooter, 0.5));
+    m_operatorController.leftBumper().whileTrue(new ShooterAngle(m_shooter, 0.2));
 
   }
 

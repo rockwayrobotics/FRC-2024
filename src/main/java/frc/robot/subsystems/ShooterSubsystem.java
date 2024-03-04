@@ -17,8 +17,8 @@ import frc.robot.Constants.Shooter.ScoringMode;
 
 public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax m_angleMotor;
-  private final CANSparkMax m_flywheelLeft;
-  private final CANSparkMax m_flywheelRight;
+  private final CANSparkMax m_leftFlywheel;
+  private final CANSparkMax m_rightFlywheel;
 
   RelativeEncoder m_angleEncoder;
 
@@ -31,14 +31,15 @@ public class ShooterSubsystem extends SubsystemBase {
   
 
   /** Creates a new HookSubsystem. */
-  public ShooterSubsystem(int angleMotor, int flywheelLeft, int flywheelRight) {
+  public ShooterSubsystem(int angleMotor, int leftFlywheel, int rightFlywheel) {
     m_angleMotor = new CANSparkMax(Constants.CAN.GEAR, MotorType.kBrushless);
-    m_flywheelLeft = new CANSparkMax(Constants.CAN.LEFT_FLYWHEEL, MotorType.kBrushless);
-    m_flywheelRight = new CANSparkMax(Constants.CAN.RIGHT_FLYWHEEL, MotorType.kBrushless);
+    m_leftFlywheel = new CANSparkMax(Constants.CAN.LEFT_FLYWHEEL, MotorType.kBrushless);
+    m_rightFlywheel = new CANSparkMax(Constants.CAN.RIGHT_FLYWHEEL, MotorType.kBrushless);
     m_angleMotor.setIdleMode(IdleMode.kBrake);
-    m_flywheelLeft.setIdleMode(IdleMode.kCoast);
-    m_flywheelRight.setIdleMode(IdleMode.kCoast);
+    m_leftFlywheel.setIdleMode(IdleMode.kCoast);
+    m_rightFlywheel.setIdleMode(IdleMode.kCoast);
 
+    m_rightFlywheel.follow(m_leftFlywheel, true);
     m_angleEncoder = m_angleMotor.getEncoder();
 
     ShuffleboardTab dashboardTab = Shuffleboard.getTab("Dashboard");
@@ -48,8 +49,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setFlywheels(double m_pow) {
-    m_flywheelLeft.set(m_pow);
-    m_flywheelRight.set(-m_pow);
+    m_leftFlywheel.set(m_pow);
   }
 
   public void spinAngleMotor(double speed) {
