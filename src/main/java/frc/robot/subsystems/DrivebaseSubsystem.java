@@ -81,4 +81,26 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public void setScale(double scale) {
     m_scale = scale;
   }
+
+  /**
+   * Gets the distance travelled by the left-side wheels of the drivebase since last reset.
+   * @return Distance, in inches.
+   */
+  public double getLDistance() {
+    return m_leftDriveEncoder.getDistance();
+  }
+
+  /**
+   * Gets the distance travelled by the right-side wheels of the drivebase since last reset.
+   * @return Distance in inches.
+   */
+  public double getRDistance() {
+    return m_rightDriveEncoder.getDistance();
+  }
+
+  /** Resets drivebase encoder distances to 0. */
+  public void resetEncoders() {
+    m_leftDriveEncoder.reset();
+    m_rightDriveEncoder.reset();
+  }
 }
