@@ -27,12 +27,12 @@ public final class Constants {
     public static final int LEFT_DRIVE_MOTOR_F = 2;
     public static final int RIGHT_DRIVE_MOTOR_R = 3;
     public static final int RIGHT_DRIVE_MOTOR_F = 4;
-    public static final int LEFT_INTAKE = 5;
-    public static final int RIGHT_INTAKE = 6;
-    public static final int BELT = 7; 
-    public static final int GEAR = 8; 
-    public static final int LEFT_FLYWHEEL = 9;
-    public static final int RIGHT_FLYWHEEL = 10;
+    public static final int LEFT_INTAKE = 5; // brushed
+    public static final int RIGHT_INTAKE = 6; // brushed one opposite direction
+    public static final int BELT = 7; // indexer
+    public static final int GEAR = 8; // angle
+    public static final int LEFT_FLYWHEEL = 9; // negative on one flywheel?
+    public static final int RIGHT_FLYWHEEL = 10; // negative on one flywheel?
     public static final int CLIMB = 11; 
   }
 
