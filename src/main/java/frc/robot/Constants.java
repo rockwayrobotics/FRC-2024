@@ -23,10 +23,17 @@ public final class Constants {
   }
 
   public static final class CAN {
-    public static final int LEFT_DRIVE_MOTOR_1 = 1;
-    public static final int LEFT_DRIVE_MOTOR_2 = 2;
-    public static final int RIGHT_DRIVE_MOTOR_1 = 3;
-    public static final int RIGHT_DRIVE_MOTOR_2 = 4;
+    public static final int LEFT_DRIVE_MOTOR_R = 1;
+    public static final int LEFT_DRIVE_MOTOR_F = 2;
+    public static final int RIGHT_DRIVE_MOTOR_R = 3;
+    public static final int RIGHT_DRIVE_MOTOR_F = 4;
+    public static final int LEFT_INTAKE = 5;
+    public static final int RIGHT_INTAKE = 6;
+    public static final int BELT = 7; 
+    public static final int GEAR = 8; 
+    public static final int LEFT_FLYWHEEL = 9;
+    public static final int RIGHT_FLYWHEEL = 10;
+    public static final int CLIMB = 11; 
   }
 
   public static final class Digital {
