@@ -5,9 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.*;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -32,7 +31,8 @@ public class RobotContainer {
   private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
 
   private final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
-  private final ClimberSubsystem m_climber = new ClimberSubsystem(Constants.CAN.CLIMB); 
+  private final ClimberSubsystem m_climber = new ClimberSubsystem(Constants.CAN.CLIMB);
+  private final LedSubsystem m_led = new LedSubsystem();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -69,7 +69,10 @@ public class RobotContainer {
     m_driverController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
 
     // Operator Controller buttons
-    m_operatorController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_operatorController.a().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Blue)));
+    m_operatorController.b().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
+    m_operatorController.x().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow)));
+    m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));
     m_driverController.povUp().whileTrue(new ClimberCommand(m_climber, 0.5));
     m_driverController.povDown().whileTrue(new ClimberCommand(m_climber, -0.5));
   }

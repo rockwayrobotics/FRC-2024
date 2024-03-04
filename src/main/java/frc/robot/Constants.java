@@ -49,4 +49,25 @@ public final class Constants {
     public final static boolean LEFT_DRIVE_INVERTED = false;
     public final static boolean RIGHT_DRIVE_INVERTED = true;
   }
+
+  // Constants for LEDs 
+  public static final class LED {
+    public final static int LED_PWM = 0;
+    public final static int LED_LENGTH = 30;
+
+    public static enum modes {
+      Rainbow,
+      Red, 
+      Green,
+      Blue,
+      Purple,
+      Orange,
+      Yellow,
+      BreathingYellow,
+      BreathingMagenta,
+      badApple,
+      heatGradient,
+      imageLoop,
+    }
+  }
 }
