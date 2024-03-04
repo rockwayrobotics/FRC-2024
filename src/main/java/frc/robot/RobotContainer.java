@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.*;
+import frc.robot.Constants.Shooter.ScoringMode;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -33,6 +34,7 @@ public class RobotContainer {
   private final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem(Constants.CAN.CLIMB);
   private final LedSubsystem m_led = new LedSubsystem();
+  private final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.GEAR, Constants.CAN.LEFT_FLYWHEEL, Constants.CAN.RIGHT_FLYWHEEL);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -61,20 +63,17 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Drive Controller buttons
-    m_driverController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-
-    // Operator Controller buttons
-    m_operatorController.a().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Blue)));
-    m_operatorController.b().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
-    m_operatorController.x().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow)));
-    m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));
+    // Driver Controller buttons
     m_driverController.povUp().whileTrue(new ClimberCommand(m_climber, 0.5));
     m_driverController.povDown().whileTrue(new ClimberCommand(m_climber, -0.5));
+
+    // Operator Controller buttons
+    m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(Constants.Shooter.ScoringMode.SPEAKER)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow))));
+    m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(Constants.Shooter.ScoringMode.AMP)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow))));
+    m_operatorController.x().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow)));
+    m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));
+
+    m_operatorController.leftBumper().whileTrue(new ShooterAngle(m_shooter, 0.5));
   }
 
   /**

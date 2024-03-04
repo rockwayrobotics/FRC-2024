@@ -70,4 +70,11 @@ public final class Constants {
       imageLoop,
     }
   }
+
+  public static final class Shooter {
+    public static enum ScoringMode {
+      SPEAKER,
+      AMP,
+    }
+  }
 }
