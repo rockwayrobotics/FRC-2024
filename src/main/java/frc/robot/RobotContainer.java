@@ -70,6 +70,8 @@ public class RobotContainer {
 
     // Operator Controller buttons
     m_operatorController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_driverController.povUp().whileTrue(new ClimberCommand(m_climber, 0.5));
+    m_driverController.povDown().whileTrue(new ClimberCommand(m_climber, -0.5));
   }
 
   /**

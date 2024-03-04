@@ -24,11 +24,13 @@ public class ClimberSubsystem extends SubsystemBase {
   /**
    * Extends the hook.
    */
-  public void extend(double extendPow) {
+  public void set(double extendPow) {
 
     // For some reason switch is reading inverse, false when pushed down and true when not pushed
 
-    // if(!m_topLimitSwitch.get()) {
+    // if(!m_topLimitSwitch.get() && extendPow > 0) {
+    //   m_pow = 0;
+    // } else if(!m_bottomLimitSwitch.get() && extendPow < 0) {
     //   m_pow = 0;
     // } else {
       m_pow = extendPow;
@@ -36,14 +38,10 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   /**
-   * Retracts the hook.
+   * Stops the hook.
    */
-  public void retract(double retractPow) {
-    // if(!m_bottomLimitSwitch.get()) {
-    //   m_pow = 0;
-    // } else {
-      m_pow = retractPow;
-    // }
+  public void stop() {
+    m_pow = 0; 
   }
 
   @Override
