@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
+
 import frc.robot.commands.autoSequences.*;
 
 import frc.robot.subsystems.*;
@@ -67,12 +69,12 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Driver Controller buttons
-    m_driverController.povUp().whileTrue(new ClimberCommand(m_climber, 0.2));
-    m_driverController.povDown().whileTrue(new ClimberCommand(m_climber, -0.2));
+    m_driverController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.2))));
+    m_driverController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.2))));
 
-    m_driverController.a().whileTrue(new ShooterFlywheel(m_shooter, 0.4));
-    m_driverController.b().whileTrue(new InstantCommand(() -> m_intake.setBelt(0.2)));
-    m_driverController.x().whileTrue(new InstantCommand(() -> m_intake.setIntake(0.2)));
+    m_driverController.a().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(0.4))));
+    m_driverController.b().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.2))));
+    m_driverController.x().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setIntake(0.2))));
 
     // Operator Controller buttons
     m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(Constants.Shooter.ScoringMode.SPEAKER)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow))));

@@ -49,6 +49,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setFlywheels(double m_pow) {
+    System.out.println("Flywheels: " + m_pow);
     m_leftFlywheel.set(m_pow);
   }
 
@@ -56,6 +57,7 @@ public class ShooterSubsystem extends SubsystemBase {
     // if (bottomShooterLimitPressed && Math.abs(speed) < 0){
     //   m_angleMotor.set(0);
     // } else {
+      System.out.println("Angle: " + speed);
       m_angleMotor.set(speed);
     // }
   }
