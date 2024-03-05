@@ -33,6 +33,8 @@ public class LedSubsystem extends SubsystemBase{
   public LedSubsystem(){
     m_led = new AddressableLED(Constants.LED.LED_PWM);
     m_ledBuffer = new AddressableLEDBuffer(Constants.LED.LED_LENGTH);
+
+    m_mode = modes.Rainbow;
     
     m_led.setLength(m_ledBuffer.getLength());
     m_led.setData(m_ledBuffer);
