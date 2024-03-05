@@ -48,6 +48,8 @@ public final class Constants {
 
     public final static boolean LEFT_DRIVE_INVERTED = true;
     public final static boolean RIGHT_DRIVE_INVERTED = false;
+
+    public final static double rotation_kP = 0.3;
   }
 
   // Constants for LEDs 
