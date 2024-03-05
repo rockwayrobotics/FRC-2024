@@ -44,8 +44,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     ShuffleboardTab dashboardTab = Shuffleboard.getTab("Dashboard");
 
-    speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(2,2).getEntry();
-    ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(3,2).getEntry();
+    speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(0,0).getEntry();
+    ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0,0).getEntry();
   }
 
   public void setFlywheels(double m_pow) {

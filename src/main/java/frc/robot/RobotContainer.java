@@ -6,6 +6,9 @@ package frc.robot;
 
 import frc.robot.Constants.*;
 import frc.robot.Constants.Shooter.ScoringMode;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -17,6 +20,11 @@ import frc.robot.commands.autoSequences.*;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
+
+enum AutoOption {
+  JustMoveForward,
+  ThisWillCrashTheRobot,
+}
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -38,11 +46,18 @@ public class RobotContainer {
   private final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.GEAR, Constants.CAN.LEFT_FLYWHEEL, Constants.CAN.RIGHT_FLYWHEEL);
   private final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.CAN.BELT, Constants.CAN.LEFT_INTAKE, Constants.CAN.RIGHT_INTAKE);
 
+  SendableChooser<AutoOption> m_autoChooser = new SendableChooser<>();
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    ShuffleboardTab dashboard = Shuffleboard.getTab("Dashboard");
     // Configure the trigger bindings
+
+    m_autoChooser.setDefaultOption("Just Forwards", AutoOption.JustMoveForward);
+    m_autoChooser.addOption("This option will crash the robot", AutoOption.ThisWillCrashTheRobot);
+    dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
 
     m_drivebase
         .setDefaultCommand(new DriveCommand(m_driverController::getLeftY, m_driverController::getRightX, m_drivebase));
@@ -94,7 +109,10 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return new driveForward(m_drivebase);
+    // The selected command will be run in autonomous
+    return switch (m_autoChooser.getSelected()) {
+      case JustMoveForward -> new driveForward(m_drivebase);
+      case ThisWillCrashTheRobot -> new driveForward(m_drivebase);
+    };
   }
 }
