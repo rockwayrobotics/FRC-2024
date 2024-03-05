@@ -46,8 +46,8 @@ public final class Constants {
     public final static double WHEEL_DIAMETER = 6;
     public final static double DISTANCE_PER_ENCODER_PULSE = WHEEL_DIAMETER * Math.PI / ENCODER_PULSES_PER_REVOLUTION;
 
-    public final static boolean LEFT_DRIVE_INVERTED = false;
-    public final static boolean RIGHT_DRIVE_INVERTED = true;
+    public final static boolean LEFT_DRIVE_INVERTED = true;
+    public final static boolean RIGHT_DRIVE_INVERTED = false;
   }
 
   // Constants for LEDs 
