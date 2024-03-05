@@ -28,9 +28,6 @@ import frc.robot.commands.*;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController = new CommandXboxController(Gamepads.DRIVER);
   private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
@@ -71,14 +68,19 @@ public class RobotContainer {
     // Driver Controller buttons
     m_driverController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.2))));
     m_driverController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.2))));
+    m_driverController.povCenter().whileTrue(new InstantCommand(() -> m_climber.setClimber(0)));
+
 
     m_driverController.a().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(0.4))));
     m_driverController.b().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.2))));
     m_driverController.x().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setIntake(0.2))));
+    m_driverController.a().whileFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+    m_driverController.b().whileFalse(new InstantCommand(() -> m_intake.setBelt(0)));
+    m_driverController.x().whileFalse(new InstantCommand(() -> m_intake.setIntake(0)));
 
     // Operator Controller buttons
-    m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(Constants.Shooter.ScoringMode.SPEAKER)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow))));
-    m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(Constants.Shooter.ScoringMode.AMP)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow))));
+    m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.SPEAKER)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow))));
+    m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.AMP)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow))));
     m_operatorController.x().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow)));
     m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));
 
