@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -18,8 +19,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   private final DifferentialDrive m_drive;
 
-  private final Encoder m_leftDriveEncoder;
-  private final Encoder m_rightDriveEncoder;
+  RelativeEncoder m_leftDriveEncoder;
+  RelativeEncoder m_rightDriveEncoder;
 
   private double m_scale = 1;
 
@@ -48,19 +49,14 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_drive = new DifferentialDrive(m_leftDriveMotorF, m_rightDriveMotorF);
 
     setDrivebaseIdle(IdleMode.kBrake);
-    m_leftDriveEncoder = new Encoder(Constants.Digital.LEFT_DRIVE_ENCODER[0],
-        Constants.Digital.LEFT_DRIVE_ENCODER[1]);
-    m_rightDriveEncoder = new Encoder(Constants.Digital.RIGHT_DRIVE_ENCODER[0],
-        Constants.Digital.RIGHT_DRIVE_ENCODER[1]);
+    m_leftDriveEncoder = m_leftDriveMotorF.getEncoder();
+    m_rightDriveEncoder = m_rightDriveMotorF.getEncoder();
     // when robot goes forward, left encoder spins positive and right encoder spins
     // negative
-    m_leftDriveEncoder.setDistancePerPulse(Constants.Drive.DISTANCE_PER_ENCODER_PULSE);
-    m_rightDriveEncoder.setDistancePerPulse(Constants.Drive.DISTANCE_PER_ENCODER_PULSE);
-    m_leftDriveEncoder.setReverseDirection(Constants.Drive.LEFT_DRIVE_INVERTED);
-    m_rightDriveEncoder.setReverseDirection(Constants.Drive.RIGHT_DRIVE_INVERTED);
-    m_leftDriveEncoder.reset();
-    m_rightDriveEncoder.reset();
-
+    m_leftDriveEncoder.setPositionConversionFactor(Constants.Drive.DISTANCE_PER_ENCODER_PULSE);
+    m_rightDriveEncoder.setPositionConversionFactor(Constants.Drive.DISTANCE_PER_ENCODER_PULSE);
+    m_leftDriveEncoder.setPosition(0);
+    m_rightDriveEncoder.setPosition(0);
   }
 
   public void setDrivebaseIdle(IdleMode setting) {
@@ -87,7 +83,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
    * @return Distance, in inches.
    */
   public double getLDistance() {
-    return m_leftDriveEncoder.getDistance();
+    return m_leftDriveEncoder.getPosition();
   }
 
   /**
@@ -95,12 +91,12 @@ public class DrivebaseSubsystem extends SubsystemBase {
    * @return Distance in inches.
    */
   public double getRDistance() {
-    return m_rightDriveEncoder.getDistance();
+    return m_rightDriveEncoder.getPosition();
   }
 
   /** Resets drivebase encoder distances to 0. */
   public void resetEncoders() {
-    m_leftDriveEncoder.reset();
-    m_rightDriveEncoder.reset();
+    m_leftDriveEncoder.setPosition(0);
+    m_rightDriveEncoder.setPosition(0);
   }
 }
