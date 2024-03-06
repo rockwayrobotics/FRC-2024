@@ -40,6 +40,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_leftFlywheel.setInverted(true);
     m_rightFlywheel.setIdleMode(IdleMode.kCoast);
 
+    m_leftFlywheel.setSmartCurrentLimit(40);
+    m_rightFlywheel.setSmartCurrentLimit(40);
+
 
     m_rightFlywheel.follow(m_leftFlywheel, true);
     m_angleEncoder = m_angleMotor.getEncoder();
