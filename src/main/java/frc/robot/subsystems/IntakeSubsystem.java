@@ -19,6 +19,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_leftIntake = new CANSparkMax(leftIntake, CANSparkMax.MotorType.kBrushed);
     m_rightIntake = new CANSparkMax(rightIntake, CANSparkMax.MotorType.kBrushed);
     m_beltMotor.setIdleMode(IdleMode.kBrake);
+    m_beltMotor.setInverted(true);
     m_leftIntake.setIdleMode(IdleMode.kCoast);
     m_rightIntake.setIdleMode(IdleMode.kCoast);
 

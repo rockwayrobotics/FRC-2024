@@ -37,7 +37,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_rightFlywheel = new CANSparkMax(Constants.CAN.RIGHT_FLYWHEEL, MotorType.kBrushless);
     m_angleMotor.setIdleMode(IdleMode.kBrake);
     m_leftFlywheel.setIdleMode(IdleMode.kCoast);
+    m_leftFlywheel.setInverted(true);
     m_rightFlywheel.setIdleMode(IdleMode.kCoast);
+
 
     m_rightFlywheel.follow(m_leftFlywheel, true);
     m_angleEncoder = m_angleMotor.getEncoder();
