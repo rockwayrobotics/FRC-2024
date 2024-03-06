@@ -87,13 +87,12 @@ public class RobotContainer {
     m_driverController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
 
-    m_driverController.a().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(1)))); 
+    m_driverController.a().whileTrue(new ShootSequence(m_shooter, m_intake)); 
     m_driverController.b().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.5))));
-    m_driverController.rightBumper().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(-0.5))));
+    m_driverController.rightBumper().whileTrue(new LoadShooterSequence(m_shooter, m_intake));
     m_driverController.x().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setIntake(0.2))));
     m_driverController.a().whileFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
     m_driverController.b().whileFalse(new InstantCommand(() -> m_intake.setBelt(0)));
-    m_driverController.rightBumper().whileFalse(new InstantCommand(() -> m_intake.setBelt(0)));
     m_driverController.x().whileFalse(new InstantCommand(() -> m_intake.setIntake(0)));
 
     // Operator Controller buttons
