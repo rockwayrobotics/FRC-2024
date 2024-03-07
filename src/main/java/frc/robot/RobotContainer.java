@@ -88,12 +88,12 @@ public class RobotContainer {
 
 
     m_driverController.a().whileTrue(new ShootSequence(m_shooter, m_intake)); 
-    m_driverController.b().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.5))));
+    m_driverController.b().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.5)).andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))));
     m_driverController.rightBumper().whileTrue(new LoadShooterSequence(m_shooter, m_intake));
-    m_driverController.x().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setIntake(0.2))));
+    //m_driverController.x().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setIntake(0.2))));
     m_driverController.a().whileFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
-    m_driverController.b().whileFalse(new InstantCommand(() -> m_intake.setBelt(0)));
-    m_driverController.x().whileFalse(new InstantCommand(() -> m_intake.setIntake(0)));
+    m_driverController.b().whileFalse(new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0)))));
+    //m_driverController.x().whileFalse(new InstantCommand(() -> m_intake.setIntake(0)));
 
     // Operator Controller buttons
     m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.SPEAKER)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow))));
