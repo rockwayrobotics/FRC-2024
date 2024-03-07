@@ -22,8 +22,8 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.*;
 
 enum AutoOption {
-  JustMoveForward,
-  ThisWillCrashTheRobot,
+  driveForward,
+  shootMove,
 }
 
 /**
@@ -55,8 +55,8 @@ public class RobotContainer {
     ShuffleboardTab dashboard = Shuffleboard.getTab("Dashboard");
     // Configure the trigger bindings
 
-    m_autoChooser.setDefaultOption("Just Forwards", AutoOption.JustMoveForward);
-    m_autoChooser.addOption("This option will crash the robot", AutoOption.ThisWillCrashTheRobot);
+    m_autoChooser.setDefaultOption("Just Forwards", AutoOption.driveForward);
+    m_autoChooser.addOption("Shoot Then Forwards", AutoOption.shootMove);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
 
     m_drivebase
@@ -114,8 +114,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // The selected command will be run in autonomous
     return switch (m_autoChooser.getSelected()) {
-      case JustMoveForward -> new driveForward(m_drivebase);
-      case ThisWillCrashTheRobot -> new driveForward(m_drivebase);
+      case driveForward -> new driveForward(m_drivebase);
+      case shootMove -> new driveForward(m_drivebase);
     };
   }
 }
