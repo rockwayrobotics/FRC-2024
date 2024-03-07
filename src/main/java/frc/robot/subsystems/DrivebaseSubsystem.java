@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -23,6 +24,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   RelativeEncoder m_leftDriveEncoder;
   RelativeEncoder m_rightDriveEncoder;
+
+  SlewRateLimiter filter = new SlewRateLimiter(0);
 
   private double m_scale = 1;
 
@@ -53,6 +56,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveMotorF.setInverted(Constants.Drive.RIGHT_DRIVE_INVERTED);
 
     m_drive = new DifferentialDrive(m_leftDriveMotorF, m_rightDriveMotorF);
+    
 
     setDrivebaseIdle(IdleMode.kCoast);
     m_leftDriveEncoder = m_leftDriveMotorF.getEncoder();
@@ -77,6 +81,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void set(double speed, double rotation) {
+   // speed = filter.calculate(speed);
     m_drive.curvatureDrive(speed * m_scale, rotation * m_scale, true);
   }
 

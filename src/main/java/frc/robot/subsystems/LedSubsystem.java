@@ -23,7 +23,7 @@ public class LedSubsystem extends SubsystemBase{
   private int counter = 0; 
   private int row = 0;
   
-  private int m_pacer = 3;
+  private int m_pacer = 1;
   private modes m_mode;
 
   private int m_rainbowFirstPixelHue;
