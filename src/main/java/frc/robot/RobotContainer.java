@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.Constants.*;
 import frc.robot.Constants.Shooter.ScoringMode;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -49,13 +50,18 @@ public class RobotContainer {
       Constants.CAN.RIGHT_INTAKE);
 
   SendableChooser<AutoOption> m_autoChooser = new SendableChooser<>();
+    
+  ShuffleboardTab dashboard = Shuffleboard.getTab("Dashboard");
+    // Configure the trigger bindings
 
+    GenericEntry waittime =
+      dashboard.add("Time After Shoot to Wait (Seconds)", 0)
+         .getEntry();
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    ShuffleboardTab dashboard = Shuffleboard.getTab("Dashboard");
-    // Configure the trigger bindings
+
 
     m_autoChooser.setDefaultOption("Just Forwards", AutoOption.driveForward);
     m_autoChooser.addOption("Shoot Then Forwards", AutoOption.shootMove);
@@ -131,7 +137,7 @@ public class RobotContainer {
 
     m_operatorController.a().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
     m_operatorController.a().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
-    
+
     // TODO: angle STUFF HERE :3 
 
 
@@ -153,7 +159,7 @@ public class RobotContainer {
     // The selected command will be run in autonomous
     return switch (m_autoChooser.getSelected()) {
       case driveForward -> new driveForward(m_drivebase);
-      case shootMove -> new shootMove(m_drivebase, m_shooter, m_intake);
+      case shootMove -> new shootMove(m_drivebase, m_shooter, m_intake, waittime.getDouble(0));
     };
   }
 }

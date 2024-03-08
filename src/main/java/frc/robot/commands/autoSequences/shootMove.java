@@ -15,6 +15,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
+
 import java.util.Map;
 
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -31,12 +32,6 @@ public class shootMove extends SequentialCommandGroup {
     IntakeSubsystem m_intake;
     LedSubsystem m_led;
 
-    ShuffleboardTab dashboard = Shuffleboard.getTab("Dashboard");
-
-    private GenericEntry waittime =
-      dashboard.add("Time After Shoot to Wait (Seconds)", 0)
-         .getEntry();
-
     public void setStatusWidget(SimpleWidget AutoFailedWidget, FailFastTimeoutGroup sequence) {
         if(sequence.timedOut()) {
             AutoFailedWidget.withProperties(Map.of("colorWhenFalse", "red"));
@@ -45,7 +40,7 @@ public class shootMove extends SequentialCommandGroup {
         }
     }
 
-    public shootMove(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake){
+    public shootMove(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, double waittime){
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_intake = intake;
@@ -56,9 +51,9 @@ public class shootMove extends SequentialCommandGroup {
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new InstantCommand(() -> m_intake.setBelt(0.5)))
-                .then(new WaitCommand(waittime.getDouble(0)))
+                .then(new WaitCommand(3.5))
                 .then(new ShootSequenceFull(m_shooter, m_intake))
-                .then(new WaitCommand(0.7))
+                .then(new WaitCommand(waittime))
                 .thenWithTimeout(new DriveDistance(drivebase, -0.3, 2), 10)
                 .then(new WaitCommand(1))
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
