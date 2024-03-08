@@ -86,14 +86,39 @@ public class RobotContainer {
     m_driverController.povUp().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
     m_driverController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
+    m_driverController.leftBumper().onTrue(
+      new InstantCommand(() -> m_drivebase.setScale(0.5))
+      .andThen(new InstantCommand(() -> m_shooter.setFlywheelsScale(0.5))
+      ));
+
     m_driverController.rightBumper().onTrue(new ShootSequence(m_shooter, m_intake)); 
+
     m_driverController.b().onTrue(new LoadShooterSequence(m_shooter, m_intake));
-    m_driverController.a().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.7)).andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))));
-    m_driverController.x().whileTrue(new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(-0.7)).andThen(new InstantCommand(() -> m_intake.setIntake(-0.2)))));
+
+    m_driverController.a().whileTrue(
+      new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.7))
+      .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))
+      ));
+
+    m_driverController.x().whileTrue(
+      new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(-0.7))
+      .andThen(new InstantCommand(() -> m_intake.setIntake(-0.2)))
+      ));
+
+    m_driverController.y().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(1))));
+
+
     // m_driverController.a().whileFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+
+    m_driverController.leftBumper().onFalse(
+      new InstantCommand(() -> m_drivebase.setScale(1))
+      .andThen(new InstantCommand(() -> m_shooter.setFlywheelsScale(1))
+      ));
+
     m_driverController.b().onFalse(new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
     m_driverController.x().onFalse(new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
-
+    m_driverController.y().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+    
     //m_driverController.rightBumper().whileFalse(new LoadShooterSequence(m_shooter, m_intake));
     //m_driverController.x().whileFalse(new InstantCommand(() -> m_intake.setIntake(0)));
 

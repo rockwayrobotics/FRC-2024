@@ -27,6 +27,8 @@ public class ShooterSubsystem extends SubsystemBase {
   GenericEntry speakerAngleWidget;
   GenericEntry ampAngleWidget;
 
+  private double m_scale = 1;
+
   public ScoringMode m_ScoringMode = ScoringMode.SPEAKER;
   
 
@@ -53,9 +55,13 @@ public class ShooterSubsystem extends SubsystemBase {
     ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0,0).getEntry();
   }
 
+  public void setFlywheelsScale(double scale) {
+    m_scale = scale;
+  }
+
   public void setFlywheels(double m_pow) {
-    System.out.println("Flywheels: " + m_pow);
-    m_leftFlywheel.set(m_pow);
+    //System.out.println("Flywheels: " + m_pow);
+    m_leftFlywheel.set(m_pow * m_scale);
   }
 
   public void spinAngleMotor(double speed) {
