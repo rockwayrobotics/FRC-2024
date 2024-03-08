@@ -41,9 +41,10 @@ public class shootMove extends SequentialCommandGroup {
         addRequirements(m_drivebase, m_shooter, m_intake);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
+                .then(new DriveDistance(drivebase, 0.5, 2))
                 .then(new ShootSequenceFull(m_shooter, m_intake))
                 .then(new WaitCommand(0.7))
-                .thenWithTimeout(new DriveDistance(drivebase, 0.2, 80), 10);
+                .thenWithTimeout(new DriveDistance(drivebase, -0.5, 80), 10);
 
 
         this.addCommands(sequence);
