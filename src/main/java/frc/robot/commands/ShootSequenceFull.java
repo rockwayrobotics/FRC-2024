@@ -16,7 +16,7 @@ public class ShootSequenceFull extends SequentialCommandGroup {
     addRequirements(m_shooter, m_intake);
 
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(1)));
-    this.addCommands(new WaitCommand(0.5));
+    this.addCommands(new WaitCommand(1));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0.5)));
     this.addCommands(new WaitCommand(1));
 
