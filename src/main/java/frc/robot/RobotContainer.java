@@ -83,8 +83,8 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Driver Controller buttons
-    m_driverController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.2))));
-    m_driverController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.2))));
+    m_driverController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
+    m_driverController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.5))));
     m_driverController.povUp().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
     m_driverController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
