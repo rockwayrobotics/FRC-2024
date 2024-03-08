@@ -148,7 +148,7 @@ public class RobotContainer {
     // The selected command will be run in autonomous
     return switch (m_autoChooser.getSelected()) {
       case driveForward -> new driveForward(m_drivebase);
-      case shootMove -> new driveForward(m_drivebase);
+      case shootMove -> new shootMove(m_drivebase, m_shooter);
     };
   }
 }

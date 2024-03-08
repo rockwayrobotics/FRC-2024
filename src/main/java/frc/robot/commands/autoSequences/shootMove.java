@@ -33,8 +33,11 @@ public class shootMove extends SequentialCommandGroup {
         }
     }
 
-    public shootMove(DrivebaseSubsystem drivebase) {
+    public shootMove(DrivebaseSubsystem drivebase, ShooterSubsystem shooter) {
         m_drivebase = drivebase;
+        m_shooter = shooter;
+
+        addRequirements(m_drivebase, m_shooter);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new ShootSequenceFull(m_shooter, m_intake))

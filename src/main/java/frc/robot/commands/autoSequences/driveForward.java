@@ -37,6 +37,8 @@ public class driveForward extends SequentialCommandGroup {
 
   public driveForward(DrivebaseSubsystem drivebase) {
     m_drivebase = drivebase;
+    
+    addRequirements(m_drivebase);
 
     FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
         .thenWithTimeout(new DriveDistance(drivebase, 0.2, 80), 10);
