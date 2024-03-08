@@ -100,9 +100,9 @@ public class RobotContainer {
     //m_driverController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.5))));
     //m_driverController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
-    m_driverController.a().onTrue(new ShootSequenceHalf(m_shooter, m_intake));
+    m_driverController.a().onTrue(new ShootSequenceHalf(m_shooter, m_intake, m_led));
 
-    m_driverController.y().onTrue(new ShootSequenceFull(m_shooter, m_intake));
+    m_driverController.y().onTrue(new ShootSequenceFull(m_shooter, m_intake, m_led));
 
     m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake));
 

@@ -3,18 +3,25 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShootSequenceFull extends SequentialCommandGroup {
   ShooterSubsystem m_shooter;
   IntakeSubsystem m_intake;
+  LedSubsystem m_led; 
 
-  public ShootSequenceFull(ShooterSubsystem shooter, IntakeSubsystem intake) {
+
+  public ShootSequenceFull(ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led) {
     m_shooter = shooter;
     m_intake = intake;
-    addRequirements(m_shooter, m_intake);
+    m_led = led;
 
+    addRequirements(m_shooter, m_intake, m_led);
+
+    this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Yellow)));
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(1)));
     this.addCommands(new WaitCommand(1));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0.5)));
@@ -22,5 +29,6 @@ public class ShootSequenceFull extends SequentialCommandGroup {
 
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+    this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
   }
 }
