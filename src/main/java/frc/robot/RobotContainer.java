@@ -116,27 +116,15 @@ public class RobotContainer {
     m_driverController.rightTrigger().onFalse(
         new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
 
-
-    // m_driverController.x().onFalse(new InstantCommand(() ->
-    // m_intake.setBelt(0)).andThen(new InstantCommand(() ->
-    // m_intake.setIntake(0))));
-    // m_driverController.y().onFalse(new InstantCommand(() ->
-    // m_shooter.setFlywheels(0)));
-
-    // m_driverController.rightBumper().whileFalse(new
-    // LoadShooterSequence(m_shooter, m_intake));
-    // m_driverController.x().whileFalse(new InstantCommand(() ->
-    // m_intake.setIntake(0)));
-
     // Operator Controller buttons
-    m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.SPEAKER))
-        .andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow))));
-    m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.AMP))
-        .andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow))));
-    m_operatorController.x().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow)));
-    m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));
+    // m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.SPEAKER))
+    //     .andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow))));
+    // m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.AMP))
+    //     .andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow))));
+    // m_operatorController.x().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow)));
+    // m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));;
 
-    m_operatorController.leftBumper().whileTrue(new ShooterAngle(m_shooter, 0.2));
+    m_operatorController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake));
   }
 
   /**
