@@ -6,17 +6,17 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShootSequence extends SequentialCommandGroup{
+public class ShootSequenceHalf extends SequentialCommandGroup{
   ShooterSubsystem m_shooter;
   IntakeSubsystem m_intake; 
 
-  public ShootSequence(ShooterSubsystem shooter, IntakeSubsystem intake) {
+  public ShootSequenceHalf(ShooterSubsystem shooter, IntakeSubsystem intake) {
     m_shooter = shooter;
     m_intake = intake;
     addRequirements(m_shooter, m_intake);
 
   
-    this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(1)));
+    this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(0.5)));
     this.addCommands(new WaitCommand(0.5));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0.5)));
     this.addCommands(new WaitCommand(1));
