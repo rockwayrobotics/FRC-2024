@@ -96,7 +96,7 @@ public class RobotContainer {
 
     m_driverController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake));
 
-    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(0.5)));
+    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(0.25)));
     m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
 
     m_driverController.leftTrigger().whileTrue(new InstantCommand(() -> m_drivebase.set(0.5,0)));
