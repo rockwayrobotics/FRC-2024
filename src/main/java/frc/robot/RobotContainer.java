@@ -63,8 +63,14 @@ public class RobotContainer {
     // This is a more compact way of doing two actions only on button down then up.
     m_dCtrl.button(3).whileTrue(Commands
       .startEnd(
-        () -> m_motors.setSparkSpeed(0.1),
-        () -> m_motors.setSparkSpeed(0.0), 
+        () -> {
+          System.out.println("cmd 3: on");
+          m_motors.setSparkSpeed(0.1);
+        },
+        () -> {
+          System.out.println("cmd 3: off");
+          m_motors.setSparkSpeed(0.0);
+        },
         m_motors)
     );
 
@@ -80,16 +86,16 @@ public class RobotContainer {
         m_motors.setSparkSpeed(0.0);
         m_motors.setTalonSpeed(0.1);
       }),
-      Commands.print("cmd 2: slower"),
+      Commands.print("cmd 4: slower"),
       Commands.waitSeconds(1.0),
       Commands.runOnce(() -> m_motors.setTalonSpeed(0.1)),
-      Commands.print("cmd 2: just talon"),
+      Commands.print("cmd 4: just talon"),
       Commands.waitSeconds(1.0),
       Commands.runOnce(() -> m_motors.setTalonSpeed(0.0)),
-      Commands.print("cmd 2: paused"),
+      Commands.print("cmd 4: paused"),
       Commands.waitSeconds(1.0)
     ).finallyDo(() -> {
-      System.out.println("cmd 2: cleanup");
+      System.out.println("cmd 4: cleanup");
       m_motors.setTalonSpeed(0.0); 
       m_motors.setSparkSpeed(0.0);
     })
