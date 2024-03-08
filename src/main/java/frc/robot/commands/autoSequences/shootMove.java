@@ -1,5 +1,8 @@
 package frc.robot.commands.autoSequences;
 
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -28,9 +31,11 @@ public class shootMove extends SequentialCommandGroup {
     IntakeSubsystem m_intake;
     LedSubsystem m_led;
 
-    double waittime = 0; 
+    ShuffleboardTab dashboard = Shuffleboard.getTab("Dashboard");
 
-    
+    private GenericEntry waittime =
+      dashboard.add("Time After Shoot to Wait (Seconds)", 0)
+         .getEntry();
 
     public void setStatusWidget(SimpleWidget AutoFailedWidget, FailFastTimeoutGroup sequence) {
         if(sequence.timedOut()) {
@@ -51,7 +56,7 @@ public class shootMove extends SequentialCommandGroup {
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new InstantCommand(() -> m_intake.setBelt(0.5)))
-                .then(new WaitCommand(waittime))
+                .then(new WaitCommand(waittime.getDouble(0)))
                 .then(new ShootSequenceFull(m_shooter, m_intake))
                 .then(new WaitCommand(0.7))
                 .thenWithTimeout(new DriveDistance(drivebase, -0.3, 2), 10)
