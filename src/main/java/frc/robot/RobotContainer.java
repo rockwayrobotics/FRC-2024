@@ -83,11 +83,11 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Driver Controller buttons
-    m_driverController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
-    m_driverController.povUp().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
+    //m_driverController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
+    //m_driverController.povUp().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
-    m_driverController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.5))));
-    m_driverController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
+    //m_driverController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.5))));
+    //m_driverController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
     m_driverController.a().onTrue(new ShootSequenceHalf(m_shooter, m_intake));
 
@@ -105,7 +105,7 @@ public class RobotContainer {
 
     m_driverController.start().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
     m_driverController.start().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
-    
+
     m_driverController.rightBumper().whileTrue(
         new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.7))
             .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))));
@@ -123,6 +123,13 @@ public class RobotContainer {
     // m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));;
 
     m_operatorController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake));
+
+    m_operatorController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
+    m_operatorController.povUp().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
+
+    m_operatorController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.5))));
+    m_operatorController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
+
   }
 
   /**
