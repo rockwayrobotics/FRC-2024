@@ -1,6 +1,7 @@
 package frc.robot.commands.autoSequences;
 
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriveDistance;
@@ -12,6 +13,8 @@ import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 import java.util.Map;
+
+import com.revrobotics.CANSparkBase.IdleMode;
 
 
 /** Autonomously shoots the piece loaded in auto, and drives outside the short side of the community
@@ -38,16 +41,19 @@ public class shootMove extends SequentialCommandGroup {
         m_shooter = shooter;
         m_intake = intake;
 
+        m_drivebase.setDrivebaseIdle(IdleMode.kBrake);
+
         addRequirements(m_drivebase, m_shooter, m_intake);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
-                .then(new DriveDistance(drivebase, 0.5, 0.1))
+                .then(new DriveDistance(drivebase, 0.3, 0.1))
                 .then(new DriveDistance(drivebase, -0.5, 0.1))
                 .then(new WaitCommand(0.5))
                 .then(new ShootSequenceFull(m_shooter, m_intake))
                 .then(new WaitCommand(0.7))
-                .thenWithTimeout(new DriveDistance(drivebase, -0.5, 80), 10);
-
+                .thenWithTimeout(new DriveDistance(drivebase, -0.3, 2), 10)
+                .then(new WaitCommand(1))
+                .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
 
         this.addCommands(sequence);
     }
