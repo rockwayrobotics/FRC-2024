@@ -46,8 +46,8 @@ public class shootMove extends SequentialCommandGroup {
         addRequirements(m_drivebase, m_shooter, m_intake);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
-                .then(new DriveDistance(drivebase, 0.3, 0.1))
-                .then(new WaitCommand(0.5))
+                .then(new InstantCommand(() -> m_intake.setBelt(0.5)))
+                .then(new WaitCommand(2))
                 .then(new ShootSequenceFull(m_shooter, m_intake))
                 .then(new WaitCommand(0.7))
                 .thenWithTimeout(new DriveDistance(drivebase, -0.3, 2), 10)
