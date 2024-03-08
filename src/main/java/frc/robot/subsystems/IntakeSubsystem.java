@@ -13,7 +13,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
   RelativeEncoder m_beltEncoder;
 
-
   public IntakeSubsystem(int beltMotor, int leftIntake, int rightIntake) {
     m_beltMotor = new CANSparkMax(beltMotor, CANSparkMax.MotorType.kBrushless);
     m_leftIntake = new CANSparkMax(leftIntake, CANSparkMax.MotorType.kBrushed);
@@ -28,12 +27,12 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void setBelt(double m_pow) {
-    //System.out.println("Belt: " + m_pow);
+    // System.out.println("Belt: " + m_pow);
     m_beltMotor.set(m_pow);
   }
 
   public void setIntake(double m_pow) {
-    //System.out.println("Intake: " + m_pow);
+    // System.out.println("Intake: " + m_pow);
     m_leftIntake.set(m_pow);
   }
 }

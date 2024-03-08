@@ -30,7 +30,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private double m_scale = 1;
 
   public ScoringMode m_ScoringMode = ScoringMode.SPEAKER;
-  
 
   /** Creates a new HookSubsystem. */
   public ShooterSubsystem(int angleMotor, int leftFlywheel, int rightFlywheel) {
@@ -45,14 +44,13 @@ public class ShooterSubsystem extends SubsystemBase {
     m_leftFlywheel.setSmartCurrentLimit(40);
     m_rightFlywheel.setSmartCurrentLimit(40);
 
-
     m_rightFlywheel.follow(m_leftFlywheel, true);
     m_angleEncoder = m_angleMotor.getEncoder();
 
     ShuffleboardTab dashboardTab = Shuffleboard.getTab("Dashboard");
 
-    speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(0,0).getEntry();
-    ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0,0).getEntry();
+    speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(0, 0).getEntry();
+    ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0, 0).getEntry();
   }
 
   public void setFlywheelsScale(double scale) {
@@ -60,16 +58,16 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setFlywheels(double m_pow) {
-    //System.out.println("Flywheels: " + m_pow);
+    // System.out.println("Flywheels: " + m_pow);
     m_leftFlywheel.set(m_pow * m_scale);
   }
 
   public void spinAngleMotor(double speed) {
     // if (bottomShooterLimitPressed && Math.abs(speed) < 0){
-    //   m_angleMotor.set(0);
+    // m_angleMotor.set(0);
     // } else {
-      System.out.println("Angle: " + speed);
-      m_angleMotor.set(speed);
+    System.out.println("Angle: " + speed);
+    m_angleMotor.set(speed);
     // }
   }
 

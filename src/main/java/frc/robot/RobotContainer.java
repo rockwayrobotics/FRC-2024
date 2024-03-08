@@ -43,8 +43,10 @@ public class RobotContainer {
   private final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem(Constants.CAN.CLIMB);
   private final LedSubsystem m_led = new LedSubsystem();
-  private final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.GEAR, Constants.CAN.LEFT_FLYWHEEL, Constants.CAN.RIGHT_FLYWHEEL);
-  private final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.CAN.BELT, Constants.CAN.LEFT_INTAKE, Constants.CAN.RIGHT_INTAKE);
+  private final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.GEAR, Constants.CAN.LEFT_FLYWHEEL,
+      Constants.CAN.RIGHT_FLYWHEEL);
+  private final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.CAN.BELT, Constants.CAN.LEFT_INTAKE,
+      Constants.CAN.RIGHT_INTAKE);
 
   SendableChooser<AutoOption> m_autoChooser = new SendableChooser<>();
 
@@ -86,10 +88,9 @@ public class RobotContainer {
     m_driverController.povUp().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
     m_driverController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
+    m_driverController.a().onTrue(new ShootSequenceHalf(m_shooter, m_intake));
 
-    m_driverController.a().onTrue(new ShootSequenceHalf(m_shooter, m_intake)); 
-
-    m_driverController.y().onTrue(new ShootSequenceFull(m_shooter, m_intake)); 
+    m_driverController.y().onTrue(new ShootSequenceFull(m_shooter, m_intake));
 
     m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake));
 
@@ -99,20 +100,27 @@ public class RobotContainer {
     m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
 
     m_driverController.rightBumper().whileTrue(
-      new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.7))
-      .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))
-      ));
-    
-    m_driverController.rightBumper().onFalse(new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
-    //m_driverController.x().onFalse(new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
-    // m_driverController.y().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+        new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.7))
+            .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))));
 
-    //m_driverController.rightBumper().whileFalse(new LoadShooterSequence(m_shooter, m_intake));
-    //m_driverController.x().whileFalse(new InstantCommand(() -> m_intake.setIntake(0)));
+    m_driverController.rightBumper().onFalse(
+        new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
+    // m_driverController.x().onFalse(new InstantCommand(() ->
+    // m_intake.setBelt(0)).andThen(new InstantCommand(() ->
+    // m_intake.setIntake(0))));
+    // m_driverController.y().onFalse(new InstantCommand(() ->
+    // m_shooter.setFlywheels(0)));
+
+    // m_driverController.rightBumper().whileFalse(new
+    // LoadShooterSequence(m_shooter, m_intake));
+    // m_driverController.x().whileFalse(new InstantCommand(() ->
+    // m_intake.setIntake(0)));
 
     // Operator Controller buttons
-    m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.SPEAKER)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow))));
-    m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.AMP)).andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow))));
+    m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.SPEAKER))
+        .andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow))));
+    m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.AMP))
+        .andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow))));
     m_operatorController.x().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow)));
     m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));
 

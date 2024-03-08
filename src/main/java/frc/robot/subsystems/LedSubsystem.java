@@ -14,15 +14,14 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-
-public class LedSubsystem extends SubsystemBase{
+public class LedSubsystem extends SubsystemBase {
 
   private AddressableLED m_led;
   private AddressableLEDBuffer m_ledBuffer;
 
-  private int counter = 0; 
+  private int counter = 0;
   private int row = 0;
-  
+
   private int m_pacer = 1;
   private modes m_mode;
 
@@ -30,18 +29,18 @@ public class LedSubsystem extends SubsystemBase{
 
   BufferedImage image;
 
-  public LedSubsystem(){
+  public LedSubsystem() {
     m_led = new AddressableLED(Constants.LED.LED_PWM);
     m_ledBuffer = new AddressableLEDBuffer(Constants.LED.LED_LENGTH);
 
     m_mode = modes.Rainbow;
-    
+
     m_led.setLength(m_ledBuffer.getLength());
     m_led.setData(m_ledBuffer);
     m_led.start();
   }
 
-  private double sin_wave(double val, int set_point){
+  private double sin_wave(double val, int set_point) {
     return Math.sin(Math.PI * 2 * val / 70) * 70 + set_point;
   }
 
@@ -98,7 +97,7 @@ public class LedSubsystem extends SubsystemBase{
 
   private void breathing_monochrome(int hue) {
     int sat = 0;
-    for (int i=0; i < m_ledBuffer.getLength(); i++){
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
       sat = (int) sin_wave((double) i + counter, 200);
       m_ledBuffer.setHSV(i, hue, 255, sat);
     }
@@ -117,14 +116,14 @@ public class LedSubsystem extends SubsystemBase{
   private void imageLoop() {
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
       int pixel = image.getRGB(i, row);
-      int r = (pixel >> 16) & 0xff; 
+      int r = (pixel >> 16) & 0xff;
       int g = (pixel >> 8) & 0xff;
-      int b = (pixel >> 0) & 0xff; 
+      int b = (pixel >> 0) & 0xff;
       m_ledBuffer.setRGB(i, r, g, b);
     }
 
-    if (++row >= image.getHeight()){
-      row = 0; 
+    if (++row >= image.getHeight()) {
+      row = 0;
     }
   }
 
@@ -135,52 +134,50 @@ public class LedSubsystem extends SubsystemBase{
   }
 
   @Override
-  public void periodic(){
+  public void periodic() {
     // This method will be called once per scheduler run
-    if (m_pacer == 3){
-      switch(m_mode) {
-          case Green:
-              green();
-              break;
-          case Red:
-              red();
-              break;
-          case Orange:
-              orange();
-              break;
-          case Blue:
-              blue();
-              break;
-          case Yellow:
-              yellow();
-              break;
-          case Purple:
-              purple();
-              break;
-          case BreathingYellow:
-            breathing_monochrome(30);
-            break;
-          case BreathingMagenta:
-            breathing_monochrome(150);
-            break;
-          case imageLoop:
-            imageLoop();
-            break;
-          case badApple:
-            imageLoad("images/badapple.png");
-            break;
-          case heatGradient:
-            imageLoad("images/heatgradient.png");
-            break;
-          default:
-              rainbow();
+    if (m_pacer == 3) {
+      switch (m_mode) {
+        case Green:
+          green();
+          break;
+        case Red:
+          red();
+          break;
+        case Orange:
+          orange();
+          break;
+        case Blue:
+          blue();
+          break;
+        case Yellow:
+          yellow();
+          break;
+        case Purple:
+          purple();
+          break;
+        case BreathingYellow:
+          breathing_monochrome(30);
+          break;
+        case BreathingMagenta:
+          breathing_monochrome(150);
+          break;
+        case imageLoop:
+          imageLoop();
+          break;
+        case badApple:
+          imageLoad("images/badapple.png");
+          break;
+        case heatGradient:
+          imageLoad("images/heatgradient.png");
+          break;
+        default:
+          rainbow();
       }
-    m_pacer = -1;
+      m_pacer = -1;
     }
     // Set the LEDs
     m_led.setData(m_ledBuffer);
     m_pacer++;
   }
 }
-
-  

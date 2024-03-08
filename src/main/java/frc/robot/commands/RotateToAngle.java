@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
 public class RotateToAngle extends Command {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DrivebaseSubsystem m_DrivebaseSubsystem;
 
   private final PIDController pid = new PIDController(Constants.Drive.rotation_kP, 0, 0);
@@ -24,7 +24,8 @@ public class RotateToAngle extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public RotateToAngle(DrivebaseSubsystem subsystem, double setpoint, double toleranceDegrees, double maxRotationPower) {
+  public RotateToAngle(DrivebaseSubsystem subsystem, double setpoint, double toleranceDegrees,
+      double maxRotationPower) {
     m_DrivebaseSubsystem = subsystem;
     addRequirements(subsystem);
 
@@ -43,8 +44,10 @@ public class RotateToAngle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // PID Returns a positive result when setpoint is higher than the measurement. This results in the drivetrain turning
-    // clockwise, which causes the yaw angle to decrease. Because we want a positive PID value to correspond to an 
+    // PID Returns a positive result when setpoint is higher than the measurement.
+    // This results in the drivetrain turning
+    // clockwise, which causes the yaw angle to decrease. Because we want a positive
+    // PID value to correspond to an
     // increase in yaw here, we invert the PID result.
     double drivePower = -pid.calculate(m_DrivebaseSubsystem.getYaw());
 
@@ -56,7 +59,7 @@ public class RotateToAngle extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if(interrupted) {
+    if (interrupted) {
       System.out.println("Cancelled when attempting to rotate to " + pid.getSetpoint() + " degrees");
     } else {
       System.out.println("Rotated to " + pid.getSetpoint() + " degrees");

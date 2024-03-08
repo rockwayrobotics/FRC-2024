@@ -33,7 +33,7 @@ public final class Constants {
     public static final int GEAR = 8; // angle
     public static final int LEFT_FLYWHEEL = 9; // negative on one flywheel?
     public static final int RIGHT_FLYWHEEL = 10; // negative on one flywheel?
-    public static final int CLIMB = 11; 
+    public static final int CLIMB = 11;
   }
 
   public static final class Digital {
@@ -52,14 +52,14 @@ public final class Constants {
     public final static double rotation_kP = 0.3;
   }
 
-  // Constants for LEDs 
+  // Constants for LEDs
   public static final class LED {
     public final static int LED_PWM = 0;
     public final static int LED_LENGTH = 30;
 
     public static enum modes {
       Rainbow,
-      Red, 
+      Red,
       Green,
       Blue,
       Purple,

@@ -56,7 +56,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveMotorF.setInverted(Constants.Drive.RIGHT_DRIVE_INVERTED);
 
     m_drive = new DifferentialDrive(m_leftDriveMotorF, m_rightDriveMotorF);
-    
 
     setDrivebaseIdle(IdleMode.kCoast);
     m_leftDriveEncoder = m_leftDriveMotorF.getEncoder();
@@ -81,7 +80,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void set(double speed, double rotation) {
-   // speed = filter.calculate(speed);
+    // speed = filter.calculate(speed);
     m_drive.curvatureDrive(speed * m_scale, rotation * m_scale, true);
   }
 
@@ -90,7 +89,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   /**
-   * Gets the distance travelled by the left-side wheels of the drivebase since last reset.
+   * Gets the distance travelled by the left-side wheels of the drivebase since
+   * last reset.
+   * 
    * @return Distance, in inches.
    */
   public double getLDistance() {
@@ -98,7 +99,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   /**
-   * Gets the distance travelled by the right-side wheels of the drivebase since last reset.
+   * Gets the distance travelled by the right-side wheels of the drivebase since
+   * last reset.
+   * 
    * @return Distance in inches.
    */
   public double getRDistance() {
@@ -109,18 +112,23 @@ public class DrivebaseSubsystem extends SubsystemBase {
     System.out.println("NavX Connected: " + m_gyro.isConnected());
     m_gyro.reset();
   }
+
   public void setAutoOffset(double autoOffset) {
     yawOffset = autoOffset;
   }
+
   public double getYaw() {
     return m_gyro.getYaw() + yawOffset;
   }
+
   public double getPitch() {
     return m_gyro.getPitch();
   }
+
   public double getRoll() {
     return m_gyro.getRoll();
   }
+
   public double getAngle() {
     return m_gyro.getAngle();
   }

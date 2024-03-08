@@ -11,15 +11,15 @@ public class ClimberSubsystem extends SubsystemBase {
   private final CANSparkMax m_climberMotor;
 
   /** Creates a new HookSubsystem. */
-  public ClimberSubsystem(int climberMotor /*, int topLimitSwitch, int bottomLimitSwitch*/) {
+  public ClimberSubsystem(int climberMotor /* , int topLimitSwitch, int bottomLimitSwitch */) {
     m_climberMotor = new CANSparkMax(climberMotor, MotorType.kBrushless);
     m_climberMotor.setIdleMode(IdleMode.kBrake);
     m_climberMotor.setInverted(true);
 
-    // m_topLimitSwitch =  new DigitalInput(topLimitSwitch);
+    // m_topLimitSwitch = new DigitalInput(topLimitSwitch);
     // m_bottomLimitSwitch = new DigitalInput(bottomLimitSwitch);
   }
-  
+
   /**
    * Extends the hook.
    */
