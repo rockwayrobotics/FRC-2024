@@ -81,6 +81,11 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+
+  private double RightAxis(){
+    return m_driverController.getRightX();
+  }
+
   private void configureBindings() {
     // Driver Controller buttons
     //m_driverController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
@@ -100,7 +105,8 @@ public class RobotContainer {
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(0.25)));
     m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
 
-    m_driverController.leftTrigger().whileTrue(new RepeatCommand(new InstantCommand(() -> m_drivebase.set(0.125,0))));
+
+    m_driverController.leftTrigger().whileTrue(new RepeatCommand(new InstantCommand(() -> m_drivebase.set(0.125, RightAxis()))));
     m_driverController.leftTrigger().onFalse(new InstantCommand(() -> m_drivebase.set(0,0)));
 
     m_driverController.start().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
