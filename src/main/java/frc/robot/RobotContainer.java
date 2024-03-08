@@ -82,9 +82,9 @@ public class RobotContainer {
    * joysticks}.
    */
 
-  private double RightAxis(){
-    return m_driverController.getRightX();
-  }
+  // private double RightAxis(){
+  //   return m_driverController.getRightX();
+  // }
 
   private void configureBindings() {
     // Driver Controller buttons
@@ -105,8 +105,7 @@ public class RobotContainer {
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(0.25)));
     m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
 
-
-    m_driverController.leftTrigger().whileTrue(new RepeatCommand(new InstantCommand(() -> m_drivebase.set(0.125, RightAxis()))));
+    m_driverController.leftTrigger().whileTrue(new RepeatCommand(new InstantCommand(() -> m_drivebase.set(0.125, m_driverController.getRightX()))));
     m_driverController.leftTrigger().onFalse(new InstantCommand(() -> m_drivebase.set(0,0)));
 
     m_driverController.start().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
