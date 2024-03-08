@@ -37,10 +37,11 @@ public class shootMove extends SequentialCommandGroup {
         }
     }
 
-    public shootMove(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, double waittime){
+    public shootMove(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double waittime){
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_intake = intake;
+        m_led = led; 
 
         m_drivebase.setDrivebaseIdle(IdleMode.kBrake);
 
@@ -49,7 +50,7 @@ public class shootMove extends SequentialCommandGroup {
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new InstantCommand(() -> m_intake.setBelt(0.5)))
                 .then(new WaitCommand(3.5))
-                .then(new ShootSequenceFull(m_shooter, m_intake))
+                .then(new ShootSequenceFull(m_shooter, m_intake, m_led))
                 .then(new WaitCommand(waittime))
                 .thenWithTimeout(new DriveDistance(drivebase, -0.3, 2), 10)
                 .then(new WaitCommand(1))
