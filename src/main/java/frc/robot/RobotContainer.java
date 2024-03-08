@@ -85,7 +85,7 @@ public class RobotContainer {
     // Driver Controller buttons
     m_driverController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
     m_driverController.povUp().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
-    
+
     m_driverController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.5))));
     m_driverController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
@@ -106,23 +106,17 @@ public class RobotContainer {
     m_driverController.rightBumper().whileTrue(
         new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.7))
             .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))));
-
     m_driverController.rightBumper().onFalse(
         new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
 
     m_driverController.rightTrigger().whileTrue(
         new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(-0.7))
             .andThen(new InstantCommand(() -> m_intake.setIntake(-0.2)))));
-
     m_driverController.rightTrigger().onFalse(
         new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
 
     // Operator Controller buttons
-    // m_operatorController.a().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.SPEAKER))
-    //     .andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow))));
-    // m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.AMP))
-    //     .andThen(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow))));
-    // m_operatorController.x().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingYellow)));
+    // example led
     // m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));;
 
     m_operatorController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake));
