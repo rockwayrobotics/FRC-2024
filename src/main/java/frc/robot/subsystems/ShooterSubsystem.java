@@ -24,6 +24,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double speakerAngleSetpoint;
   public double ampAngleSetpoint;
+  public double trapAngleSetpoint;
+  
   GenericEntry speakerAngleWidget;
   GenericEntry ampAngleWidget;
 
