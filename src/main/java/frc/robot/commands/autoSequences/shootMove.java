@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.FailFastTimeoutGroup;
-import frc.robot.commands.ShootSequenceHalf;
+import frc.robot.commands.ShootSequenceFull;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
@@ -37,7 +37,7 @@ public class shootMove extends SequentialCommandGroup {
         m_drivebase = drivebase;
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
-                .then(new ShootSequenceHalf(m_shooter, null))
+                .then(new ShootSequenceFull(m_shooter, m_intake))
                 .then(new WaitCommand(0.7))
                 .thenWithTimeout(new DriveDistance(drivebase, 0.2, 80), 10);
 
