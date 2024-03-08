@@ -135,12 +135,16 @@ public class RobotContainer {
 
     m_operatorController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake));
 
-    m_operatorController.a().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
-    m_operatorController.a().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+    m_operatorController.y().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
+    m_operatorController.y().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+
+    m_operatorController.a().whileTrue(
+        new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(-0.7))
+            .andThen(new InstantCommand(() -> m_intake.setIntake(-0.2)))));
+    m_operatorController.a().onFalse(
+        new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
 
     // TODO: angle STUFF HERE :3 
-
-
 
     m_operatorController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
     m_operatorController.povUp().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
