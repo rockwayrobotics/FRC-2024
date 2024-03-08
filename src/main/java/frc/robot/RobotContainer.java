@@ -99,6 +99,9 @@ public class RobotContainer {
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(0.5)));
     m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
 
+    m_driverController.leftTrigger().whileTrue(new InstantCommand(() -> m_drivebase.set(0.5,0)));
+    m_driverController.leftTrigger().onFalse(new InstantCommand(() -> m_drivebase.set(0,0)));
+
     m_driverController.rightBumper().whileTrue(
         new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.7))
             .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))));
