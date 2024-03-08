@@ -5,44 +5,26 @@
 package frc.robot;
 
 import frc.robot.Constants.*;
-import frc.robot.Constants.LED.modes;
 
-import java.util.Map;
-
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 
 import frc.robot.subsystems.*;
-import frc.robot.commands.*;
 
-/**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final MotorSubsystem m_MotorSubsystem = new MotorSubsystem(); 
-  private final LimitswitchSubsystem m_LimitswitchSubsystem = new LimitswitchSubsystem(); 
-  private final ColourSensorSubsystem m_ColourSensorSubsystem = new ColourSensorSubsystem();
-  private final LedSubsystem m_LedSubsystem = new LedSubsystem();  
+  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final MotorSubsystem m_motors = new MotorSubsystem(); 
+  // private final LimitswitchSubsystem m_LimitswitchSubsystem = new LimitswitchSubsystem(); 
+  // private final ColourSensorSubsystem m_ColourSensorSubsystem = new ColourSensorSubsystem();
+
+  // private final LedSubsystem m_LedSubsystem = new LedSubsystem();  
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController = new CommandXboxController(Gamepads.DRIVER);
-  private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
+  private final CommandGenericHID m_dCtrl = new CommandGenericHID(Gamepads.DRIVER);
+  // private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
       
     
   
@@ -56,51 +38,73 @@ public class RobotContainer {
     configureBindings();
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be
-   * created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-   * an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link
-   * CommandXboxController
-   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or
-   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+    // new Trigger(m_exampleSubsystem::exampleCondition)
+    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
 
-    // Drive Controller buttons
-    m_driverController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    m_dCtrl.button(1).onTrue(Commands.sequence(
+      Commands.runOnce(() -> m_motors.setSparkSpeed(0.1)),
+      Commands.print("cmd 1: run spark"),
+      Commands.waitSeconds(2.0),
+      Commands.runOnce(() -> m_motors.setSparkSpeed(0.0)),
+      Commands.print("cmd 1: done")
+    ));
+  
+    m_dCtrl.button(2).onTrue(Commands
+      .runOnce(() -> m_motors.setTalonSpeed(0.3), m_motors)
+      .andThen(Commands.print("cmd 2: on"))
+    );
+    m_dCtrl.button(2).onFalse(Commands
+      .runOnce(() -> m_motors.setTalonSpeed(0.0), m_motors)
+      .andThen(Commands.print("cmd 2: off"))
+    );
 
-    m_driverController.x().whileTrue(new RepeatCommand(new InstantCommand(() -> m_MotorSubsystem.setTalonSpeed(m_MotorSubsystem.talonSpeed.getDouble(0)))));
-    m_driverController.y().whileTrue(new RepeatCommand(new InstantCommand(() -> m_MotorSubsystem.setSparkSpeed(m_MotorSubsystem.sparkSpeed.getDouble(0)))));
-    m_driverController.x().whileFalse(new InstantCommand(() -> m_MotorSubsystem.setTalonSpeed(0)));
-    m_driverController.y().whileFalse(new InstantCommand(() -> m_MotorSubsystem.setSparkSpeed(0)));
+    // This is a more compact way of doing two actions only on button down then up.
+    m_dCtrl.button(3).whileTrue(Commands
+      .startEnd(
+        () -> m_motors.setSparkSpeed(0.1),
+        () -> m_motors.setSparkSpeed(0.0), 
+        m_motors)
+    );
 
-    m_driverController.a().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.Green)));
-    m_driverController.b().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.Blue)));
-    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.oneSpace)));
+    // Nice complex sequence.
+    m_dCtrl.button(4).whileTrue(Commands.repeatingSequence(
+      Commands.parallel(
+        Commands.print("cmd 2: parallel"),
+        Commands.runOnce(() -> m_motors.setSparkSpeed(0.1)),
+        Commands.runOnce(() -> m_motors.setTalonSpeed(0.3))
+      ),
+      Commands.waitSeconds(3.0),
+      Commands.runOnce(() -> {
+        m_motors.setSparkSpeed(0.0);
+        m_motors.setTalonSpeed(0.1);
+      }),
+      Commands.print("cmd 2: slower"),
+      Commands.waitSeconds(1.0),
+      Commands.runOnce(() -> m_motors.setTalonSpeed(0.1)),
+      Commands.print("cmd 2: just talon"),
+      Commands.waitSeconds(1.0),
+      Commands.runOnce(() -> m_motors.setTalonSpeed(0.0)),
+      Commands.print("cmd 2: paused"),
+      Commands.waitSeconds(1.0)
+    ).finallyDo(() -> {
+      System.out.println("cmd 2: cleanup");
+      m_motors.setTalonSpeed(0.0); 
+      m_motors.setSparkSpeed(0.0);
+    })
+    );
 
-
-
-
-    // Operator Controller buttons
-    m_operatorController.a().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // m_dCtrl.a().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.Green)));
+    // m_dCtrl.b().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.Blue)));
+    // m_dCtrl.leftBumper().onTrue(new InstantCommand(() -> m_LedSubsystem.setMode(modes.oneSpace)));
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    // return Autos.exampleAuto(m_exampleSubsystem);
+    return Commands
+      .print("Autonomous mode!")
+      .andThen(Commands.print("jk we have no auto"));
   }
 }

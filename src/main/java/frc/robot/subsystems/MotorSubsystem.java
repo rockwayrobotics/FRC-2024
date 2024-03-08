@@ -51,7 +51,7 @@ public class MotorSubsystem extends SubsystemBase{
       .getEntry();
 
 
-  /** Creates a new MotorSubsystem. */
+    //---------------------------
     public MotorSubsystem() {
       // Initialize motor controllers
       m_talon = new TalonSRX(Constants.CAN.TALON_MOTOR);
@@ -76,15 +76,15 @@ public class MotorSubsystem extends SubsystemBase{
   }
 
 
-  public void periodic(){
-    Boolean motorOn = vMotor.get();
-    Integer xValue = (int) vX.get();
+  // public void periodic(){
+  //   Boolean motorOn = vMotor.get();
+  //   Integer xValue = (int) vX.get();
 
-    if (motorOn){
-      setTalonSpeed((xValue - 512.0) / 512);
-    }
-    else{
-      setTalonSpeed(0);
-    }
-  }
+  //   if (motorOn){
+  //     setTalonSpeed((xValue - 512.0) / 512);
+  //   }
+  //   else{
+  //     setTalonSpeed(0);
+  //   }
+  // }
 }

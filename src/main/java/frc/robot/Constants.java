@@ -51,6 +51,7 @@ public final class Constants {
    // Constants for I2C ports
   public static final class I2C {
     public static final edu.wpi.first.wpilibj.I2C.Port COLOUR_SENSOR = edu.wpi.first.wpilibj.I2C.Port.kOnboard;
+    public static final edu.wpi.first.wpilibj.I2C.Port NAVX_I2C = edu.wpi.first.wpilibj.I2C.Port.kMXP;
   }
 
   // Constants for LEDs 
