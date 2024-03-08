@@ -28,6 +28,10 @@ public class shootMove extends SequentialCommandGroup {
     IntakeSubsystem m_intake;
     LedSubsystem m_led;
 
+    double waittime = 0; 
+
+    
+
     public void setStatusWidget(SimpleWidget AutoFailedWidget, FailFastTimeoutGroup sequence) {
         if(sequence.timedOut()) {
             AutoFailedWidget.withProperties(Map.of("colorWhenFalse", "red"));
@@ -47,7 +51,7 @@ public class shootMove extends SequentialCommandGroup {
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new InstantCommand(() -> m_intake.setBelt(0.5)))
-                .then(new WaitCommand(2))
+                .then(new WaitCommand(waittime))
                 .then(new ShootSequenceFull(m_shooter, m_intake))
                 .then(new WaitCommand(0.7))
                 .thenWithTimeout(new DriveDistance(drivebase, -0.3, 2), 10)
