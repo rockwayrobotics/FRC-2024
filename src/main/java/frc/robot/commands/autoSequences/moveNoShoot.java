@@ -22,7 +22,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
  * <p><strong>END:</strong> The robot has driven beyond the line to get out of the community, but not too far beyond the line
  * <p><strong>SCORES:</strong> Piece in auto, Auto mobility
  */
-public class shootMoveNoShot extends SequentialCommandGroup {
+public class moveNoShoot extends SequentialCommandGroup {
     DrivebaseSubsystem m_drivebase;
     ShooterSubsystem m_shooter;
     LedSubsystem m_led;
@@ -35,7 +35,7 @@ public class shootMoveNoShot extends SequentialCommandGroup {
         }
     }
 
-    public shootMoveNoShot(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, LedSubsystem led, double waittime, double drivedistance){
+    public moveNoShoot(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, LedSubsystem led, double waittime, double drivedistance){
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_led = led; 
