@@ -69,8 +69,8 @@ public class RobotContainer {
   public RobotContainer() {
 
 
-    m_autoChooser.setDefaultOption("Just Forwards", AutoOption.driveForward);
-    m_autoChooser.addOption("Shoot Then Forwards", AutoOption.shootMove);
+    m_autoChooser.setDefaultOption("Shoot Then Forwards", AutoOption.shootMove);
+    m_autoChooser.addOption("Just Forwards", AutoOption.driveForward);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
 
     m_drivebase
