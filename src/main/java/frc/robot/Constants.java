@@ -70,7 +70,6 @@ public final class Constants {
       badApple,
       heatGradient,
       whiteDotLines,
-      imageLoop,
     }
   }
 

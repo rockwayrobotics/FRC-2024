@@ -27,7 +27,11 @@ public class LedSubsystem extends SubsystemBase {
 
   private int m_rainbowFirstPixelHue;
 
-  BufferedImage image;
+  BufferedImage badapple;
+  BufferedImage heatgradient;
+  BufferedImage whitedotlines; 
+
+  BufferedImage currentimage; 
 
   public LedSubsystem() {
     m_led = new AddressableLED(Constants.LED.LED_PWM);
@@ -38,6 +42,11 @@ public class LedSubsystem extends SubsystemBase {
     m_led.setLength(m_ledBuffer.getLength());
     m_led.setData(m_ledBuffer);
     m_led.start();
+
+    badapple = imageLoad("images/badapple.png");
+    heatgradient = imageLoad("images/heatgradient.png");
+    whitedotlines = imageLoad("images/whitedotlines.png");
+
   }
 
   private double sin_wave(double val, int set_point) {
@@ -104,25 +113,32 @@ public class LedSubsystem extends SubsystemBase {
     counter++;
   }
 
-  private void imageLoad(String imagePath) {
+  private BufferedImage imageLoad(String imagePath) {
     try {
-      image = ImageIO.read(new File(Filesystem.getDeployDirectory(), imagePath));
-      m_mode = modes.imageLoop;
+      return ImageIO.read(new File(Filesystem.getDeployDirectory(), imagePath));
     } catch (IOException e) {
       e.printStackTrace();
+      // make robust 
     }
+    return null;
   }
 
   private void imageLoop() {
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      int pixel = image.getRGB(i, row);
+    if (currentimage == null) {
+      return;
+    }
+
+    int width = Math.min(m_ledBuffer.getLength(), currentimage.getWidth());
+
+    for (var i = 0; i < width; i++) {
+      int pixel = currentimage.getRGB(i, row);
       int r = (pixel >> 16) & 0xff;
       int g = (pixel >> 8) & 0xff;
       int b = (pixel >> 0) & 0xff;
       m_ledBuffer.setRGB(i, r, g, b);
     }
 
-    if (++row >= image.getHeight()) {
+    if (++row >= currentimage.getHeight()) {
       row = 0;
     }
   }
@@ -162,17 +178,17 @@ public class LedSubsystem extends SubsystemBase {
         case BreathingMagenta:
           breathing_monochrome(150);
           break;
-        case imageLoop:
+        case badApple:
+          currentimage = badapple;
           imageLoop();
           break;
-        case badApple:
-          imageLoad("images/badapple.png");
-          break;
         case heatGradient:
-          imageLoad("images/heatgradient.png");
+          currentimage = heatgradient;
+          imageLoop();
           break;
         case whiteDotLines:
-          imageLoad("images/whitedotlines.png");
+          currentimage = whitedotlines;
+          imageLoop();
           break;
         default:
           rainbow();
