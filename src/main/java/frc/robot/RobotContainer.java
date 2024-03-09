@@ -104,9 +104,9 @@ public class RobotContainer {
 
     m_driverController.y().onTrue(new ShootSequenceFull(m_shooter, m_intake, m_led));
 
-    m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake));
+    m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake, m_led));
 
-    m_driverController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake));
+    m_driverController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake, m_led));
 
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(0.25)));
     m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
@@ -133,7 +133,7 @@ public class RobotContainer {
     // example led
     // m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));;
 
-    m_operatorController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake));
+    m_operatorController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake, m_led));
 
     m_operatorController.y().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
     m_operatorController.y().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));

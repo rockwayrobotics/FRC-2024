@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.FailFastTimeoutGroup;
 import frc.robot.commands.ShootSequenceFull;
@@ -48,13 +49,17 @@ public class shootMove extends SequentialCommandGroup {
         addRequirements(m_drivebase, m_shooter, m_intake);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
+                .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Red)))
                 .then(new InstantCommand(() -> m_intake.setBelt(0.5)))
                 .then(new WaitCommand(3.5))
                 .then(new ShootSequenceFull(m_shooter, m_intake, m_led))
+                .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.heatGradient)))
                 .then(new WaitCommand(waittime))
-                .thenWithTimeout(new DriveDistance(drivebase, -0.3, 2), 10)
+                .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
+                .thenWithTimeout(new DriveDistance(drivebase, -0.3, 2), 5)
                 .then(new WaitCommand(1))
-                .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
+                .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
+                .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
         this.addCommands(sequence);
     }
