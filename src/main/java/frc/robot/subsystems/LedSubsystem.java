@@ -130,7 +130,7 @@ public class LedSubsystem extends SubsystemBase {
   public void setMode(modes mode) {
     m_mode = mode;
     counter = 0;
-    System.out.println("Set LED to: " + mode);
+    //System.out.println("Set LED to: " + mode);
   }
 
   @Override
@@ -170,6 +170,9 @@ public class LedSubsystem extends SubsystemBase {
           break;
         case heatGradient:
           imageLoad("images/heatgradient.png");
+          break;
+        case whiteDotLines:
+          imageLoad("images/whitedotlines.png");
           break;
         default:
           rainbow();

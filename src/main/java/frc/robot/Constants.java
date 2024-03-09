@@ -69,6 +69,7 @@ public final class Constants {
       BreathingMagenta,
       badApple,
       heatGradient,
+      whiteDotLines,
       imageLoop,
     }
   }

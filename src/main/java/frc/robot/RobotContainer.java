@@ -144,6 +144,13 @@ public class RobotContainer {
     m_operatorController.a().onFalse(
         new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
 
+    m_operatorController.rightBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.whiteDotLines)));
+    m_operatorController.rightBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
+
+    m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Purple)));
+    m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
+
+
     // TODO: angle STUFF HERE :3 
 
     m_operatorController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
