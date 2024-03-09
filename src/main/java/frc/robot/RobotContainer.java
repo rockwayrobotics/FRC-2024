@@ -24,7 +24,7 @@ import frc.robot.commands.*;
 
 enum AutoOption {
   driveForward,
-  shootMove,
+  shootMove, shootMoveNoShot,
 }
 
 /**
@@ -75,7 +75,9 @@ public class RobotContainer {
 
     m_autoChooser.setDefaultOption("Shoot Then Forwards", AutoOption.shootMove);
     m_autoChooser.addOption("Just Forwards", AutoOption.driveForward);
+    m_autoChooser.addOption("No ShooT dRIVE", AutoOption.shootMoveNoShot);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
+
 
     m_drivebase
         .setDefaultCommand(new DriveCommand(m_driverController::getLeftY, m_driverController::getRightX, m_drivebase));
@@ -188,6 +190,7 @@ public class RobotContainer {
     return switch (m_autoChooser.getSelected()) {
       case driveForward -> new driveForward(m_drivebase);
       case shootMove -> new shootMove(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
+      case shootMoveNoShot -> new shootMoveNoShot(m_drivebase, m_shooter, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
     };
   }
 }
