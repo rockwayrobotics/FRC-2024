@@ -24,8 +24,9 @@ public class ClimberSubsystem extends SubsystemBase {
    * Extends the hook.
    */
   public void setClimber(double m_pow) {
-    //System.out.println("Climber: " + m_pow);
+    System.out.println("Climber: " + m_pow);
     m_climberMotor.set(m_pow);
+    
   }
 
   /**

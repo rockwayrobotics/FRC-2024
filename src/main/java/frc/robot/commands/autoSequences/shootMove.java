@@ -50,8 +50,8 @@ public class shootMove extends SequentialCommandGroup {
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Red)))
-                .then(new InstantCommand(() -> m_intake.setBelt(0.5)))
-                .then(new WaitCommand(1))
+                .then(new InstantCommand(() -> m_intake.setBelt(-0.5)))
+                .then(new WaitCommand(0.5))
                 .then(new ShootSequenceFullAuto(m_shooter, m_intake, m_led))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Blue)))
                 .then(new WaitCommand(waittime))

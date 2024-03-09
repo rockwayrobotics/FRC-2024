@@ -61,6 +61,10 @@ public class RobotContainer {
     GenericEntry drivedistance=
       dashboard.add("Drivedistance (m)", 1)
          .getEntry();
+
+    GenericEntry ampshotspeed=
+      dashboard.add("Amp Shot Speed (P)", 0.18)
+         .getEntry();
         
   /**
    * 
@@ -106,7 +110,7 @@ public class RobotContainer {
     //m_driverController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.5))));
     //m_driverController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
-    m_driverController.a().onTrue(new ShootSequenceHalf(m_shooter, m_intake, m_led));
+    m_driverController.a().onTrue(new ShootSequenceHalf(m_shooter, m_intake, m_led,ampshotspeed.getDouble(0.18)));
 
     m_driverController.y().onTrue(new ShootSequenceFull(m_shooter, m_intake, m_led));
 
@@ -114,7 +118,7 @@ public class RobotContainer {
 
     m_driverController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake, m_led));
 
-    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(0.25)));
+    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(0.20)));
     m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
 
     m_driverController.leftTrigger().whileTrue(new RepeatCommand(new InstantCommand(() -> m_drivebase.set(0.125, m_driverController.getRightX()))));

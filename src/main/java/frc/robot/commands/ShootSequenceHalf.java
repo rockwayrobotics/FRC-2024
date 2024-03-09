@@ -14,7 +14,7 @@ public class ShootSequenceHalf extends SequentialCommandGroup {
   IntakeSubsystem m_intake;
   LedSubsystem m_led; 
 
-  public ShootSequenceHalf(ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led) {
+  public ShootSequenceHalf(ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double ampshotspeed) {
     m_shooter = shooter;
     m_intake = intake;
     m_led = led;
@@ -22,7 +22,7 @@ public class ShootSequenceHalf extends SequentialCommandGroup {
     addRequirements(m_shooter, m_intake, m_led);
 
     this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Green)));
-    this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(0.3)));
+    this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(ampshotspeed)));
     this.addCommands(new WaitCommand(0.5));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0.5)));
     this.addCommands(new WaitCommand(1));
