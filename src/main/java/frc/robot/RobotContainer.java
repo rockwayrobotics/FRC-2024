@@ -51,7 +51,7 @@ public class RobotContainer {
 
   SendableChooser<AutoOption> m_autoChooser = new SendableChooser<>();
     
-  ShuffleboardTab dashboard = Shuffleboard.getTab("Dashboard");
+  ShuffleboardTab dashboard = Shuffleboard.getTab("NewDashboard");
     // Configure the trigger bindings
 
     GenericEntry waittime =
