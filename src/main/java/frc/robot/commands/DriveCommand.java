@@ -4,7 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.DoubleSupplier;
 
@@ -55,8 +55,8 @@ public class DriveCommand extends Command {
 
     m_DrivebaseSubsystem.set(speed, rotation * 0.76);
 
-    SmartDashboard.putNumber("Y", m_left_y.getAsDouble());
-    SmartDashboard.putNumber("X", m_right_x.getAsDouble());
+    //SmartDashboard.putNumber("Y", m_left_y.getAsDouble());
+    //SmartDashboard.putNumber("X", m_right_x.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

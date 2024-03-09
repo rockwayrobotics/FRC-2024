@@ -6,7 +6,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -33,6 +33,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public ScoringMode m_ScoringMode = ScoringMode.SPEAKER;
 
+  ShuffleboardTab dashboardTab = Shuffleboard.getTab("NewDashboard");
+
   /** Creates a new HookSubsystem. */
   public ShooterSubsystem(int angleMotor, int leftFlywheel, int rightFlywheel) {
     m_angleMotor = new CANSparkMax(Constants.CAN.GEAR, MotorType.kBrushless);
@@ -49,7 +51,6 @@ public class ShooterSubsystem extends SubsystemBase {
     m_rightFlywheel.follow(m_leftFlywheel, true);
     m_angleEncoder = m_angleMotor.getEncoder();
 
-    ShuffleboardTab dashboardTab = Shuffleboard.getTab("NewDashboard");
 
     speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(0, 0).getEntry();
     ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0, 0).getEntry();
@@ -83,7 +84,11 @@ public class ShooterSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Encoder revolutions", getAngleEncoder());
+
+    //SmartDashboard.putNumber("Encoder revolutions", getAngleEncoder());
+
+    // this one broke some stuff, look at it later 
+    //dashboardTab.add("Encoder revolutions", getAngleEncoder());
 
     speakerAngleSetpoint = speakerAngleWidget.getDouble(0);
     ampAngleSetpoint = ampAngleWidget.getDouble(0);
