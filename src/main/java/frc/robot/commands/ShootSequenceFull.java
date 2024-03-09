@@ -22,9 +22,12 @@ public class ShootSequenceFull extends SequentialCommandGroup {
     addRequirements(m_shooter, m_intake, m_led);
 
     this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Yellow)));
+    this.addCommands(new InstantCommand(() -> m_intake.setBelt(-0.5)));
+    this.addCommands(new WaitCommand(0.5));
+    this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(1)));
-    this.addCommands(new WaitCommand(1));
-    this.addCommands(new InstantCommand(() -> m_intake.setBelt(0.5)));
+    this.addCommands(new WaitCommand(1.5));
+    this.addCommands(new InstantCommand(() -> m_intake.setBelt(1)));
     this.addCommands(new WaitCommand(1));
 
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
