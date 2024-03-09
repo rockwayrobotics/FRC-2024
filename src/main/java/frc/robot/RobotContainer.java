@@ -57,7 +57,13 @@ public class RobotContainer {
     GenericEntry waittime =
       dashboard.add("Time After Shoot to Wait (Seconds)", 0)
          .getEntry();
+
+    GenericEntry drivedistance=
+      dashboard.add("Drivedistance (m)", 1)
+         .getEntry();
+        
   /**
+   * 
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
@@ -170,7 +176,7 @@ public class RobotContainer {
     // The selected command will be run in autonomous
     return switch (m_autoChooser.getSelected()) {
       case driveForward -> new driveForward(m_drivebase);
-      case shootMove -> new shootMove(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case shootMove -> new shootMove(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
     };
   }
 }

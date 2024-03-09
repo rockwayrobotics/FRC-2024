@@ -38,7 +38,7 @@ public class shootMove extends SequentialCommandGroup {
         }
     }
 
-    public shootMove(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double waittime){
+    public shootMove(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double waittime, double drivedistance){
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_intake = intake;
@@ -56,7 +56,7 @@ public class shootMove extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Blue)))
                 .then(new WaitCommand(waittime))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
-                .thenWithTimeout(new DriveDistance(drivebase, -0.3, 1), 5)
+                .thenWithTimeout(new DriveDistance(drivebase, -0.3, drivedistance), 5)
                 .then(new WaitCommand(1))
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
