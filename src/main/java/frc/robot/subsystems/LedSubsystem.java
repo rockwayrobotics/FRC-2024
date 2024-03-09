@@ -104,6 +104,12 @@ public class LedSubsystem extends SubsystemBase {
     }
   }
 
+  private void off() {
+    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, 0, 0, 0);
+    }
+  }
+
   private void breathing_monochrome(int hue) {
     int sat = 0;
     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
@@ -172,6 +178,9 @@ public class LedSubsystem extends SubsystemBase {
         case Purple:
           purple();
           break;
+        case Off:
+          off();
+          break; 
         case BreathingYellow:
           breathing_monochrome(30);
           break;

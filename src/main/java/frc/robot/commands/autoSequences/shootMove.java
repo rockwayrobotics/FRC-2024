@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.FailFastTimeoutGroup;
-import frc.robot.commands.ShootSequenceFull;
+import frc.robot.commands.ShootSequenceFullAuto;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
@@ -51,8 +51,8 @@ public class shootMove extends SequentialCommandGroup {
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Red)))
                 .then(new InstantCommand(() -> m_intake.setBelt(0.5)))
-                .then(new WaitCommand(3.5))
-                .then(new ShootSequenceFull(m_shooter, m_intake, m_led))
+                .then(new WaitCommand(1))
+                .then(new ShootSequenceFullAuto(m_shooter, m_intake, m_led))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Blue)))
                 .then(new WaitCommand(waittime))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))

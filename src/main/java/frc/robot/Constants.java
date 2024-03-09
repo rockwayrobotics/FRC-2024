@@ -65,6 +65,7 @@ public final class Constants {
       Purple,
       Orange,
       Yellow,
+      Off,
       BreathingYellow,
       BreathingMagenta,
       badApple,
