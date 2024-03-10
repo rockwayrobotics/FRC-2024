@@ -63,12 +63,6 @@ public class RobotContainer {
       dashboard.add("Drivedistance (m)", 1)
          .getEntry();
 
-    SimpleWidget ampshotspeed=
-      dashboard.add("Amp Shot Speed (P)", 0.18);
-
-    SimpleWidget speakershotspeed=
-      dashboard.add("Speaker Shot Speed (P)", 1);
-        
   /**
    * 
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -115,9 +109,9 @@ public class RobotContainer {
     //m_driverController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.5))));
     //m_driverController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
-    m_driverController.a().onTrue(new ShootSequenceHalf(m_shooter, m_intake, m_led, ampshotspeed.getEntry().getDouble(0.18)));
+    m_driverController.a().onTrue(new ShootSequenceHalf(m_shooter, m_intake, m_led));
 
-    m_driverController.y().onTrue(new ShootSequenceFull(m_shooter, m_intake, m_led, speakershotspeed.getEntry().getDouble(1)));
+    m_driverController.y().onTrue(new ShootSequenceFull(m_shooter, m_intake, m_led));
 
     //m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake, m_led));
 

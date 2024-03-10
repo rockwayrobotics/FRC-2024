@@ -14,7 +14,7 @@ public class ShootSequenceFull extends SequentialCommandGroup {
   LedSubsystem m_led; 
 
 
-  public ShootSequenceFull(ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double power) {
+  public ShootSequenceFull(ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led) {
     m_shooter = shooter;
     m_intake = intake;
     m_led = led;
@@ -25,7 +25,7 @@ public class ShootSequenceFull extends SequentialCommandGroup {
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(-0.5)));
     this.addCommands(new WaitCommand(0.5));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
-    this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(power)));
+    this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(1)));
     this.addCommands(new WaitCommand(1));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(1)));
     this.addCommands(new WaitCommand(1));
