@@ -53,6 +53,7 @@ public class middleTwoPiece extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Red)))
                 .then(new InstantCommand(() -> m_intake.setBelt(-0.5)))
                 .then(new WaitCommand(0.2))
+                .then(new InstantCommand(() -> m_intake.setBelt(0)))
                 .then(new ShootSequenceFullAuto(m_shooter, m_intake, m_led))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Blue)))
                 .then(new WaitCommand(waittime))
