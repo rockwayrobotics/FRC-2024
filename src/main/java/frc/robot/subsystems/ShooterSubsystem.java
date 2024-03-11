@@ -6,6 +6,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -24,10 +25,15 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double speakerAngleSetpoint;
   public double ampAngleSetpoint;
-  public double trapAngleSetpoint;
+  public double ampSpeedSetpoint;
+  public double speakerSpeedSetpoint;
   
   GenericEntry speakerAngleWidget;
   GenericEntry ampAngleWidget;
+  GenericEntry ampSpeedWidget; 
+  GenericEntry speakerSpeedWidget; 
+
+  SimpleWidget selectedModeColourWidget;
 
   private double m_scale = 1;
 
@@ -52,8 +58,13 @@ public class ShooterSubsystem extends SubsystemBase {
     m_angleEncoder = m_angleMotor.getEncoder();
 
 
-    speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(0, 0).getEntry();
-    ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0, 0).getEntry();
+    speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(2, 2).getEntry();
+    ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(3, 2).getEntry();
+
+    ampSpeedWidget = dashboardTab.addPersistent("Amp Speed", 0.5).getEntry();
+    speakerSpeedWidget = dashboardTab.addPersistent("Speaker Speed", 1).getEntry();
+
+    selectedModeColourWidget = dashboardTab.add("Selected mode", false).withPosition(0, 0);
   }
 
   public void setFlywheelsScale(double scale) {
@@ -92,5 +103,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     speakerAngleSetpoint = speakerAngleWidget.getDouble(0);
     ampAngleSetpoint = ampAngleWidget.getDouble(0);
+    
+    ampSpeedSetpoint = ampSpeedWidget.getDouble(0);
+    speakerSpeedSetpoint = speakerSpeedWidget.getDouble(0);
+
   }
 }
