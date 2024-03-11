@@ -144,7 +144,7 @@ public class RobotContainer {
 
     m_operatorController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake, m_led));
 
-    m_operatorController.y().whileTrue(new OperatorPullback(m_shooter, m_intake, m_led));
+    m_operatorController.y().onTrue(new OperatorPullback(m_shooter, m_intake, m_led));
 
     m_operatorController.a().whileTrue(
         new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(-0.7))

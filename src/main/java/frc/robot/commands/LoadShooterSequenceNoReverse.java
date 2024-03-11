@@ -18,7 +18,7 @@ public class LoadShooterSequenceNoReverse extends SequentialCommandGroup {
     m_intake = intake;
     m_led = led;
 
-    addRequirements(m_intake, m_shooter);
+    addRequirements(m_intake, m_shooter, m_led);
 
     this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Red)));
 
