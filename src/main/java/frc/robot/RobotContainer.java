@@ -5,7 +5,6 @@
 package frc.robot;
 
 import frc.robot.Constants.*;
-import frc.robot.Constants.Shooter.ScoringMode;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -112,7 +111,7 @@ public class RobotContainer {
 
     m_driverController.a().onTrue(new ShootSequenceHalf(m_shooter, m_intake, m_led));
 
-    m_driverController.y().onTrue(new ShootSequence(m_shooter, m_intake, m_led));
+    m_driverController.y().onTrue(new ShootSequenceFull(m_shooter, m_intake, m_led));
 
     //m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake, m_led));
 
@@ -166,11 +165,6 @@ public class RobotContainer {
 
     m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Off)));
     m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
-
-    m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.AMP)));
-    m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_shooter.setScoringMode(ScoringMode.SPEAKER)));
-
-
 
 
     // TODO: angle STUFF HERE :3 
