@@ -8,6 +8,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.FailFastTimeoutGroup;
+import frc.robot.commands.ShootFromGround;
 import frc.robot.commands.ShootSequenceFullAuto;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -25,7 +26,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
  * <p><strong>END:</strong> The robot has driven beyond the line to get out of the community, but not too far beyond the line
  * <p><strong>SCORES:</strong> Piece in auto, Auto mobility
  */
-public class shootMove extends SequentialCommandGroup {
+public class middleTwoPiece extends SequentialCommandGroup {
     DrivebaseSubsystem m_drivebase;
     ShooterSubsystem m_shooter;
     IntakeSubsystem m_intake;
@@ -39,7 +40,7 @@ public class shootMove extends SequentialCommandGroup {
         }
     }
 
-    public shootMove(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double waittime, double drivedistance){
+    public middleTwoPiece(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double waittime, double drivedistance){
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_intake = intake;
@@ -58,7 +59,7 @@ public class shootMove extends SequentialCommandGroup {
                 .then(new WaitCommand(waittime))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
                 .thenWithTimeout(new DriveDistance(drivebase, -0.3, drivedistance), 5)
-                .then(new WaitCommand(1))
+                .then(new ShootFromGround(m_shooter, m_intake, m_led))
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 

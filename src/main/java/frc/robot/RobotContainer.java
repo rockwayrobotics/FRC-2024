@@ -29,6 +29,7 @@ enum AutoOption {
   driveForward,
   shootMove, 
   moveNoShoot,
+  middleTwoPiece,
 }
 
 /**
@@ -194,6 +195,7 @@ public class RobotContainer {
       case driveForward -> new driveForward(m_drivebase);
       case shootMove -> new shootMove(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case moveNoShoot -> new moveNoShoot(m_drivebase, m_shooter, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
+      case middleTwoPiece -> new middleTwoPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
     };
   }
 }
