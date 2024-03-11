@@ -5,6 +5,9 @@
 package frc.robot;
 
 import frc.robot.Constants.*;
+
+import com.revrobotics.CANSparkBase.IdleMode;
+
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -102,6 +105,8 @@ public class RobotContainer {
   // }
 
   private void configureBindings() {
+    // TODO why are commands that share requirements able to be ran on same time on button press?
+
     // Driver Controller buttons
     //m_driverController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
     //m_driverController.povUp().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
@@ -142,7 +147,8 @@ public class RobotContainer {
     // example led
     // m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));;
 
-    m_operatorController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake, m_led));
+    m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setFlywheels(-1)));
+    m_operatorController.b().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
 
     m_operatorController.y().onTrue(new OperatorPullback(m_shooter, m_intake, m_led));
 
@@ -165,16 +171,16 @@ public class RobotContainer {
     m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Off)));
     m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
-    m_operatorController.start().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
-    m_operatorController.start().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+    m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
 
+    m_operatorController.
     // TODO: angle STUFF HERE :3 
 
-    m_operatorController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
-    m_operatorController.povUp().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
+    m_operatorController.povUp().onTrue(new InstantCommand(() -> m_climber.setClimber(0.7)));
+    m_operatorController.povUp().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
-    m_operatorController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.5))));
-    m_operatorController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
+    m_operatorController.povDown().onTrue(new InstantCommand(() -> m_climber.setClimber(-0.7)));
+    m_operatorController.povDown().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
   }
 
