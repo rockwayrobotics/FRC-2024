@@ -144,8 +144,7 @@ public class RobotContainer {
 
     m_operatorController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake, m_led));
 
-    m_operatorController.y().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
-    m_operatorController.y().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+    m_operatorController.y().whileTrue(new OperatorPullback(m_shooter, m_intake, m_led));
 
     m_operatorController.a().whileTrue(
         new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(-0.7))
@@ -166,6 +165,8 @@ public class RobotContainer {
     m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Off)));
     m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
+    m_operatorController.start().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
+    m_operatorController.start().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
 
     // TODO: angle STUFF HERE :3 
 
