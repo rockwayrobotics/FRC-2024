@@ -41,7 +41,7 @@ public class driveForward extends SequentialCommandGroup {
     addRequirements(m_drivebase);
 
     FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
-        .thenWithTimeout(new DriveDistance(drivebase, 0.2, 80), 10);
+        .thenWithTimeout(new DriveDistance(m_drivebase, 0.2, 80), 10);
 
     this.addCommands(sequence);
   }

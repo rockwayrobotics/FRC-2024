@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.FailFastTimeoutGroup;
 import frc.robot.commands.ShootSequenceFullAuto;
@@ -57,7 +56,7 @@ public class shootMove extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Blue)))
                 .then(new WaitCommand(waittime))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
-                .thenWithTimeout(new DriveDistance(drivebase, -0.3, drivedistance), 5)
+                .thenWithTimeout(new DriveDistance(m_drivebase, -0.3, drivedistance), 5)
                 .then(new WaitCommand(1))
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));

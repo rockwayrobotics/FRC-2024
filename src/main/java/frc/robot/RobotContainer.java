@@ -59,11 +59,11 @@ public class RobotContainer {
   ShuffleboardTab dashboard = Shuffleboard.getTab("NewDashboard");
     // Configure the trigger bindings
 
-    GenericEntry waittime =
+    public GenericEntry waittime =
       dashboard.add("Time After Shoot to Wait (Seconds)", 0)
          .getEntry();
 
-    GenericEntry drivedistance=
+    public GenericEntry drivedistance=
       dashboard.add("Drivedistance (m)", 1)
          .getEntry();
 
@@ -77,6 +77,7 @@ public class RobotContainer {
     m_autoChooser.setDefaultOption("Shoot Then Drive", AutoOption.shootMove);
     m_autoChooser.addOption("Just Forwards", AutoOption.driveForward);
     m_autoChooser.addOption("No Shoot Drive", AutoOption.moveNoShoot);
+    m_autoChooser.addOption("Middle Two Piece", AutoOption.middleTwoPiece);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
 
 
