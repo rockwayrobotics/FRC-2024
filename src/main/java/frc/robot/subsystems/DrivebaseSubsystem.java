@@ -5,6 +5,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.kauailabs.navx.frc.AHRS;
@@ -18,6 +20,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.networktables.GenericEntry;
 
 public class DrivebaseSubsystem extends SubsystemBase {
 
@@ -34,11 +37,16 @@ public class DrivebaseSubsystem extends SubsystemBase {
   SlewRateLimiter filter = new SlewRateLimiter(0);
 
   private double m_scale = 1;
+  private double m_rotatescale = 1;
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
   private double yawOffset;
-  private DifferentialDriveOdometry driveOdometry; 
+  private DifferentialDriveOdometry driveOdometry;  
+   
+  ShuffleboardTab dashboard = Shuffleboard.getTab("NewDashboard");
+  
+  GenericEntry rotationscale;
 
   public DrivebaseSubsystem() {
     m_leftDriveMotorF = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_F, MotorType.kBrushless);
@@ -75,6 +83,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveEncoder.setPosition(0);
 
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
+
+    rotationscale =
+      dashboard.add("Rotational Adjust Scale", 0)
+         .getEntry();
 
     AutoBuilder.configureRamsete(
             this::getPose, // Robot pose supplier
@@ -114,8 +126,14 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   public void set(double speed, double rotation) {
     // speed = filter.calculate(speed);
-    m_drive.curvatureDrive(speed * m_scale, rotation * m_scale, true);
+    if (m_rotatescale != 1) {
+      m_drive.curvatureDrive(speed * m_scale, rotation * m_rotatescale, true);
+    }
+    else{
+      m_drive.curvatureDrive(speed * m_scale, rotation * m_scale, true);
+    }
   }
+
 
   public void setScale(double scale) {
     m_scale = scale;
@@ -194,5 +212,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public void resetEncoders() {
     m_leftDriveEncoder.setPosition(0);
     m_rightDriveEncoder.setPosition(0);
+  }
+
+  public void periodic(){
+    m_rotatescale = rotationscale.getDouble(1);
   }
 }

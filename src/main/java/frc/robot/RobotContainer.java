@@ -61,11 +61,11 @@ public class RobotContainer {
   ShuffleboardTab dashboard = Shuffleboard.getTab("NewDashboard");
     // Configure the trigger bindings
 
-    public GenericEntry waittime =
+    GenericEntry waittime =
       dashboard.add("Time After Shoot to Wait (Seconds)", 0)
          .getEntry();
 
-    public GenericEntry drivedistance=
+    GenericEntry drivedistance=
       dashboard.add("Drivedistance (m)", 1)
          .getEntry();
 
@@ -189,7 +189,7 @@ public class RobotContainer {
     m_operatorController.povDown().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
   }
-  
+
   public void onDisable() {
     m_drivebase.disable();
   }
