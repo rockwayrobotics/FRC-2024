@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 
 public class DrivebaseSubsystem extends SubsystemBase {
@@ -62,6 +63,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveMotorF.setInverted(Constants.Drive.RIGHT_DRIVE_INVERTED);
 
     m_drive = new DifferentialDrive(m_leftDriveMotorF, m_rightDriveMotorF);
+
+    driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
     setDrivebaseIdle(IdleMode.kCoast);
     m_leftDriveEncoder = m_leftDriveMotorF.getEncoder();
