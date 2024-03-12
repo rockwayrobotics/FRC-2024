@@ -118,7 +118,7 @@ public class RobotContainer {
 
     m_driverController.a().onTrue(new ShootSequenceHalf(m_shooter, m_intake, m_led));
 
-    m_driverController.y().onTrue(new ShootSequenceFull(m_shooter, m_intake, m_led));
+    m_driverController.y().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
 
     //m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake, m_led));
 
