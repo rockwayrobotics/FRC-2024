@@ -30,6 +30,7 @@ enum AutoOption {
   shootMove, 
   moveNoShoot,
   middleTwoPiece,
+  middleThreePiece,
 }
 
 /**
@@ -78,6 +79,7 @@ public class RobotContainer {
     m_autoChooser.addOption("Just Forwards", AutoOption.driveForward);
     m_autoChooser.addOption("No Shoot Drive", AutoOption.moveNoShoot);
     m_autoChooser.addOption("Middle Two Piece", AutoOption.middleTwoPiece);
+    m_autoChooser.addOption("Middle Three Piece", AutoOption.middleThreePiece);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
 
 
@@ -173,6 +175,8 @@ public class RobotContainer {
     m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Off)));
     m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
+    m_operatorController.leftTrigger().onTrue(new DriveRotate(m_drivebase, -30));
+
     m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
 
     // TODO: angle STUFF HERE :3 
@@ -197,6 +201,7 @@ public class RobotContainer {
       case shootMove -> new shootMove(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case moveNoShoot -> new moveNoShoot(m_drivebase, m_shooter, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case middleTwoPiece -> new middleTwoPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
+      case middleThreePiece -> new middleTwoPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
     };
   }
 }
