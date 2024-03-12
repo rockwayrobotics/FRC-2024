@@ -37,9 +37,9 @@ public final class Constants {
   }
 
   public static final class Digital {
-    public static final int[] LEFT_DRIVE_ENCODER = { 0, 1 };
-    public static final int[] RIGHT_DRIVE_ENCODER = { 2, 3 };
+    public final static int CLIMB_HOME_SWITCH = 0; 
   }
+
 
   public static final class Drive {
     public final static double ENCODER_PULSES_PER_REVOLUTION = 360;
