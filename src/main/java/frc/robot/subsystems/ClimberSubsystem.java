@@ -34,7 +34,7 @@ public class ClimberSubsystem extends SubsystemBase {
     .getEntry();
   }
 
-  public boolean isHomePressed(){
+  public boolean isAtHome(){
     return !m_homeSensor.get();
   }
 
@@ -42,8 +42,10 @@ public class ClimberSubsystem extends SubsystemBase {
    * Extends the hook.
    */
   public void setClimber(double m_pow) {
-    System.out.println("Climber: " + m_pow);
-    m_climberMotor.set(m_pow);
+    //System.out.println("Climber: " + m_pow);
+    if (!isAtHome() || m_pow >= 0){
+      m_climberMotor.set(m_pow);
+    }
   }
 
   /**
@@ -54,12 +56,12 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void periodic() {
-    if (isHomePressed()) {
+    if (isAtHome()) {
       if (m_climberMotor.get() < 0) {
         m_climberMotor.set(0);
       }
     }
-    homesensor.setBoolean(isHomePressed());
+    homesensor.setBoolean(isAtHome());
   }
 }
 
