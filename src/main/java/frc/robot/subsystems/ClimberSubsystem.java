@@ -18,7 +18,7 @@ public class ClimberSubsystem extends SubsystemBase {
   private DigitalInput m_homeSensor;
 
   ShuffleboardTab dashboardTab = Shuffleboard.getTab("NewDashboard");
-  
+
   GenericEntry homesensor;
 
   /** Creates a new HookSubsystem. */
@@ -32,6 +32,10 @@ public class ClimberSubsystem extends SubsystemBase {
     homesensor = 
     dashboardTab.addPersistent("Climb Home Sensor", false)
     .getEntry();
+  }
+
+  public boolean isHomePressed(){
+    return !m_homeSensor.get();
   }
 
   /**
@@ -50,12 +54,12 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void periodic() {
-    if (m_homeSensor.get()) {
+    if (isHomePressed()) {
       if (m_climberMotor.get() < 0) {
         m_climberMotor.set(0);
       }
     }
-    homesensor.setBoolean(m_homeSensor.get());
+    homesensor.setBoolean(isHomePressed());
   }
 }
 
