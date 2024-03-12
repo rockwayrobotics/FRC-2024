@@ -6,12 +6,12 @@ package frc.robot;
 
 import frc.robot.Constants.*;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -31,6 +31,7 @@ enum AutoOption {
   moveNoShoot,
   middleTwoPiece,
   middleThreePiece,
+  pathPlannerExample,
 }
 
 /**
@@ -80,6 +81,7 @@ public class RobotContainer {
     m_autoChooser.addOption("No Shoot Drive", AutoOption.moveNoShoot);
     m_autoChooser.addOption("Middle Two Piece", AutoOption.middleTwoPiece);
     m_autoChooser.addOption("Middle Three Piece", AutoOption.middleThreePiece);
+    m_autoChooser.addOption("Path Planner Example", AutoOption.pathPlannerExample);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
 
 
@@ -109,7 +111,6 @@ public class RobotContainer {
   // }
 
   private void configureBindings() {
-    // TODO why are commands that share requirements able to be ran on same time on button press?
 
     // Driver Controller buttons
     //m_driverController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
@@ -202,6 +203,7 @@ public class RobotContainer {
       case moveNoShoot -> new moveNoShoot(m_drivebase, m_shooter, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case middleTwoPiece -> new middleTwoPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case middleThreePiece -> new middleThreePiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
+      case pathPlannerExample -> new PathPlannerAuto("New Auto");
     };
   }
 }

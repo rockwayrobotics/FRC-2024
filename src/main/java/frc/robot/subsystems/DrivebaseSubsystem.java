@@ -1,17 +1,22 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.kauailabs.navx.frc.AHRS;
-
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 
 public class DrivebaseSubsystem extends SubsystemBase {
 
@@ -32,6 +37,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
   private double yawOffset;
+  private DifferentialDriveOdometry driveOdometry; 
 
   public DrivebaseSubsystem() {
     m_leftDriveMotorF = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_F, MotorType.kBrushless);
@@ -66,6 +72,26 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveEncoder.setPositionConversionFactor(Constants.Drive.DISTANCE_PER_ENCODER_PULSE);
     m_leftDriveEncoder.setPosition(0);
     m_rightDriveEncoder.setPosition(0);
+
+    AutoBuilder.configureRamsete(
+            this::getPose, // Robot pose supplier
+            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getCurrentSpeeds, // Current ChassisSpeeds supplier
+            this::drive, // Method that will drive the robot given ChassisSpeeds
+            new ReplanningConfig(), // Default path replanning config. See the API for the options here
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+    );
   }
 
   public void setDrivebaseIdle(IdleMode setting) {
@@ -86,6 +112,30 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   public void setScale(double scale) {
     m_scale = scale;
+  }
+
+  // Get the pose of the robot as Pose2d 
+  public Pose2d getPose(){
+    return this.driveOdometry.getPoseMeters();
+  }
+
+
+  // Reset the Pose2d of the robot 
+  public void resetPose(Pose2d pose2d) {
+    this.resetEncoders();
+    this.driveOdometry.resetPosition(
+        this.m_gyro.getRotation2d(),
+        this.getLDistance(),
+        this.getRDistance(),
+        pose2d);
+  }
+
+  public ChassisSpeeds getCurrentSpeeds(){
+    return new ChassisSpeeds(this.getLDistance(), this.getRDistance(), this.getAngle());
+  }
+
+  public void drive(ChassisSpeeds speeds){
+    this.set(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
   }
 
   /**
