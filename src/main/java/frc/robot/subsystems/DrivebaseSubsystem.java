@@ -16,7 +16,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 
 public class DrivebaseSubsystem extends SubsystemBase {
@@ -119,7 +118,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   // Get the pose of the robot as Pose2d 
   public Pose2d getPose(){
-    return this.driveOdometry.getPoseMeters();
+    return driveOdometry.getPoseMeters();
   }
 
 
@@ -127,18 +126,18 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public void resetPose(Pose2d pose2d) {
     this.resetEncoders();
     this.driveOdometry.resetPosition(
-        this.m_gyro.getRotation2d(),
-        this.getLDistance(),
-        this.getRDistance(),
+        m_gyro.getRotation2d(),
+        getLDistance(),
+        getRDistance(),
         pose2d);
   }
 
   public ChassisSpeeds getCurrentSpeeds(){
-    return new ChassisSpeeds(this.getLDistance(), this.getRDistance(), this.getAngle());
+    return new ChassisSpeeds(getLDistance(), getRDistance(), getAngle());
   }
 
   public void drive(ChassisSpeeds speeds){
-    this.set(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
+    set(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
   }
 
   /**
