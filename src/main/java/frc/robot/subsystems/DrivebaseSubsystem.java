@@ -81,7 +81,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
             this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getCurrentSpeeds, // Current ChassisSpeeds supplier
             this::drive, // Method that will drive the robot given ChassisSpeeds
-            new ReplanningConfig(), // Default path replanning config. See the API for the options here
+            new ReplanningConfig(),
             () -> {
               // Boolean supplier that controls when the path will be mirrored for the red alliance
               // This will flip the path being followed to the red side of the field.
