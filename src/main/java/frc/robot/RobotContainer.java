@@ -70,6 +70,10 @@ public class RobotContainer {
       dashboard.add("Drivedistance (m)", 1)
          .getEntry();
 
+    GenericEntry drivescale = 
+      dashboard.addPersistent("Drivescale", 0.3)
+        .getEntry();
+
   /**
    * 
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -129,7 +133,7 @@ public class RobotContainer {
 
     m_driverController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake, m_led));
 
-    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(0.20)));
+    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(drivescale.getDouble(0.3))));
     m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
 
     m_driverController.leftTrigger().whileTrue(new RepeatCommand(new InstantCommand(() -> m_drivebase.set(0.125, m_driverController.getRightX()))));
