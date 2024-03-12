@@ -64,7 +64,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     m_drive = new DifferentialDrive(m_leftDriveMotorF, m_rightDriveMotorF);
 
-    setDrivebaseIdle(IdleMode.kCoast);
+    setDrivebaseIdle(IdleMode.kBrake);
     m_leftDriveEncoder = m_leftDriveMotorF.getEncoder();
     m_rightDriveEncoder = m_rightDriveMotorF.getEncoder();
     // when robot goes forward, left encoder spins positive and right encoder spins
@@ -102,6 +102,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveMotorR.setIdleMode(setting);
     m_leftDriveMotorF.setIdleMode(setting);
     m_leftDriveMotorR.setIdleMode(setting);
+  }
+
+  public void disable(){
+    setDrivebaseIdle(IdleMode.kCoast);
   }
 
   public void stop() {

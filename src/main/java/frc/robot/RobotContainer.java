@@ -189,6 +189,10 @@ public class RobotContainer {
     m_operatorController.povDown().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
   }
+  
+  public void onDisable() {
+    m_drivebase.disable();
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
