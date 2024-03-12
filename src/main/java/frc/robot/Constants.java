@@ -78,7 +78,6 @@ public final class Constants {
     public static enum ScoringMode {
       SPEAKER,
       AMP,
-      TRAP,
     }
   }
 }

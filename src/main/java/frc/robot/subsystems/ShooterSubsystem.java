@@ -24,16 +24,20 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double speakerAngleSetpoint;
   public double ampAngleSetpoint;
-  public double trapAngleSetpoint;
-  
+  public double leftFlywheelSpeed;
+  public double rightFlywheelSpeed; 
+
   GenericEntry speakerAngleWidget;
   GenericEntry ampAngleWidget;
+  GenericEntry leftFlywheelWidget;
+  GenericEntry rightFlywheelWidget;
 
   private double m_scale = 1;
 
   public ScoringMode m_ScoringMode = ScoringMode.SPEAKER;
 
   ShuffleboardTab dashboardTab = Shuffleboard.getTab("NewDashboard");
+
 
   /** Creates a new HookSubsystem. */
   public ShooterSubsystem(int angleMotor, int leftFlywheel, int rightFlywheel) {
@@ -48,21 +52,37 @@ public class ShooterSubsystem extends SubsystemBase {
     m_leftFlywheel.setSmartCurrentLimit(40);
     m_rightFlywheel.setSmartCurrentLimit(40);
 
-    m_rightFlywheel.follow(m_leftFlywheel, true);
+    //m_rightFlywheel.follow(m_leftFlywheel, true);
     m_angleEncoder = m_angleMotor.getEncoder();
 
 
     speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(0, 0).getEntry();
     ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0, 0).getEntry();
+
+    leftFlywheelWidget = dashboardTab.addPersistent("Left Flywheel Speed", 1).withPosition(0, 0).getEntry();
+    rightFlywheelWidget = dashboardTab.addPersistent("Right Flywheel Speed", 1).withPosition(0, 0).getEntry();
   }
 
   public void setFlywheelsScale(double scale) {
     m_scale = scale;
   }
 
+  // public void setFlywheels(double m_pow) {
+  //   // System.out.println("Flywheels: " + m_pow);
+  //   m_leftFlywheel.set(m_pow * m_scale);
+  // }
+
   public void setFlywheels(double m_pow) {
-    // System.out.println("Flywheels: " + m_pow);
     m_leftFlywheel.set(m_pow * m_scale);
+    m_rightFlywheel.set(m_pow * m_scale);
+  }
+
+  public void setLeftFlywheel(double m_pow){
+    m_leftFlywheel.set(m_pow * m_scale);
+  }
+
+  public void setRightFlywheel(double m_pow){
+    m_rightFlywheel.set(m_pow * m_scale);
   }
 
   public void spinAngleMotor(double speed) {
@@ -92,5 +112,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     speakerAngleSetpoint = speakerAngleWidget.getDouble(0);
     ampAngleSetpoint = ampAngleWidget.getDouble(0);
+
+    rightFlywheelSpeed = rightFlywheelWidget.getDouble(1);
+    leftFlywheelSpeed = leftFlywheelWidget.getDouble(1);
   }
 }
