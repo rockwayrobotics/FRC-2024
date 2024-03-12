@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 
 public class DrivebaseSubsystem extends SubsystemBase {
@@ -63,8 +64,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     m_drive = new DifferentialDrive(m_leftDriveMotorF, m_rightDriveMotorF);
 
-    driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
-
     setDrivebaseIdle(IdleMode.kCoast);
     m_leftDriveEncoder = m_leftDriveMotorF.getEncoder();
     m_rightDriveEncoder = m_rightDriveMotorF.getEncoder();
@@ -74,6 +73,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveEncoder.setPositionConversionFactor(Constants.Drive.DISTANCE_PER_ENCODER_PULSE);
     m_leftDriveEncoder.setPosition(0);
     m_rightDriveEncoder.setPosition(0);
+
+    driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
     AutoBuilder.configureRamsete(
             this::getPose, // Robot pose supplier
