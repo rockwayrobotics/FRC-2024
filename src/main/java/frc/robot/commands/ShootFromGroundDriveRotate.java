@@ -16,7 +16,7 @@ public class ShootFromGroundDriveRotate extends SequentialCommandGroup {
   LedSubsystem m_led; 
 
 
-  public ShootFromGroundDriveRotate(ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, DrivebaseSubsystem drivebase, double drivedistance) {
+  public ShootFromGroundDriveRotate(ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, DrivebaseSubsystem drivebase, double drivedistance, double angle) {
     m_shooter = shooter;
     m_intake = intake;
     m_led = led;
@@ -33,7 +33,7 @@ public class ShootFromGroundDriveRotate extends SequentialCommandGroup {
 
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(1)));
-    this.addCommands(new DriveRotate(m_drivebase, -30));
+    this.addCommands(new DriveRotate(m_drivebase, angle));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(1)));
     this.addCommands(new WaitCommand(1));
 

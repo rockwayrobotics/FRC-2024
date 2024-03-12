@@ -31,6 +31,7 @@ enum AutoOption {
   moveNoShoot,
   middleTwoPiece,
   middleThreePiece,
+  middleThreePieceCounterClockwise,
   pathPlannerExample,
 }
 
@@ -82,6 +83,7 @@ public class RobotContainer {
     m_autoChooser.addOption("Middle Two Piece", AutoOption.middleTwoPiece);
     m_autoChooser.addOption("Middle Three Piece", AutoOption.middleThreePiece);
     m_autoChooser.addOption("Path Planner Example", AutoOption.pathPlannerExample);
+    m_autoChooser.addOption("Middle Three Piece Counter Clockwise", AutoOption.middleThreePieceCounterClockwise);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
 
 
@@ -207,6 +209,7 @@ public class RobotContainer {
       case moveNoShoot -> new moveNoShoot(m_drivebase, m_shooter, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case middleTwoPiece -> new middleTwoPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case middleThreePiece -> new middleThreePiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
+      case middleThreePieceCounterClockwise -> new middleThreePieceCounterClockwise(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case pathPlannerExample -> new PathPlannerAuto("New Auto");
     };
   }

@@ -27,7 +27,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
  * <p><strong>END:</strong> The robot has driven beyond the line to get out of the community, but not too far beyond the line
  * <p><strong>SCORES:</strong> Piece in auto, Auto mobility
  */
-public class middleThreePiece extends SequentialCommandGroup {
+public class middleThreePieceCounterClockwise extends SequentialCommandGroup {
     DrivebaseSubsystem m_drivebase;
     ShooterSubsystem m_shooter;
     IntakeSubsystem m_intake;
@@ -41,7 +41,7 @@ public class middleThreePiece extends SequentialCommandGroup {
         }
     }
 
-    public middleThreePiece(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double waittime, double drivedistance){
+    public middleThreePieceCounterClockwise(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double waittime, double drivedistance){
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_intake = intake;
@@ -63,9 +63,9 @@ public class middleThreePiece extends SequentialCommandGroup {
                 .thenWithTimeout(new DriveDistance(m_drivebase, -0.3, drivedistance), 5)
                 .then(new ShootFromGroundDrive(m_shooter, m_intake, m_led, m_drivebase, drivedistance))
                 .then(new DriveDistance(m_drivebase, -0.3, 0.1))
-                .then(new DriveRotate(m_drivebase, 30))
+                .then(new DriveRotate(m_drivebase, -30))
                 .thenWithTimeout(new DriveDistance(m_drivebase, -0.3, drivedistance + 0.15), 5)
-                .then(new ShootFromGroundDriveRotate(m_shooter, m_intake, m_led, m_drivebase, drivedistance, -30 + 0.15))
+                .then(new ShootFromGroundDriveRotate(m_shooter, m_intake, m_led, m_drivebase, drivedistance, 30 + 0.15))
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
