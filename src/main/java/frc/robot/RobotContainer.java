@@ -61,11 +61,11 @@ public class RobotContainer {
   ShuffleboardTab dashboard = Shuffleboard.getTab("NewDashboard");
     // Configure the trigger bindings
 
-    GenericEntry waittime =
+    public GenericEntry waittime =
       dashboard.add("Time After Shoot to Wait (Seconds)", 0)
          .getEntry();
 
-    GenericEntry drivedistance=
+    public GenericEntry drivedistance=
       dashboard.add("Drivedistance (m)", 1)
          .getEntry();
 
@@ -130,7 +130,7 @@ public class RobotContainer {
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(0.20)));
     m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
 
-    m_driverController.leftTrigger().onTrue(new RepeatCommand(new InstantCommand(() -> m_drivebase.set(0.125, m_driverController.getRightX()))));
+    m_driverController.leftTrigger().whileTrue(new RepeatCommand(new InstantCommand(() -> m_drivebase.set(0.125, m_driverController.getRightX()))));
     m_driverController.leftTrigger().onFalse(new InstantCommand(() -> m_drivebase.set(0,0)));
 
     m_driverController.start().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
@@ -189,7 +189,7 @@ public class RobotContainer {
     m_operatorController.povDown().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
   }
-
+  
   public void onDisable() {
     m_drivebase.disable();
   }
