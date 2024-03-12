@@ -9,6 +9,7 @@ import frc.robot.commands.DriveDistance;
 import frc.robot.commands.DriveRotate;
 import frc.robot.commands.FailFastTimeoutGroup;
 import frc.robot.commands.ShootFromGroundDrive;
+import frc.robot.commands.ShootFromGroundDriveRotate;
 import frc.robot.commands.ShootSequenceFullAuto;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -61,9 +62,10 @@ public class middleThreePiece extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
                 .thenWithTimeout(new DriveDistance(m_drivebase, -0.3, drivedistance), 5)
                 .then(new ShootFromGroundDrive(m_shooter, m_intake, m_led, m_drivebase, drivedistance))
+                .then(new DriveDistance(m_drivebase, -0.3, 0.1))
                 .then(new DriveRotate(m_drivebase, 30))
-                .thenWithTimeout(new DriveDistance(m_drivebase, -0.3, drivedistance + 0.25), 5)
-                .then(new ShootFromGroundDrive(m_shooter, m_intake, m_led, m_drivebase, drivedistance + 0.25))
+                .thenWithTimeout(new DriveDistance(m_drivebase, -0.3, drivedistance + 0.15), 5)
+                .then(new ShootFromGroundDriveRotate(m_shooter, m_intake, m_led, m_drivebase, drivedistance + 0.15))
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
