@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -13,6 +14,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants;
+import frc.robot.Constants.Digital;
 import frc.robot.Constants.Shooter.ScoringMode;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -20,14 +22,17 @@ public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax m_leftFlywheel;
   private final CANSparkMax m_rightFlywheel;
 
+  private DigitalInput m_shooterTopSensor; 
+
   RelativeEncoder m_angleEncoder;
 
   public double speakerAngleSetpoint;
-  public double ampAngleSetpoint;
-  public double trapAngleSetpoint;
+  public double ampAngleSetpoint; 
+  public boolean shooterStaged;
   
   GenericEntry speakerAngleWidget;
   GenericEntry ampAngleWidget;
+  GenericEntry shooterTopSensorWidget; 
 
   private double m_scale = 1;
 
@@ -51,9 +56,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_rightFlywheel.follow(m_leftFlywheel, true);
     m_angleEncoder = m_angleMotor.getEncoder();
 
-
     speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(0, 0).getEntry();
     ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0, 0).getEntry();
+    shooterTopSensorWidget = dashboardTab.addPersistent("Shooter Staged Sensor", false).getEntry();
   }
 
   public void setFlywheelsScale(double scale) {
@@ -82,6 +87,10 @@ public class ShooterSubsystem extends SubsystemBase {
     m_ScoringMode = mode;
   }
 
+  public boolean isNoteStaged() {
+    return !m_shooterTopSensor.get();
+  }
+
   @Override
   public void periodic() {
 
@@ -92,5 +101,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     speakerAngleSetpoint = speakerAngleWidget.getDouble(0);
     ampAngleSetpoint = ampAngleWidget.getDouble(0);
+    shooterTopSensorWidget.setBoolean(isNoteStaged());
+
+    shooterStaged = isNoteStaged();
   }
 }
