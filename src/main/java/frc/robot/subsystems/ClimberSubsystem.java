@@ -34,8 +34,8 @@ public class ClimberSubsystem extends SubsystemBase {
     m_climberMotor.setIdleMode(IdleMode.kBrake);
     m_climberMotor.setInverted(true);
 
-    m_climberMotor.setSoftLimit(SoftLimitDirection.kForward, 150);
-    m_climberMotor.setSoftLimit(SoftLimitDirection.kReverse, 50);
+    m_climberMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.Climber.FORWARD_MAX);
+    m_climberMotor.setSoftLimit(SoftLimitDirection.kReverse, Constants.Climber.REVERSE_MAX);
     m_climberMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     m_climberMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
 

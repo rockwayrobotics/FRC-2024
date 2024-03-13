@@ -33,6 +33,7 @@ public class DriveCommand extends Command {
   public void execute() {
     double speed;
     double rotation;
+    
     // TODO: Delete the comment below. We actually know what the code does. :3 "We don't know what this does. It's a mystery." "It's a mystery." "It's a mystery."
     // TODO The comment below is incorrect. We need to test and see what direction
     // does what.

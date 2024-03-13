@@ -30,7 +30,6 @@ public class ShooterAngle extends Command {
     switch (m_shooter.m_ScoringMode) {
       case SPEAKER -> m_distance = m_shooter.speakerAngleSetpoint;
       case AMP -> m_distance = m_shooter.ampAngleSetpoint;
-      case TRAP -> m_distance = m_shooter.trapAngleSetpoint;
     }
     ;
 

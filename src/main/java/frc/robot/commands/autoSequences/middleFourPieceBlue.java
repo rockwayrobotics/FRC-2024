@@ -24,10 +24,9 @@ import java.util.Map;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 
-/** Autonomously shoots the piece loaded in auto, and drives outside the short side of the community
- * <p><strong>SETUP:</strong> Place the robot on short side of community beside charge station
- * <p><strong>END:</strong> The robot has driven beyond the line to get out of the community, but not too far beyond the line
- * <p><strong>SCORES:</strong> Piece in auto, Auto mobility
+
+/** Four piece auto from the middle of the field, starting on the blue alliance.
+ * Different for each alliance so we don't smack into the truss first 
  */
 public class middleFourPieceBlue extends SequentialCommandGroup {
     DrivebaseSubsystem m_drivebase;

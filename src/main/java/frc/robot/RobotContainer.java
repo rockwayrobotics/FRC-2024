@@ -30,8 +30,8 @@ enum AutoOption {
   shootMove, 
   moveNoShoot,
   middleTwoPiece,
-  middleThreePiece,
-  middleThreePieceCounterClockwise,
+  middleThreePieceRed,
+  middleThreePieceBlue,
   middleFourPieceRed,
   middleFourPieceBlue,
   pathPlannerExample,
@@ -91,9 +91,9 @@ public class RobotContainer {
     m_autoChooser.addOption("Just Forwards", AutoOption.driveForward);
     m_autoChooser.addOption("No Shoot Drive", AutoOption.moveNoShoot);
     m_autoChooser.addOption("Middle Two Piece", AutoOption.middleTwoPiece);
-    m_autoChooser.addOption("Middle Three Piece", AutoOption.middleThreePiece);
+    m_autoChooser.addOption("Middle Three Piece Red", AutoOption.middleThreePieceRed);
     m_autoChooser.addOption("Path Planner Example", AutoOption.pathPlannerExample);
-    m_autoChooser.addOption("Middle Three Piece Counter Clockwise", AutoOption.middleThreePieceCounterClockwise);
+    m_autoChooser.addOption("Middle Three Piece Blue", AutoOption.middleThreePieceBlue);
     m_autoChooser.addOption("Middle Four Piece Red", AutoOption.middleFourPieceRed);
     m_autoChooser.addOption("Middle Four Piece Blue", AutoOption.middleFourPieceBlue);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
@@ -220,8 +220,8 @@ public class RobotContainer {
       case shootMove -> new shootMove(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case moveNoShoot -> new moveNoShoot(m_drivebase, m_shooter, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case middleTwoPiece -> new middleTwoPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case middleThreePiece -> new middleThreePiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case middleThreePieceCounterClockwise -> new middleThreePieceCounterClockwise(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
+      case middleThreePieceRed -> new middleThreePieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
+      case middleThreePieceBlue -> new middleThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case middleFourPieceRed -> new middleFourPieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1), driveMoreOffsetEntry.getDouble(0.07));
       case middleFourPieceBlue -> new middleFourPieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1), driveMoreOffsetEntry.getDouble(0.07));
       case pathPlannerExample -> new PathPlannerAuto("New Auto");

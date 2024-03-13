@@ -52,10 +52,15 @@ public final class Constants {
     public final static double rotation_kP = 0.3;
   }
 
+  public static final class Climber {
+    public final static float REVERSE_MAX = 0;
+    public final static float FORWARD_MAX = 270;
+  }
+
   // Constants for LEDs
   public static final class LED {
     public final static int LED_PWM = 0;
-    public final static int LED_LENGTH = 59;
+    public final static int LED_LENGTH = 58;
 
     public static enum modes {
       Rainbow,
@@ -78,7 +83,6 @@ public final class Constants {
     public static enum ScoringMode {
       SPEAKER,
       AMP,
-      TRAP,
     }
   }
 }
