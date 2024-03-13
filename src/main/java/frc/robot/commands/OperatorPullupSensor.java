@@ -25,12 +25,12 @@ public class OperatorPullupSensor extends Command {
   @Override
   public void initialize() {
     // Resets encoder values to default
+    //System.out.println("operator pullup");
     m_intake.setBelt(1);
   }
 
   @Override
   public void execute() {
-    System.out.println("Executing Operator Pullup");
   }
 
   @Override
@@ -40,8 +40,7 @@ public class OperatorPullupSensor extends Command {
 
   @Override
   public void end(boolean cancelled) {
-    m_intake.setBelt(-0.5);
-    new WaitCommand(0.2);
-    m_intake.setBelt(0);
+    // m_intake.setBelt(0);
+    //System.out.println(cancelled);
   }
 }
