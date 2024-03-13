@@ -29,7 +29,7 @@ public class ShootFromGroundDriveRotateFour extends SequentialCommandGroup {
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(1)));
     this.addCommands(new WaitCommand(0.3));
 
-    this.addCommands(new DriveDistance(m_drivebase, 1, drivedistance)); 
+    this.addCommands(new DriveDistance(m_drivebase, 0.7, drivedistance)); 
 
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(1)));

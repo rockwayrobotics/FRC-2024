@@ -68,11 +68,11 @@ public class middleFourPiece extends SequentialCommandGroup {
                 .then(new ShootFromGroundDriveFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance))
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
                 .then(new DriveRotate(m_drivebase, 30))
-                .thenWithTimeout(new DriveDistance(m_drivebase, -1, drivedistance + drivemoreoffset), 5)
+                .thenWithTimeout(new DriveDistance(m_drivebase, -0.7, drivedistance + drivemoreoffset), 5)
                 .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance, -30 + drivemoreoffset))
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
                 .then(new DriveRotate(m_drivebase, -30))
-                .thenWithTimeout(new DriveDistance(m_drivebase, -0.3, drivedistance + drivemoreoffset), 5)
+                .thenWithTimeout(new DriveDistance(m_drivebase, -0.7, drivedistance + drivemoreoffset), 5)
                 .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance, 30 + drivemoreoffset))
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
