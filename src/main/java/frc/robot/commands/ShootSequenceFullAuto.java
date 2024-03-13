@@ -9,19 +9,25 @@ import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShootSequenceFullAuto extends SequentialCommandGroup {
+
   ShooterSubsystem m_shooter;
   IntakeSubsystem m_intake;
-  LedSubsystem m_led; 
+  LedSubsystem m_led;
 
-
-  public ShootSequenceFullAuto(ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led) {
+  public ShootSequenceFullAuto(
+    ShooterSubsystem shooter,
+    IntakeSubsystem intake,
+    LedSubsystem led
+  ) {
     m_shooter = shooter;
     m_intake = intake;
     m_led = led;
 
     addRequirements(m_shooter, m_intake, m_led);
 
-    this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Yellow)));
+    this.addCommands(
+        new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Yellow))
+      );
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(1)));
     this.addCommands(new WaitCommand(0.5));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(1)));
@@ -29,6 +35,8 @@ public class ShootSequenceFullAuto extends SequentialCommandGroup {
 
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(0)));
-    this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
+    this.addCommands(
+        new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow))
+      );
   }
 }

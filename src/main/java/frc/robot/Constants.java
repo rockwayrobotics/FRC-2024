@@ -17,12 +17,15 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
   public static final class Gamepads {
+
     public static final int DRIVER = 0;
     public static final int OPERATOR = 1;
   }
 
   public static final class CAN {
+
     public static final int LEFT_DRIVE_MOTOR_R = 1;
     public static final int LEFT_DRIVE_MOTOR_F = 2;
     public static final int RIGHT_DRIVE_MOTOR_R = 3;
@@ -37,30 +40,34 @@ public final class Constants {
   }
 
   public static final class Digital {
-    public final static int CLIMB_HOME_SWITCH = 0; 
+
+    public static final int CLIMB_HOME_SWITCH = 0;
   }
 
-
   public static final class Drive {
-    public final static double ENCODER_PULSES_PER_REVOLUTION = 360;
-    public final static double WHEEL_DIAMETER = 6;
-    public final static double DISTANCE_PER_ENCODER_PULSE = WHEEL_DIAMETER * Math.PI / ENCODER_PULSES_PER_REVOLUTION;
 
-    public final static boolean LEFT_DRIVE_INVERTED = true;
-    public final static boolean RIGHT_DRIVE_INVERTED = false;
+    public static final double ENCODER_PULSES_PER_REVOLUTION = 360;
+    public static final double WHEEL_DIAMETER = 6;
+    public static final double DISTANCE_PER_ENCODER_PULSE =
+      WHEEL_DIAMETER * Math.PI / ENCODER_PULSES_PER_REVOLUTION;
 
-    public final static double rotation_kP = 0.3;
+    public static final boolean LEFT_DRIVE_INVERTED = true;
+    public static final boolean RIGHT_DRIVE_INVERTED = false;
+
+    public static final double rotation_kP = 0.3;
   }
 
   public static final class Climber {
-    public final static float REVERSE_MAX = 0;
-    public final static float FORWARD_MAX = 270;
+
+    public static final float REVERSE_MAX = 0;
+    public static final float FORWARD_MAX = 270;
   }
 
   // Constants for LEDs
   public static final class LED {
-    public final static int LED_PWM = 0;
-    public final static int LED_LENGTH = 58;
+
+    public static final int LED_PWM = 0;
+    public static final int LED_LENGTH = 58;
 
     public static enum modes {
       Rainbow,
@@ -80,6 +87,7 @@ public final class Constants {
   }
 
   public static final class Shooter {
+
     public static enum ScoringMode {
       SPEAKER,
       AMP,

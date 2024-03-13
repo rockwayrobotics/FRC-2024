@@ -4,18 +4,23 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants;
-import frc.robot.subsystems.DrivebaseSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.subsystems.DrivebaseSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class RotateToAngle extends Command {
+
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DrivebaseSubsystem m_DrivebaseSubsystem;
 
-  private final PIDController pid = new PIDController(Constants.Drive.rotation_kP, 0, 0);
+  private final PIDController pid = new PIDController(
+    Constants.Drive.rotation_kP,
+    0,
+    0
+  );
 
   private final double m_maxRotationPower;
 
@@ -24,8 +29,12 @@ public class RotateToAngle extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public RotateToAngle(DrivebaseSubsystem subsystem, double setpoint, double toleranceDegrees,
-      double maxRotationPower) {
+  public RotateToAngle(
+    DrivebaseSubsystem subsystem,
+    double setpoint,
+    double toleranceDegrees,
+    double maxRotationPower
+  ) {
     m_DrivebaseSubsystem = subsystem;
     addRequirements(subsystem);
 
@@ -51,7 +60,8 @@ public class RotateToAngle extends Command {
     // increase in yaw here, we invert the PID result.
     double drivePower = -pid.calculate(m_DrivebaseSubsystem.getYaw());
 
-    drivePower = MathUtil.clamp(drivePower, -m_maxRotationPower, m_maxRotationPower);
+    drivePower =
+      MathUtil.clamp(drivePower, -m_maxRotationPower, m_maxRotationPower);
 
     m_DrivebaseSubsystem.set(0, drivePower);
   }
@@ -60,7 +70,11 @@ public class RotateToAngle extends Command {
   @Override
   public void end(boolean interrupted) {
     if (interrupted) {
-      System.out.println("Cancelled when attempting to rotate to " + pid.getSetpoint() + " degrees");
+      System.out.println(
+        "Cancelled when attempting to rotate to " +
+        pid.getSetpoint() +
+        " degrees"
+      );
     } else {
       System.out.println("Rotated to " + pid.getSetpoint() + " degrees");
     }

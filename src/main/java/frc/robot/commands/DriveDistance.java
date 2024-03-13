@@ -10,8 +10,11 @@ public class DriveDistance extends Command {
   private double m_speed;
   private double m_distance;
 
-  public DriveDistance(DrivebaseSubsystem subsystem, double speed, double distance) {
-
+  public DriveDistance(
+    DrivebaseSubsystem subsystem,
+    double speed,
+    double distance
+  ) {
     m_drivebase = subsystem;
     m_speed = speed;
     m_distance = distance;
@@ -35,7 +38,12 @@ public class DriveDistance extends Command {
 
   @Override
   public boolean isFinished() {
-    System.out.println("Current pos: " + Math.abs(m_drivebase.getRDistance()) + " Setpoint: " + m_distance);
+    System.out.println(
+      "Current pos: " +
+      Math.abs(m_drivebase.getRDistance()) +
+      " Setpoint: " +
+      m_distance
+    );
     //SmartDashboard.putNumber("Auto Command Distance Travelled", m_drivebase.getRDistance());
     return (Math.abs(m_drivebase.getRDistance()) >= m_distance);
   }

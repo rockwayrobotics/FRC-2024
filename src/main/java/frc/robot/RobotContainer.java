@@ -4,30 +4,25 @@
 
 package frc.robot;
 
-import frc.robot.Constants.*;
-
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkBase.IdleMode;
-
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
-
-import frc.robot.commands.autoSequences.*;
-
-import frc.robot.subsystems.*;
+import frc.robot.Constants.*;
 import frc.robot.commands.*;
+import frc.robot.commands.autoSequences.*;
+import frc.robot.subsystems.*;
 
 enum AutoOption {
   driveForward,
-  shootMove, 
+  shootMove,
   moveNoShoot,
   middleTwoPiece,
   middleThreePieceRed,
@@ -47,60 +42,93 @@ enum AutoOption {
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController = new CommandXboxController(Gamepads.DRIVER);
-  private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
+  private final CommandXboxController m_driverController = new CommandXboxController(
+    Gamepads.DRIVER
+  );
+  private final CommandXboxController m_operatorController = new CommandXboxController(
+    Gamepads.OPERATOR
+  );
 
   private final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
-  private final ClimberSubsystem m_climber = new ClimberSubsystem(Constants.CAN.CLIMB);
+  private final ClimberSubsystem m_climber = new ClimberSubsystem(
+    Constants.CAN.CLIMB
+  );
   private final LedSubsystem m_led = new LedSubsystem();
-  private final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.GEAR, Constants.CAN.LEFT_FLYWHEEL,
-      Constants.CAN.RIGHT_FLYWHEEL);
-  private final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.CAN.BELT, Constants.CAN.LEFT_INTAKE,
-      Constants.CAN.RIGHT_INTAKE);
+  private final ShooterSubsystem m_shooter = new ShooterSubsystem(
+    Constants.CAN.GEAR,
+    Constants.CAN.LEFT_FLYWHEEL,
+    Constants.CAN.RIGHT_FLYWHEEL
+  );
+  private final IntakeSubsystem m_intake = new IntakeSubsystem(
+    Constants.CAN.BELT,
+    Constants.CAN.LEFT_INTAKE,
+    Constants.CAN.RIGHT_INTAKE
+  );
 
   SendableChooser<AutoOption> m_autoChooser = new SendableChooser<>();
-    
+
   ShuffleboardTab dashboard = Shuffleboard.getTab("NewDashboard");
-    // Configure the trigger bindings
+  // Configure the trigger bindings
 
-    public GenericEntry waittime =
-      dashboard.add("Time After Shoot to Wait (Seconds)", 0)
-         .getEntry();
+  public GenericEntry waittime = dashboard
+    .add("Time After Shoot to Wait (Seconds)", 0)
+    .getEntry();
 
-    public GenericEntry drivedistance=
-      dashboard.add("Drivedistance (m)", 1)
-         .getEntry();
+  public GenericEntry drivedistance = dashboard
+    .add("Drivedistance (m)", 1)
+    .getEntry();
 
-    GenericEntry drivescale = 
-      dashboard.addPersistent("Drivescale", 0.3)
-        .getEntry();
+  GenericEntry drivescale = dashboard
+    .addPersistent("Drivescale", 0.3)
+    .getEntry();
 
-    GenericEntry driveMoreOffsetEntry = 
-      dashboard.addPersistent("Drive More Offset", 0.07)
-        .getEntry();
+  GenericEntry driveMoreOffsetEntry = dashboard
+    .addPersistent("Drive More Offset", 0.07)
+    .getEntry();
 
   /**
-   * 
+   *
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
-
     m_autoChooser.setDefaultOption("Shoot Then Drive", AutoOption.shootMove);
     m_autoChooser.addOption("Just Forwards", AutoOption.driveForward);
     m_autoChooser.addOption("No Shoot Drive", AutoOption.moveNoShoot);
     m_autoChooser.addOption("Middle Two Piece", AutoOption.middleTwoPiece);
-    m_autoChooser.addOption("Middle Three Piece Red", AutoOption.middleThreePieceRed);
-    m_autoChooser.addOption("Path Planner Example", AutoOption.pathPlannerExample);
-    m_autoChooser.addOption("Middle Three Piece Blue", AutoOption.middleThreePieceBlue);
-    m_autoChooser.addOption("Middle Four Piece Red", AutoOption.middleFourPieceRed);
-    m_autoChooser.addOption("Middle Four Piece Blue", AutoOption.middleFourPieceBlue);
-    dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
+    m_autoChooser.addOption(
+      "Middle Three Piece Red",
+      AutoOption.middleThreePieceRed
+    );
+    m_autoChooser.addOption(
+      "Path Planner Example",
+      AutoOption.pathPlannerExample
+    );
+    m_autoChooser.addOption(
+      "Middle Three Piece Blue",
+      AutoOption.middleThreePieceBlue
+    );
+    m_autoChooser.addOption(
+      "Middle Four Piece Red",
+      AutoOption.middleFourPieceRed
+    );
+    m_autoChooser.addOption(
+      "Middle Four Piece Blue",
+      AutoOption.middleFourPieceBlue
+    );
+    dashboard
+      .add("Auto Routine", m_autoChooser)
+      .withSize(2, 1)
+      .withPosition(8, 0);
 
-
-    m_drivebase
-        .setDefaultCommand(new DriveCommand(m_driverController::getLeftY, m_driverController::getRightX, m_drivebase));
+    m_drivebase.setDefaultCommand(
+      new DriveCommand(
+        m_driverController::getLeftY,
+        m_driverController::getRightX,
+        m_drivebase
+      )
+    );
 
     configureBindings();
   }
@@ -125,7 +153,6 @@ public class RobotContainer {
   // }
 
   private void configureBindings() {
-
     // Driver Controller buttons
     //m_driverController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
     //m_driverController.povUp().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
@@ -133,77 +160,176 @@ public class RobotContainer {
     //m_driverController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.5))));
     //m_driverController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
-    m_driverController.a().onTrue(new ShootSequenceHalf(m_shooter, m_intake, m_led));
+    m_driverController
+      .a()
+      .onTrue(new ShootSequenceHalf(m_shooter, m_intake, m_led));
 
-    m_driverController.y().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
+    m_driverController
+      .y()
+      .onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
 
     //m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake, m_led));
 
-    m_driverController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake, m_led));
+    m_driverController
+      .b()
+      .onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake, m_led));
 
-    m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(drivescale.getDouble(0.3))));
-    m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
+    m_driverController
+      .leftBumper()
+      .onTrue(
+        new InstantCommand(() -> m_drivebase.setScale(drivescale.getDouble(0.3))
+        )
+      );
+    m_driverController
+      .leftBumper()
+      .onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
 
-    m_driverController.leftTrigger().whileTrue(new RepeatCommand(new InstantCommand(() -> m_drivebase.set(0.125, m_driverController.getRightX()))));
-    m_driverController.leftTrigger().onFalse(new InstantCommand(() -> m_drivebase.set(0,0)));
+    m_driverController
+      .leftTrigger()
+      .whileTrue(
+        new RepeatCommand(
+          new InstantCommand(() ->
+            m_drivebase.set(0.125, m_driverController.getRightX())
+          )
+        )
+      );
+    m_driverController
+      .leftTrigger()
+      .onFalse(new InstantCommand(() -> m_drivebase.set(0, 0)));
 
-    m_driverController.start().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
-    m_driverController.start().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+    m_driverController
+      .start()
+      .whileTrue(
+        new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1)))
+      );
+    m_driverController
+      .start()
+      .onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
 
-    m_driverController.rightBumper().whileTrue(
-        new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.7))
-            .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))));
-    m_driverController.rightBumper().onFalse(
-        new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
+    m_driverController
+      .rightBumper()
+      .whileTrue(
+        new RepeatCommand(
+          new InstantCommand(() -> m_intake.setBelt(0.7))
+            .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))
+        )
+      );
+    m_driverController
+      .rightBumper()
+      .onFalse(
+        new InstantCommand(() -> m_intake.setBelt(0))
+          .andThen(new InstantCommand(() -> m_intake.setIntake(0)))
+      );
 
-    m_driverController.rightTrigger().whileTrue(
-        new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(-0.7))
-            .andThen(new InstantCommand(() -> m_intake.setIntake(-0.2)))));
-    m_driverController.rightTrigger().onFalse(
-        new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
+    m_driverController
+      .rightTrigger()
+      .whileTrue(
+        new RepeatCommand(
+          new InstantCommand(() -> m_intake.setBelt(-0.7))
+            .andThen(new InstantCommand(() -> m_intake.setIntake(-0.2)))
+        )
+      );
+    m_driverController
+      .rightTrigger()
+      .onFalse(
+        new InstantCommand(() -> m_intake.setBelt(0))
+          .andThen(new InstantCommand(() -> m_intake.setIntake(0)))
+      );
 
     // Operator Controller buttons
     // example led
     // m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));;
 
-    m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setFlywheels(-1)));
-    m_operatorController.b().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+    m_operatorController
+      .b()
+      .onTrue(new InstantCommand(() -> m_shooter.setFlywheels(-1)));
+    m_operatorController
+      .b()
+      .onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
 
-    m_operatorController.y().onTrue(new OperatorPullback(m_shooter, m_intake, m_led));
+    m_operatorController
+      .y()
+      .onTrue(new OperatorPullback(m_shooter, m_intake, m_led));
 
-    m_operatorController.a().whileTrue(
-        new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(-0.7))
-            .andThen(new InstantCommand(() -> m_intake.setIntake(-0.2)))));
-    m_operatorController.a().onFalse(
-        new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
+    m_operatorController
+      .a()
+      .whileTrue(
+        new RepeatCommand(
+          new InstantCommand(() -> m_intake.setBelt(-0.7))
+            .andThen(new InstantCommand(() -> m_intake.setIntake(-0.2)))
+        )
+      );
+    m_operatorController
+      .a()
+      .onFalse(
+        new InstantCommand(() -> m_intake.setBelt(0))
+          .andThen(new InstantCommand(() -> m_intake.setIntake(0)))
+      );
 
-    m_operatorController.x().whileTrue(
-        new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.7))
-            .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))));
-    m_operatorController.x().onFalse(
-        new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
+    m_operatorController
+      .x()
+      .whileTrue(
+        new RepeatCommand(
+          new InstantCommand(() -> m_intake.setBelt(0.7))
+            .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))
+        )
+      );
+    m_operatorController
+      .x()
+      .onFalse(
+        new InstantCommand(() -> m_intake.setBelt(0))
+          .andThen(new InstantCommand(() -> m_intake.setIntake(0)))
+      );
 
+    m_operatorController
+      .rightBumper()
+      .onTrue(
+        new InstantCommand(() ->
+          m_led.setMode(Constants.LED.modes.whiteDotLines)
+        )
+      );
+    m_operatorController
+      .rightBumper()
+      .onFalse(
+        new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow))
+      );
 
-    m_operatorController.rightBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.whiteDotLines)));
-    m_operatorController.rightBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
+    m_operatorController
+      .leftBumper()
+      .onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Off)));
+    m_operatorController
+      .leftBumper()
+      .onFalse(
+        new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow))
+      );
 
-    m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Off)));
-    m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
+    m_operatorController
+      .leftTrigger()
+      .onTrue(new DriveRotate(m_drivebase, -30));
 
-    m_operatorController.leftTrigger().onTrue(new DriveRotate(m_drivebase, -30));
+    m_operatorController
+      .start()
+      .onTrue(
+        new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast))
+      );
 
-    m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
+    // TODO: angle STUFF HERE :3
 
-    // TODO: angle STUFF HERE :3 
+    m_operatorController
+      .povUp()
+      .onTrue(new InstantCommand(() -> m_climber.setClimber(0.7)));
+    m_operatorController
+      .povUp()
+      .onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
-    m_operatorController.povUp().onTrue(new InstantCommand(() -> m_climber.setClimber(0.7)));
-    m_operatorController.povUp().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
-
-    m_operatorController.povDown().onTrue(new InstantCommand(() -> m_climber.setClimber(-0.7)));
-    m_operatorController.povDown().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
-
+    m_operatorController
+      .povDown()
+      .onTrue(new InstantCommand(() -> m_climber.setClimber(-0.7)));
+    m_operatorController
+      .povDown()
+      .onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
   }
-  
+
   public void onDisable() {
     m_drivebase.disable();
   }
@@ -217,13 +343,63 @@ public class RobotContainer {
     // The selected command will be run in autonomous
     return switch (m_autoChooser.getSelected()) {
       case driveForward -> new driveForward(m_drivebase);
-      case shootMove -> new shootMove(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case moveNoShoot -> new moveNoShoot(m_drivebase, m_shooter, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case middleTwoPiece -> new middleTwoPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case middleThreePieceRed -> new middleThreePieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case middleThreePieceBlue -> new middleThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case middleFourPieceRed -> new middleFourPieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1), driveMoreOffsetEntry.getDouble(0.07));
-      case middleFourPieceBlue -> new middleFourPieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1), driveMoreOffsetEntry.getDouble(0.07));
+      case shootMove -> new shootMove(
+        m_drivebase,
+        m_shooter,
+        m_intake,
+        m_led,
+        waittime.getDouble(0),
+        drivedistance.getDouble(1)
+      );
+      case moveNoShoot -> new moveNoShoot(
+        m_drivebase,
+        m_shooter,
+        m_led,
+        waittime.getDouble(0),
+        drivedistance.getDouble(1)
+      );
+      case middleTwoPiece -> new middleTwoPiece(
+        m_drivebase,
+        m_shooter,
+        m_intake,
+        m_led,
+        waittime.getDouble(0),
+        drivedistance.getDouble(1)
+      );
+      case middleThreePieceRed -> new middleThreePieceRed(
+        m_drivebase,
+        m_shooter,
+        m_intake,
+        m_led,
+        waittime.getDouble(0),
+        drivedistance.getDouble(1)
+      );
+      case middleThreePieceBlue -> new middleThreePieceBlue(
+        m_drivebase,
+        m_shooter,
+        m_intake,
+        m_led,
+        waittime.getDouble(0),
+        drivedistance.getDouble(1)
+      );
+      case middleFourPieceRed -> new middleFourPieceRed(
+        m_drivebase,
+        m_shooter,
+        m_intake,
+        m_led,
+        waittime.getDouble(0),
+        drivedistance.getDouble(1),
+        driveMoreOffsetEntry.getDouble(0.07)
+      );
+      case middleFourPieceBlue -> new middleFourPieceBlue(
+        m_drivebase,
+        m_shooter,
+        m_intake,
+        m_led,
+        waittime.getDouble(0),
+        drivedistance.getDouble(1),
+        driveMoreOffsetEntry.getDouble(0.07)
+      );
       case pathPlannerExample -> new PathPlannerAuto("New Auto");
     };
   }

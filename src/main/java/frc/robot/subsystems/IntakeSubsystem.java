@@ -3,10 +3,10 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
+
   private final CANSparkMax m_beltMotor;
   private final CANSparkMax m_leftIntake;
   private final CANSparkMax m_rightIntake;
@@ -16,7 +16,8 @@ public class IntakeSubsystem extends SubsystemBase {
   public IntakeSubsystem(int beltMotor, int leftIntake, int rightIntake) {
     m_beltMotor = new CANSparkMax(beltMotor, CANSparkMax.MotorType.kBrushless);
     m_leftIntake = new CANSparkMax(leftIntake, CANSparkMax.MotorType.kBrushed);
-    m_rightIntake = new CANSparkMax(rightIntake, CANSparkMax.MotorType.kBrushed);
+    m_rightIntake =
+      new CANSparkMax(rightIntake, CANSparkMax.MotorType.kBrushed);
     m_beltMotor.setIdleMode(IdleMode.kBrake);
     m_beltMotor.setInverted(true);
     m_leftIntake.setIdleMode(IdleMode.kCoast);
