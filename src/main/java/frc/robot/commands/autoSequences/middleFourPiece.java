@@ -67,13 +67,14 @@ public class middleFourPiece extends SequentialCommandGroup {
                 .thenWithTimeout(new DriveDistance(m_drivebase, -1, drivedistance), 5)
                 .then(new ShootFromGroundDriveFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance))
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
-                .then(new DriveRotate(m_drivebase, 30))
+                .then(new DriveRotate(m_drivebase, 25))
+                .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
                 .thenWithTimeout(new DriveDistance(m_drivebase, -0.7, drivedistance + drivemoreoffset), 5)
-                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance, -30 + drivemoreoffset))
+                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance, -25 + drivemoreoffset))
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
-                .then(new DriveRotate(m_drivebase, -30))
+                .then(new DriveRotate(m_drivebase, -25))
                 .thenWithTimeout(new DriveDistance(m_drivebase, -0.7, drivedistance + drivemoreoffset), 5)
-                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance, 30 + drivemoreoffset))
+                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance, 25 + drivemoreoffset))
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 

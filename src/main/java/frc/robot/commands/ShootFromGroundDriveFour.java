@@ -27,7 +27,9 @@ public class ShootFromGroundDriveFour extends SequentialCommandGroup {
     this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Orange)));
     
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(1)));
+    this.addCommands(new InstantCommand(() -> m_intake.setIntake(0.5)));
     this.addCommands(new WaitCommand(0.3));
+    this.addCommands(new InstantCommand(() -> m_intake.setIntake(0)));
 
     this.addCommands(new DriveDistance(m_drivebase, 1, drivedistance)); 
 
