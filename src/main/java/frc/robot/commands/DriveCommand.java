@@ -6,8 +6,9 @@ package frc.robot.commands;
 
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.DrivebaseSubsystem;
 import java.util.function.DoubleSupplier;
+
+import frc.robot.subsystems.DrivebaseSubsystem;
 
 public class DriveCommand extends Command {
 
@@ -15,11 +16,7 @@ public class DriveCommand extends Command {
   private DoubleSupplier m_left_y;
   private DoubleSupplier m_right_x;
 
-  public DriveCommand(
-    DoubleSupplier left_y,
-    DoubleSupplier right_x,
-    DrivebaseSubsystem subsystem
-  ) {
+  public DriveCommand(DoubleSupplier left_y, DoubleSupplier right_x, DrivebaseSubsystem subsystem) {
     m_left_y = left_y;
     m_right_x = right_x;
     m_DrivebaseSubsystem = subsystem;
@@ -28,14 +25,15 @@ public class DriveCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double speed;
     double rotation;
-
+    
     // TODO: Delete the comment below. We actually know what the code does. :3 "We don't know what this does. It's a mystery." "It's a mystery." "It's a mystery."
     // TODO The comment below is incorrect. We need to test and see what direction
     // does what.
@@ -57,6 +55,7 @@ public class DriveCommand extends Command {
     }
 
     m_DrivebaseSubsystem.set(speed, rotation * 0.76);
+
     //SmartDashboard.putNumber("Y", m_left_y.getAsDouble());
     //SmartDashboard.putNumber("X", m_right_x.getAsDouble());
   }

@@ -2,13 +2,16 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.LED.modes;
+
+import edu.wpi.first.wpilibj.Filesystem;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 
 public class LedSubsystem extends SubsystemBase {
@@ -26,9 +29,9 @@ public class LedSubsystem extends SubsystemBase {
 
   BufferedImage badapple;
   BufferedImage heatgradient;
-  BufferedImage whitedotlines;
+  BufferedImage whitedotlines; 
 
-  BufferedImage currentimage;
+  BufferedImage currentimage; 
 
   public LedSubsystem() {
     m_led = new AddressableLED(Constants.LED.LED_PWM);
@@ -43,6 +46,7 @@ public class LedSubsystem extends SubsystemBase {
     badapple = imageLoad("images/badapple.png");
     heatgradient = imageLoad("images/heatgradient.png");
     whitedotlines = imageLoad("images/whitedotlines.png");
+
   }
 
   private double sin_wave(double val, int set_point) {
@@ -54,8 +58,7 @@ public class LedSubsystem extends SubsystemBase {
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
       // Calculate the hue - hue is easier for rainbows because the color
       // shape is a circle so only one value needs to precess
-      final var hue =
-        (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+      final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
       // Set the value
       m_ledBuffer.setHSV(i, hue, 255, 64);
     }
@@ -121,7 +124,7 @@ public class LedSubsystem extends SubsystemBase {
       return ImageIO.read(new File(Filesystem.getDeployDirectory(), imagePath));
     } catch (IOException e) {
       e.printStackTrace();
-      // make robust
+      // make robust 
     }
     return null;
   }
@@ -177,7 +180,7 @@ public class LedSubsystem extends SubsystemBase {
           break;
         case Off:
           off();
-          break;
+          break; 
         case BreathingYellow:
           breathing_monochrome(30);
           break;

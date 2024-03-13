@@ -7,6 +7,7 @@ import frc.robot.commands.FailFastTimeoutGroup;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+
 import java.util.Map;
 
 /**
@@ -22,15 +23,11 @@ import java.util.Map;
  * <strong>SCORES:</strong> Piece in auto, Auto mobility
  */
 public class driveForward extends SequentialCommandGroup {
-
   DrivebaseSubsystem m_drivebase;
   ShooterSubsystem m_shooter;
   LedSubsystem m_led;
 
-  public void setStatusWidget(
-    SimpleWidget AutoFailedWidget,
-    FailFastTimeoutGroup sequence
-  ) {
+  public void setStatusWidget(SimpleWidget AutoFailedWidget, FailFastTimeoutGroup sequence) {
     if (sequence.timedOut()) {
       AutoFailedWidget.withProperties(Map.of("colorWhenFalse", "red"));
     } else {
@@ -44,7 +41,7 @@ public class driveForward extends SequentialCommandGroup {
     addRequirements(m_drivebase);
 
     FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
-      .thenWithTimeout(new DriveDistance(m_drivebase, 0.2, 80), 10);
+        .thenWithTimeout(new DriveDistance(m_drivebase, 0.2, 80), 10);
 
     this.addCommands(sequence);
   }

@@ -31,8 +31,9 @@ public class ShooterAngle extends Command {
       case SPEAKER -> m_distance = m_shooter.speakerAngleSetpoint;
       case AMP -> m_distance = m_shooter.ampAngleSetpoint;
     }
-    pid.setSetpoint(m_distance);
+    ;
 
+    pid.setSetpoint(m_distance);
     pid.reset();
   }
 
