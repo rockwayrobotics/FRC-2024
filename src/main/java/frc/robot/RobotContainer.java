@@ -75,6 +75,10 @@ public class RobotContainer {
       dashboard.addPersistent("Drivescale", 0.3)
         .getEntry();
 
+    GenericEntry driveMoreOffsetEntry = 
+      dashboard.addPersistent("Drive More Offset", 0.07)
+        .getEntry();
+
   /**
    * 
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -216,7 +220,7 @@ public class RobotContainer {
       case middleTwoPiece -> new middleTwoPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case middleThreePiece -> new middleThreePiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case middleThreePieceCounterClockwise -> new middleThreePieceCounterClockwise(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case middleFourPiece -> new middleFourPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
+      case middleFourPiece -> new middleFourPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1), driveMoreOffsetEntry.getDouble(0.07));
       case pathPlannerExample -> new PathPlannerAuto("New Auto");
     };
   }

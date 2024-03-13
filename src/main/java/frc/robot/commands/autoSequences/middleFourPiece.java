@@ -45,7 +45,7 @@ public class middleFourPiece extends SequentialCommandGroup {
 
     // TODO optimize speeds and note positions 
 
-    public middleFourPiece(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double waittime, double drivedistance){
+    public middleFourPiece(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double waittime, double drivedistance, double drivemoreoffset){
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_intake = intake;
@@ -57,8 +57,8 @@ public class middleFourPiece extends SequentialCommandGroup {
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Red)))
-                .then(new InstantCommand(() -> m_intake.setBelt(-1)))
-                .then(new WaitCommand(0.1))
+                .then(new InstantCommand(() -> m_intake.setBelt(-0.5)))
+                .then(new WaitCommand(0.2))
                 .then(new InstantCommand(() -> m_intake.setBelt(0)))
                 .then(new ShootSequenceFullAuto(m_shooter, m_intake, m_led))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Blue)))
@@ -68,12 +68,12 @@ public class middleFourPiece extends SequentialCommandGroup {
                 .then(new ShootFromGroundDriveFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance))
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
                 .then(new DriveRotate(m_drivebase, 30))
-                .thenWithTimeout(new DriveDistance(m_drivebase, -1, drivedistance + 0.15), 5)
-                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance, -30 + 0.15))
+                .thenWithTimeout(new DriveDistance(m_drivebase, -1, drivedistance + drivemoreoffset), 5)
+                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance, -30 + drivemoreoffset))
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
                 .then(new DriveRotate(m_drivebase, -30))
-                .thenWithTimeout(new DriveDistance(m_drivebase, -0.3, drivedistance + 0.15), 5)
-                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance, 30 + 0.15))
+                .thenWithTimeout(new DriveDistance(m_drivebase, -0.3, drivedistance + drivemoreoffset), 5)
+                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance, 30 + drivemoreoffset))
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
