@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.io.Serial;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -30,6 +32,8 @@ public class ShootFromGroundDriveFour extends SequentialCommandGroup {
 
     addRequirements(m_shooter, m_intake, m_led, m_drivebase);
 
+    System.out.println("ShootFromGroundDriveFour");
+    
     this.addCommands(
         new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Orange))
       );
