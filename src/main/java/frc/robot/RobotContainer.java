@@ -222,8 +222,8 @@ public class RobotContainer {
       case middleTwoPiece -> new middleTwoPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case middleThreePieceRed -> new middleThreePieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
       case middleThreePieceBlue -> new middleThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case middleFourPieceRed -> new middleFourPieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1), driveMoreOffsetEntry.getDouble(0.07));
-      case middleFourPieceBlue -> new middleFourPieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1), driveMoreOffsetEntry.getDouble(0.07));
+      case middleFourPieceRed -> new middleFourPieceRed(m_drivebase, m_shooter, m_intake, m_led, driveMoreOffsetEntry.getDouble(0.07));
+      case middleFourPieceBlue -> new middleFourPieceBlue(m_drivebase, m_shooter, m_intake, m_led, driveMoreOffsetEntry.getDouble(0.07));
       case pathPlannerExample -> new PathPlannerAuto("New Auto");
     };
   }
