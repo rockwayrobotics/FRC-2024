@@ -59,7 +59,6 @@ public class middleFourPieceBlue extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_intake.setBelt(0)))
                 .then(new ShootSequenceFullAuto(m_shooter, m_intake, m_led))
 
-                .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Blue)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
 
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
