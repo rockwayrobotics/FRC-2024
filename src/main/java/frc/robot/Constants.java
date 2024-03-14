@@ -39,6 +39,7 @@ public final class Constants {
   public static final class Digital {
     public final static int CLIMB_HOME_SWITCH = 0; 
     public final static int SHOOTER_TOP_SENSOR = 1;
+    public final static int INTAKE_LOAD_SENSOR = 2; 
   }
 
 

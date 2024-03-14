@@ -14,7 +14,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants;
-import frc.robot.Constants.Digital;
 import frc.robot.Constants.Shooter.ScoringMode;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -23,16 +22,19 @@ public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax m_rightFlywheel;
 
   private DigitalInput m_shooterTopSensor; 
+  private DigitalInput m_intakeLoadSensor; 
 
   RelativeEncoder m_angleEncoder;
 
   public double speakerAngleSetpoint;
   public double ampAngleSetpoint; 
   public boolean shooterStaged;
+  public boolean intakeLoad; 
   
   GenericEntry speakerAngleWidget;
   GenericEntry ampAngleWidget;
   GenericEntry shooterTopSensorWidget; 
+  GenericEntry intakeLoadWidget; 
 
   private double m_scale = 1;
 
@@ -57,10 +59,12 @@ public class ShooterSubsystem extends SubsystemBase {
     m_angleEncoder = m_angleMotor.getEncoder();
 
     m_shooterTopSensor = new DigitalInput(Constants.Digital.SHOOTER_TOP_SENSOR);
+    m_intakeLoadSensor = new DigitalInput(Constants.Digital.INTAKE_LOAD_SENSOR);
 
     speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(0, 0).getEntry();
     ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0, 0).getEntry();
     shooterTopSensorWidget = dashboardTab.addPersistent("Shooter Staged Sensor", false).getEntry();
+    intakeLoadWidget = dashboardTab.addPersistent("Intake Load", false).getEntry();
   }
 
   public void setFlywheelsScale(double scale) {
@@ -93,6 +97,10 @@ public class ShooterSubsystem extends SubsystemBase {
     return !m_shooterTopSensor.get();
   }
 
+  public boolean isNoteLoaded() {
+    return !m_intakeLoadSensor.get();
+  }
+
   @Override
   public void periodic() {
 
@@ -106,5 +114,6 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTopSensorWidget.setBoolean(isNoteStaged());
 
     shooterStaged = isNoteStaged();
+    intakeLoad = isNoteLoaded();
   }
 }
