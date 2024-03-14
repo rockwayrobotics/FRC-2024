@@ -112,6 +112,7 @@ public class ShooterSubsystem extends SubsystemBase {
     speakerAngleSetpoint = speakerAngleWidget.getDouble(0);
     ampAngleSetpoint = ampAngleWidget.getDouble(0);
     shooterTopSensorWidget.setBoolean(isNoteStaged());
+    intakeLoadWidget.setBoolean(isNoteLoaded());
 
     shooterStaged = isNoteStaged();
     intakeLoad = isNoteLoaded();
