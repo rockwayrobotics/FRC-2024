@@ -59,6 +59,16 @@ public final class Constants {
     public final static float FORWARD_MAX = 270;
   }
 
+  public static final class Shooter {
+    public final static float ANGLE_TOP_MAX = 0.5f;
+    public final static float ANGLE_BOTTOM_MAX = 5.7f; 
+
+    public static enum ScoringMode {
+      SPEAKER,
+      AMP,
+    }
+  }
+
   // Constants for LEDs
   public static final class LED {
     public final static int LED_PWM = 0;
@@ -78,13 +88,6 @@ public final class Constants {
       badApple,
       heatGradient,
       whiteDotLines,
-    }
-  }
-
-  public static final class Shooter {
-    public static enum ScoringMode {
-      SPEAKER,
-      AMP,
     }
   }
 }

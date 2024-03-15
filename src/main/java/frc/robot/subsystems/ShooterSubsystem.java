@@ -7,10 +7,14 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkBase.SoftLimitDirection;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import frc.robot.Constants;
@@ -56,8 +60,15 @@ public class ShooterSubsystem extends SubsystemBase {
     m_leftFlywheel.setSmartCurrentLimit(40);
     m_rightFlywheel.setSmartCurrentLimit(40);
 
+    m_angleMotor.setSoftLimit(SoftLimitDirection.kForward, Constants.Shooter.ANGLE_BOTTOM_MAX);
+    m_angleMotor.setSoftLimit(SoftLimitDirection.kReverse, Constants.Shooter.ANGLE_TOP_MAX);
+    m_angleMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    m_angleMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+
     m_rightFlywheel.follow(m_leftFlywheel, true);
     m_angleEncoder = m_angleMotor.getEncoder();
+
+    m_angleEncoder.setPosition(0);
 
     m_shooterTopSensor = new DigitalInput(Constants.Digital.SHOOTER_TOP_SENSOR);
     m_intakeLoadSensor = new DigitalInput(Constants.Digital.INTAKE_LOAD_SENSOR);
@@ -67,6 +78,8 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTopSensorWidget = dashboardTab.addPersistent("Shooter Staged Sensor", false).getEntry();
     intakeLoadWidget = dashboardTab.addPersistent("Intake Load", false).getEntry();
     angleEncoderWidget = dashboardTab.addPersistent("Angle Encoder", 0).getEntry();
+
+    SmartDashboard.putData("Angle Encoder Reset", new InstantCommand(() -> resetAngleEncoder())); 
   }
 
   public void setFlywheelsScale(double scale) {
@@ -89,6 +102,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double getAngleEncoder() {
     return m_angleEncoder.getPosition();
+  }
+
+  public void resetAngleEncoder(){
+    m_angleEncoder.setPosition(0);
   }
 
   public void setScoringMode(ScoringMode mode) {

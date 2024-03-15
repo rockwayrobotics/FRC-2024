@@ -54,7 +54,7 @@ public class RobotContainer {
   private final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem(Constants.CAN.CLIMB);
   private final LedSubsystem m_led = new LedSubsystem();
-  private final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.GEAR, Constants.CAN.LEFT_FLYWHEEL,
+  public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.GEAR, Constants.CAN.LEFT_FLYWHEEL,
       Constants.CAN.RIGHT_FLYWHEEL);
   private final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.CAN.BELT, Constants.CAN.LEFT_INTAKE,
       Constants.CAN.RIGHT_INTAKE);
