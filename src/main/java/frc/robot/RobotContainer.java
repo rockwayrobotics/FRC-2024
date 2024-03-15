@@ -190,8 +190,11 @@ public class RobotContainer {
     m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Off)));
     m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
-    m_operatorController.leftTrigger().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(1.5).andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
+    // m_operatorController.leftTrigger().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(1.5).andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
     
+    m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_shooter.setAngleMotor(-0.2)));
+    m_operatorController.leftTrigger().onFalse(new InstantCommand(() -> m_shooter.setAngleMotor(0)));
+
     m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_shooter.setAngleMotor(0.2)));
     m_operatorController.rightTrigger().onFalse(new InstantCommand(() -> m_shooter.setAngleMotor(0)));
 

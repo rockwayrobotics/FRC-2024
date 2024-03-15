@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class ShooterAngle extends Command {
@@ -22,7 +23,7 @@ public class ShooterAngle extends Command {
     addRequirements(m_shooter);
 
     pid = new PIDController(.02, 0, 0);
-    pid.setTolerance(10);
+    pid.setTolerance(Constants.Shooter.ANGLE_BOTTOM_MAX / 25);
   }
 
   @Override
