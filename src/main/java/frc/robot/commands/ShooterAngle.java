@@ -45,7 +45,7 @@ public class ShooterAngle extends Command {
 
     spinPower = MathUtil.clamp(spinPower, -m_maxSpeed, m_maxSpeed);
 
-    m_shooter.spinAngleMotor(spinPower);
+    m_shooter.setAngleMotor(spinPower);
   }
 
   @Override
@@ -56,6 +56,6 @@ public class ShooterAngle extends Command {
   @Override
   public void end(boolean cancelled) {
     System.out.println("Angled to: " + m_shooter.m_ScoringMode);
-    m_shooter.spinAngleMotor(0); // Resets the angle motor to 0, ends command
+    m_shooter.setAngleMotor(0); // Resets the angle motor to 0, ends command
   }
 }

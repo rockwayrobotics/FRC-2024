@@ -35,6 +35,7 @@ public class ShooterSubsystem extends SubsystemBase {
   GenericEntry ampAngleWidget;
   GenericEntry shooterTopSensorWidget; 
   GenericEntry intakeLoadWidget; 
+  GenericEntry angleEncoderWidget;
 
   private double m_scale = 1;
 
@@ -65,6 +66,7 @@ public class ShooterSubsystem extends SubsystemBase {
     ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0, 0).getEntry();
     shooterTopSensorWidget = dashboardTab.addPersistent("Shooter Staged Sensor", false).getEntry();
     intakeLoadWidget = dashboardTab.addPersistent("Intake Load", false).getEntry();
+    angleEncoderWidget = dashboardTab.addPersistent("Angle Encoder", 0).getEntry();
   }
 
   public void setFlywheelsScale(double scale) {
@@ -76,7 +78,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_leftFlywheel.set(m_pow * m_scale);
   }
 
-  public void spinAngleMotor(double speed) {
+  public void setAngleMotor(double speed) {
     // if (bottomShooterLimitPressed && Math.abs(speed) < 0){
     // m_angleMotor.set(0);
     // } else {
@@ -113,6 +115,7 @@ public class ShooterSubsystem extends SubsystemBase {
     ampAngleSetpoint = ampAngleWidget.getDouble(0);
     shooterTopSensorWidget.setBoolean(isNoteStaged());
     intakeLoadWidget.setBoolean(isNoteLoaded());
+    angleEncoderWidget.setDouble(getAngleEncoder());
 
     shooterStaged = isNoteStaged();
     intakeLoad = isNoteLoaded();

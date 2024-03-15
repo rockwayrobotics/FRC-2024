@@ -192,6 +192,9 @@ public class RobotContainer {
 
     m_operatorController.leftTrigger().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(1.5).andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
     
+    m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_shooter.setAngleMotor(0.2)));
+    m_operatorController.rightTrigger().onFalse(new InstantCommand(() -> m_shooter.setAngleMotor(0)));
+
     m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
 
     // TODO: angle STUFF HERE :3 
