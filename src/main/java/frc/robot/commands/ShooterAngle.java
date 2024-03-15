@@ -28,11 +28,11 @@ public class ShooterAngle extends Command {
 
   @Override
   public void initialize() {
-    switch (m_angler.m_ScoringMode) {
-      case SPEAKER -> m_distance = m_angler.speakerAngleSetpoint;
-      case AMP -> m_distance = m_angler.ampAngleSetpoint;
-    }
-    ;
+    // switch (m_angler.m_ScoringMode) {
+    //   case SPEAKER -> m_distance = m_angler.speakerAngleSetpoint;
+    //   case AMP -> m_distance = m_angler.ampAngleSetpoint;
+    // }
+    // ;
 
     pid.setSetpoint(m_distance);
     pid.reset();

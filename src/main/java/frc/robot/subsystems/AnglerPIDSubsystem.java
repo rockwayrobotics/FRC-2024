@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -25,18 +26,34 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
   GenericEntry speakerAngleWidget;
   GenericEntry ampAngleWidget;
   GenericEntry angleEncoderWidget;
+  GenericEntry angleSetpointWidget; 
+  GenericEntry outputWidget; 
 
-  public double speakerAngleSetpoint;
-  public double ampAngleSetpoint; 
+  GenericEntry kPWidget;
+  GenericEntry kIWidget;
+  GenericEntry kDWidget; 
+
+  GenericEntry positiveClampWidget;
+  GenericEntry negativeClampWidget;
+
+  private double kPVal;
+  // private double kIVal;
+  // private double kDVal; 
+
+  private double positiveClamp;
+  private double negativeClamp;
+
+  // public double speakerAngleSetpoint;
+  // public double ampAngleSetpoint;
+  public double angleSetpoint;
   public ScoringMode m_ScoringMode = ScoringMode.SPEAKER;
 
   ShuffleboardTab dashboardTab = Shuffleboard.getTab("NewDashboard");
 
 
   public AnglerPIDSubsystem(){
-    super(new PIDController(0.2, 0, 0.1));
+    super(new PIDController(0.1, 0, 0));
     getController().setTolerance(Constants.Angler.ANGLE_PID_TOLERANCE);
-    setSetpoint(Constants.Angler.SPEAKER_SETPOINT);
 
     m_angleMotor.setIdleMode(IdleMode.kBrake);
 
@@ -50,8 +67,20 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(0, 0).getEntry();
     ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0, 0).getEntry();
     angleEncoderWidget = dashboardTab.addPersistent("Angle Encoder", 0).getEntry();
+    angleSetpointWidget = dashboardTab.addPersistent("Angle Setpoint", 2.5).getEntry(); 
+    outputWidget = dashboardTab.add("Output value", 0).getEntry();
+
+    kPWidget = dashboardTab.addPersistent("kP Value", 0.05).getEntry();
+    // kIWidget = dashboardTab.addPersistent("kI Value", 0).getEntry();
+    // kDWidget = dashboardTab.addPersistent("kD Value", 0).getEntry();
+
+    positiveClampWidget = dashboardTab.addPersistent("Positive Clamp", 0.05).getEntry();
+    negativeClampWidget = dashboardTab.addPersistent("Negative Clamp", -0.1).getEntry();
+
     
     SmartDashboard.putData("Angle Encoder Reset", new InstantCommand(() -> resetAngleEncoder())); 
+
+    enable();
   }
   
   public void setScoringMode(ScoringMode mode) {
@@ -62,7 +91,9 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     // if (bottomShooterLimitPressed && Math.abs(speed) < 0){
     // m_angleMotor.set(0);
     // } else {
-    System.out.println("Angle: " + speed);
+
+    //System.out.println("Angle: " + speed);
+
     m_angleMotor.set(speed);
     // }
   }
@@ -77,10 +108,13 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
 
   @Override
   protected void useOutput(double output, double setpoint) {
-    //setAngleMotor(m_controller.calculate(getAngleEncoder(), setpoint));
-    System.out.println(m_controller.calculate(getAngleEncoder(), setpoint));
-    System.out.println("Output: " + output);
-    System.out.println("Setpoint: " + setpoint);  
+    output = MathUtil.clamp(output, negativeClamp, positiveClamp);
+    outputWidget.setDouble(output);
+    setAngleMotor(output);
+
+    // System.out.println("calc: " + m_controller.calculate(getAngleEncoder(), setpoint));
+    // System.out.println("Output: " + output);
+    // System.out.println("Setpoint: " + setpoint);  
     }
 
   @Override
@@ -90,8 +124,19 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
 
   @Override
   public void periodic(){
-    speakerAngleSetpoint = speakerAngleWidget.getDouble(0);
-    ampAngleSetpoint = ampAngleWidget.getDouble(0);
+    // speakerAngleSetpoint = speakerAngleWidget.getDouble(0);
+    // ampAngleSetpoint = ampAngleWidget.getDouble(0);
+    kPVal = kPWidget.getDouble(0.05);
+    getController().setP(kPVal);
+
+    angleSetpoint = angleSetpointWidget.getDouble(2.5);
+    setSetpoint(angleSetpoint);
+
+    positiveClamp = positiveClampWidget.getDouble(0.05);
+    negativeClamp = negativeClampWidget.getDouble(-0.1);
+    
+    super.periodic();
+
     angleEncoderWidget.setDouble(getAngleEncoder());
   }
 }
