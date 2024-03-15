@@ -28,6 +28,50 @@ public class DriveCommand extends Command {
   public void initialize() {
   }
 
+  public static double rotationMap(double rotation) {
+    double v;
+    v =  Math.abs(rotation);
+    if (v == 0) {
+      return 0;
+    }
+    
+    if (v <= 0.1){
+      v = 0.05;
+    }
+    if (v <= 0.2){
+      v = 0.1;
+    }
+    if (v <= 0.3){
+      v = 0.2;
+    }
+    if (v <= 0.4){
+      v = 0.25;
+    }
+    if (v <= 0.5){
+      v = 0.3;
+    }
+    if (v <= 0.6){
+      v = 0.4;
+    }
+    if (v <= 0.7){
+      v = 0.5;
+    }
+    if (v <= 0.8){
+      v = 0.65;
+    }
+    if (v <= 0.9){
+      v = 0.85;
+    }
+    if (v <= 1){
+      v = 1;
+    }
+  
+    if (rotation < 0) {
+      return -v;
+    } else {
+      return v;
+    }
+  }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -53,8 +97,7 @@ public class DriveCommand extends Command {
     } else {
       rotation = m_right_x.getAsDouble();
     }
-
-    m_DrivebaseSubsystem.set(speed, rotation * 0.76);
+    m_DrivebaseSubsystem.set(speed, rotationMap(rotation) * 0.76);
 
     //SmartDashboard.putNumber("Y", m_left_y.getAsDouble());
     //SmartDashboard.putNumber("X", m_right_x.getAsDouble());
