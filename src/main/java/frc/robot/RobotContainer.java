@@ -10,6 +10,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -54,10 +55,14 @@ public class RobotContainer {
   private final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem(Constants.CAN.CLIMB);
   private final LedSubsystem m_led = new LedSubsystem();
-  public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.GEAR, Constants.CAN.LEFT_FLYWHEEL,
+  private final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.LEFT_FLYWHEEL,
       Constants.CAN.RIGHT_FLYWHEEL);
   private final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.CAN.BELT, Constants.CAN.LEFT_INTAKE,
       Constants.CAN.RIGHT_INTAKE);
+
+  public final AnglerPIDSubsystem m_angler = new AnglerPIDSubsystem(); 
+
+  
 
   SendableChooser<AutoOption> m_autoChooser = new SendableChooser<>();
     
@@ -192,12 +197,6 @@ public class RobotContainer {
 
     // m_operatorController.leftTrigger().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(1.5).andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
     
-    m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_shooter.setAngleMotor(-0.2)));
-    m_operatorController.leftTrigger().onFalse(new InstantCommand(() -> m_shooter.setAngleMotor(0)));
-
-    m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_shooter.setAngleMotor(0.2)));
-    m_operatorController.rightTrigger().onFalse(new InstantCommand(() -> m_shooter.setAngleMotor(0)));
-
     m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
 
     // TODO: angle STUFF HERE :3 

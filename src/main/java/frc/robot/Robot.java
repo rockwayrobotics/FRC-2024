@@ -81,7 +81,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
 
-    m_robotContainer.m_shooter.resetAngleEncoder();
+    m_robotContainer.m_angler.resetAngleEncoder();
   }
 
   /** This function is called periodically during autonomous. */

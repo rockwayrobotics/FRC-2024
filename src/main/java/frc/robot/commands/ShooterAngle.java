@@ -4,11 +4,11 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.AnglerPIDSubsystem;
 
 public class ShooterAngle extends Command {
 
-  private final ShooterSubsystem m_shooter;
+  private final AnglerPIDSubsystem m_angler;
   private double m_maxSpeed;
   private double m_distance;
   // private ScoringTarget targetAngle;
@@ -16,21 +16,21 @@ public class ShooterAngle extends Command {
 
   private final PIDController pid;
 
-  public ShooterAngle(ShooterSubsystem shooter, double maxSpeed) {
-    m_shooter = shooter;
+  public ShooterAngle(AnglerPIDSubsystem angler, double maxSpeed) {
+    m_angler = angler;
     m_maxSpeed = maxSpeed;
 
-    addRequirements(m_shooter);
+    addRequirements(m_angler);
 
     pid = new PIDController(.02, 0, 0);
-    pid.setTolerance(Constants.Shooter.ANGLE_BOTTOM_MAX / 25);
+    pid.setTolerance(Constants.Angler.ANGLE_BOTTOM_MAX / 25);
   }
 
   @Override
   public void initialize() {
-    switch (m_shooter.m_ScoringMode) {
-      case SPEAKER -> m_distance = m_shooter.speakerAngleSetpoint;
-      case AMP -> m_distance = m_shooter.ampAngleSetpoint;
+    switch (m_angler.m_ScoringMode) {
+      case SPEAKER -> m_distance = m_angler.speakerAngleSetpoint;
+      case AMP -> m_distance = m_angler.ampAngleSetpoint;
     }
     ;
 
@@ -40,13 +40,13 @@ public class ShooterAngle extends Command {
 
   @Override
   public void execute() {
-    double currentAngle = m_shooter.getAngleEncoder();
+    double currentAngle = m_angler.getAngleEncoder();
 
     double spinPower = pid.calculate(currentAngle);
 
     spinPower = MathUtil.clamp(spinPower, -m_maxSpeed, m_maxSpeed);
 
-    m_shooter.setAngleMotor(spinPower);
+    m_angler.setAngleMotor(spinPower);
   }
 
   @Override
@@ -56,7 +56,7 @@ public class ShooterAngle extends Command {
 
   @Override
   public void end(boolean cancelled) {
-    System.out.println("Angled to: " + m_shooter.m_ScoringMode);
-    m_shooter.setAngleMotor(0); // Resets the angle motor to 0, ends command
+    System.out.println("Angled to: " + m_angler.m_ScoringMode);
+    m_angler.setAngleMotor(0); // Resets the angle motor to 0, ends command
   }
 }

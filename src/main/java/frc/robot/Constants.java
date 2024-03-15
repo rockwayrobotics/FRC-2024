@@ -60,13 +60,20 @@ public final class Constants {
   }
 
   public static final class Shooter {
-    public final static float ANGLE_TOP_MAX = 0.5f;
-    public final static float ANGLE_BOTTOM_MAX = 5.7f; 
-
     public static enum ScoringMode {
       SPEAKER,
       AMP,
     }
+  }
+
+  public static final class Angler {
+    public final static float ANGLE_TOP_MAX = 0.5f;
+    public final static float ANGLE_BOTTOM_MAX = 4f; 
+    
+    public final static double ANGLE_PID_TOLERANCE = ANGLE_BOTTOM_MAX / 25;
+
+    public final static double SPEAKER_SETPOINT = 2;
+    public final static double AMP_SETPOINT = 0;
   }
 
   // Constants for LEDs
