@@ -10,6 +10,8 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 // import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -40,6 +42,7 @@ public class ClimberSubsystem extends SubsystemBase {
     m_climberMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
 
     m_climberEncoder = m_climberMotor.getEncoder();
+    m_climberEncoder.setPosition(0); 
 
     m_homeSensor = new DigitalInput(Constants.Digital.CLIMB_HOME_SWITCH);
 
@@ -59,6 +62,7 @@ public class ClimberSubsystem extends SubsystemBase {
     dashboardTab.add("Climber Soft Limit", false)
     .getEntry();
 
+    SmartDashboard.putData(new InstantCommand(() -> m_climberEncoder.setPosition(0)));
   }
 
   public boolean isAtHome(){
