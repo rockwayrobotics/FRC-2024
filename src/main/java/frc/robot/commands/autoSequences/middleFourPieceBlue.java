@@ -39,9 +39,7 @@ public class middleFourPieceBlue extends SequentialCommandGroup {
             AutoFailedWidget.withProperties(Map.of("colorWhenFalse", "green"));
         }
     }
-
-    // TODO optimize speeds and note positions 
-
+    
     public middleFourPieceBlue(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double drivemoreoffset){
         m_drivebase = drivebase;
         m_shooter = shooter;

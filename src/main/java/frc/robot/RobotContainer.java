@@ -10,7 +10,6 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.units.Angle;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -198,8 +197,6 @@ public class RobotContainer {
     // m_operatorController.leftTrigger().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(1.5).andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
     
     m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
-
-    // TODO: angle STUFF HERE :3 :3:#;3:3;3 ;3 :# OWO 
 
     m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) + 0.1)));
     m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) - 0.1)));
