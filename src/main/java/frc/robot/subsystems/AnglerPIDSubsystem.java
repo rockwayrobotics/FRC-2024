@@ -67,7 +67,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(0, 0).getEntry();
     ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0, 0).getEntry();
     angleEncoderWidget = dashboardTab.addPersistent("Angle Encoder", 0).getEntry();
-    angleSetpointWidget = dashboardTab.addPersistent("Angle Setpoint", 2.5).getEntry(); 
+    angleSetpointWidget = dashboardTab.add("Angle Setpoint", 0).getEntry(); 
     outputWidget = dashboardTab.add("Output value", 0).getEntry();
     errorWidget = dashboardTab.add("PID Error Pos", 0).getEntry();
 
@@ -80,6 +80,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
 
     
     SmartDashboard.putData("Angle Encoder Reset", new InstantCommand(() -> resetAngleEncoder())); 
+    SmartDashboard.putData("Put Back To Zero", new InstantCommand(() -> setSetpoint(0)));
 
     enable();
   }
@@ -133,7 +134,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     getController().setP(kPVal);
     getController().setI(kIVal);
 
-    angleSetpoint = angleSetpointWidget.getDouble(2.5);
+    angleSetpoint = angleSetpointWidget.getDouble(0);
     setSetpoint(angleSetpoint);
 
     positiveClamp = positiveClampWidget.getDouble(0.05);
