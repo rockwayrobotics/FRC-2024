@@ -199,7 +199,12 @@ public class RobotContainer {
     
     m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
 
-    // TODO: angle STUFF HERE :3 
+    // TODO: angle STUFF HERE :3 :3:#;3:3;3 ;3 :# OWO 
+
+    m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) + 0.1)));
+    m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) - 0.1)));
+
+
 
     m_operatorController.povUp().onTrue(new InstantCommand(() -> m_climber.setClimber(0.7)));
     m_operatorController.povUp().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));

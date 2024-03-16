@@ -70,10 +70,11 @@ public final class Constants {
     public final static float ANGLE_TOP_MAX = 0.5f;
     public final static float ANGLE_BOTTOM_MAX = 4f; 
     
-    //public final static double ANGLE_PID_TOLERANCE = ANGLE_BOTTOM_MAX / 25;
+    public final static double SPEAKER_SETPOINT = 1.42;
+    public final static double AMP_SETPOINT = 1; 
   }
 
-  // Constants for LEDs
+  // Constants for LEDs 
   public static final class LED {
     public final static int LED_PWM = 0;
     public final static int LED_LENGTH = 58;

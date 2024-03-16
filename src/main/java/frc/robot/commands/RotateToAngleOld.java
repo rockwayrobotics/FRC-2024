@@ -11,7 +11,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class RotateToAngle extends Command {
+public class RotateToAngleOld extends Command {
   @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
   private final DrivebaseSubsystem m_DrivebaseSubsystem;
 
@@ -24,7 +24,7 @@ public class RotateToAngle extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public RotateToAngle(DrivebaseSubsystem subsystem, double setpoint, double toleranceDegrees,
+  public RotateToAngleOld(DrivebaseSubsystem subsystem, double setpoint, double toleranceDegrees,
       double maxRotationPower) {
     m_DrivebaseSubsystem = subsystem;
     addRequirements(subsystem);

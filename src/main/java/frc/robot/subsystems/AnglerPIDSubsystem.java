@@ -22,19 +22,19 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
   private final CANSparkMax m_angleMotor = new CANSparkMax(Constants.CAN.GEAR, MotorType.kBrushless);
   RelativeEncoder m_angleEncoder = m_angleMotor.getEncoder();
   
-  GenericEntry speakerAngleWidget;
-  GenericEntry ampAngleWidget;
-  GenericEntry angleEncoderWidget;
-  GenericEntry angleSetpointWidget; 
-  GenericEntry outputWidget; 
-  GenericEntry errorWidget; 
+  public GenericEntry speakerAngleWidget;
+  public GenericEntry ampAngleWidget;
+  public GenericEntry angleEncoderWidget;
+  public GenericEntry angleSetpointWidget; 
+  public GenericEntry outputWidget; 
+  public GenericEntry errorWidget; 
 
-  GenericEntry kPWidget;
-  GenericEntry kIWidget;
-  GenericEntry kDWidget; 
+  public GenericEntry kPWidget;
+  public GenericEntry kIWidget;
+  public GenericEntry kDWidget; 
 
-  GenericEntry positiveClampWidget;
-  GenericEntry negativeClampWidget;
+  public GenericEntry positiveClampWidget;
+  public GenericEntry negativeClampWidget;
 
   private double kPVal;
   private double kIVal;
