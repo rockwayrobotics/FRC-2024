@@ -204,14 +204,14 @@ public class RobotContainer {
     m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) + 0.1)));
     m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) - 0.1)));
 
-
+    m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.AMP_SETPOINT)));
+    m_operatorController.povRight().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.SPEAKER_SETPOINT)));
 
     m_operatorController.povUp().onTrue(new InstantCommand(() -> m_climber.setClimber(0.7)));
     m_operatorController.povUp().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
     m_operatorController.povDown().onTrue(new InstantCommand(() -> m_climber.setClimber(-0.7)));
     m_operatorController.povDown().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
-
   }
   
   public void onDisable() {
