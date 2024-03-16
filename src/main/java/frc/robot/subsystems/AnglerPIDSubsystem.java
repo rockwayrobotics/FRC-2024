@@ -80,7 +80,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
 
     
     SmartDashboard.putData("Angle Encoder Reset", new InstantCommand(() -> resetAngleEncoder())); 
-    SmartDashboard.putData("Put Back To Zero", new InstantCommand(() -> setSetpoint(0)));
+    SmartDashboard.putData("Put Back To Zero", new InstantCommand(() -> angleSetpointWidget.setDouble(0)));
 
     enable();
   }
