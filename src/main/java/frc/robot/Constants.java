@@ -70,7 +70,7 @@ public final class Constants {
     public final static float ANGLE_TOP_MAX = 0.5f;
     public final static float ANGLE_BOTTOM_MAX = 4f; 
     
-    public final static double ANGLE_PID_TOLERANCE = ANGLE_BOTTOM_MAX / 25;
+    //public final static double ANGLE_PID_TOLERANCE = ANGLE_BOTTOM_MAX / 25;
   }
 
   // Constants for LEDs

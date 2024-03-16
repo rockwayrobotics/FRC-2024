@@ -20,7 +20,6 @@ import frc.robot.Constants.Shooter.ScoringMode;
 public class AnglerPIDSubsystem extends PIDSubsystem {
 
   private final CANSparkMax m_angleMotor = new CANSparkMax(Constants.CAN.GEAR, MotorType.kBrushless);
-
   RelativeEncoder m_angleEncoder = m_angleMotor.getEncoder();
   
   GenericEntry speakerAngleWidget;
@@ -28,6 +27,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
   GenericEntry angleEncoderWidget;
   GenericEntry angleSetpointWidget; 
   GenericEntry outputWidget; 
+  GenericEntry errorWidget; 
 
   GenericEntry kPWidget;
   GenericEntry kIWidget;
@@ -37,7 +37,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
   GenericEntry negativeClampWidget;
 
   private double kPVal;
-  // private double kIVal;
+  private double kIVal;
   // private double kDVal; 
 
   private double positiveClamp;
@@ -53,7 +53,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
 
   public AnglerPIDSubsystem(){
     super(new PIDController(0.1, 0, 0));
-    getController().setTolerance(Constants.Angler.ANGLE_PID_TOLERANCE);
+    // getController().setTolerance(Constants.Angler.ANGLE_PID_TOLERANCE);
 
     m_angleMotor.setIdleMode(IdleMode.kBrake);
 
@@ -69,9 +69,10 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     angleEncoderWidget = dashboardTab.addPersistent("Angle Encoder", 0).getEntry();
     angleSetpointWidget = dashboardTab.addPersistent("Angle Setpoint", 2.5).getEntry(); 
     outputWidget = dashboardTab.add("Output value", 0).getEntry();
+    errorWidget = dashboardTab.add("PID Error Pos", 0).getEntry();
 
     kPWidget = dashboardTab.addPersistent("kP Value", 0.05).getEntry();
-    // kIWidget = dashboardTab.addPersistent("kI Value", 0).getEntry();
+    kIWidget = dashboardTab.addPersistent("kI Value", 0).getEntry();
     // kDWidget = dashboardTab.addPersistent("kD Value", 0).getEntry();
 
     positiveClampWidget = dashboardTab.addPersistent("Positive Clamp", 0.05).getEntry();
@@ -108,10 +109,11 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
 
   @Override
   protected void useOutput(double output, double setpoint) {
-    output = MathUtil.clamp(output, negativeClamp, positiveClamp);
     outputWidget.setDouble(output);
+    output = MathUtil.clamp(output, negativeClamp, positiveClamp);
     setAngleMotor(output);
-
+    
+    errorWidget.setDouble(getAngleEncoder() - setpoint);
     // System.out.println("calc: " + m_controller.calculate(getAngleEncoder(), setpoint));
     // System.out.println("Output: " + output);
     // System.out.println("Setpoint: " + setpoint);  
@@ -127,7 +129,9 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     // speakerAngleSetpoint = speakerAngleWidget.getDouble(0);
     // ampAngleSetpoint = ampAngleWidget.getDouble(0);
     kPVal = kPWidget.getDouble(0.05);
+    kIVal = kIWidget.getDouble(0);
     getController().setP(kPVal);
+    getController().setI(kIVal);
 
     angleSetpoint = angleSetpointWidget.getDouble(2.5);
     setSetpoint(angleSetpoint);
