@@ -62,7 +62,7 @@ public class ClimberSubsystem extends SubsystemBase {
     dashboardTab.add("Climber Soft Limit", false)
     .getEntry();
 
-    SmartDashboard.putData(new InstantCommand(() -> m_climberEncoder.setPosition(0)));
+    SmartDashboard.putData("Reset Climber Encoder", new InstantCommand(() -> m_climberEncoder.setPosition(0)));
   }
 
   public boolean isAtHome(){
