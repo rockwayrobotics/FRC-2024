@@ -19,14 +19,10 @@ public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax m_rightFlywheel;
 
   private DigitalInput m_shooterTopSensor; 
-  private DigitalInput m_intakeLoadSensor; 
 
   public boolean shooterStaged;
-  public boolean intakeLoad; 
   
   GenericEntry shooterTopSensorWidget; 
-  GenericEntry intakeLoadWidget; 
-
   private double m_scale = 1;
 
   ShuffleboardTab dashboardTab = Shuffleboard.getTab("NewDashboard");
@@ -45,10 +41,8 @@ public class ShooterSubsystem extends SubsystemBase {
     m_rightFlywheel.follow(m_leftFlywheel, true);
 
     m_shooterTopSensor = new DigitalInput(Constants.Digital.SHOOTER_TOP_SENSOR);
-    m_intakeLoadSensor = new DigitalInput(Constants.Digital.INTAKE_LOAD_SENSOR);
 
     shooterTopSensorWidget = dashboardTab.addPersistent("Shooter Staged Sensor", false).getEntry();
-    intakeLoadWidget = dashboardTab.addPersistent("Intake Load", false).getEntry();
   }
 
   public void setFlywheelsScale(double scale) {
@@ -64,9 +58,6 @@ public class ShooterSubsystem extends SubsystemBase {
     return !m_shooterTopSensor.get();
   }
 
-  public boolean isNoteLoaded() {
-    return !m_intakeLoadSensor.get();
-  }
 
   @Override
   public void periodic() {
@@ -77,9 +68,7 @@ public class ShooterSubsystem extends SubsystemBase {
     //dashboardTab.add("Encoder revolutions", getAngleEncoder());
 
     shooterTopSensorWidget.setBoolean(isNoteStaged());
-    intakeLoadWidget.setBoolean(isNoteLoaded());
 
     shooterStaged = isNoteStaged();
-    intakeLoad = isNoteLoaded();
   }
 }
