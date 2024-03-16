@@ -23,6 +23,9 @@ public class ShooterSubsystem extends SubsystemBase {
   public boolean shooterStaged;
   
   GenericEntry shooterTopSensorWidget; 
+  GenericEntry leftFlywheelWidget;
+  GenericEntry rightFlywheelWidget; 
+
   private double m_scale = 1;
 
   ShuffleboardTab dashboardTab = Shuffleboard.getTab("NewDashboard");
@@ -43,6 +46,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterTopSensor = new DigitalInput(Constants.Digital.SHOOTER_TOP_SENSOR);
 
     shooterTopSensorWidget = dashboardTab.addPersistent("Shooter Staged Sensor", false).getEntry();
+    leftFlywheelWidget = dashboardTab.addPersistent("Left Flywheel Speed", 0).getEntry();
+    rightFlywheelWidget = dashboardTab.addPersistent("Right Flywheel Speed", 0).getEntry();
+
   }
 
   public void setFlywheelsScale(double scale) {
@@ -68,6 +74,9 @@ public class ShooterSubsystem extends SubsystemBase {
     //dashboardTab.add("Encoder revolutions", getAngleEncoder());
 
     shooterTopSensorWidget.setBoolean(isNoteStaged());
+    leftFlywheelWidget.setDouble(m_leftFlywheel.get());
+    rightFlywheelWidget.setDouble(m_rightFlywheel.get());
+    
 
     shooterStaged = isNoteStaged();
   }
