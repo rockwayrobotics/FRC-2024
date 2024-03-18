@@ -21,10 +21,14 @@ public class ShooterSubsystem extends SubsystemBase {
   private DigitalInput m_shooterTopSensor; 
 
   public boolean shooterStaged;
-  
+
+  public GenericEntry flywheelSpeedWidget;
+
   GenericEntry shooterTopSensorWidget; 
   GenericEntry leftFlywheelWidget;
   GenericEntry rightFlywheelWidget; 
+
+  public double webFlywheelSpeed; 
 
   private double m_scale = 1;
 
@@ -48,6 +52,8 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTopSensorWidget = dashboardTab.addPersistent("Shooter Staged Sensor", false).getEntry();
     leftFlywheelWidget = dashboardTab.addPersistent("Left Flywheel Speed", 0).getEntry();
     rightFlywheelWidget = dashboardTab.addPersistent("Right Flywheel Speed", 0).getEntry();
+    flywheelSpeedWidget = dashboardTab.addPersistent("Flywheel Speed", 0).getEntry();
+  
 
   }
 
@@ -76,6 +82,8 @@ public class ShooterSubsystem extends SubsystemBase {
     shooterTopSensorWidget.setBoolean(isNoteStaged());
     leftFlywheelWidget.setDouble(m_leftFlywheel.get());
     rightFlywheelWidget.setDouble(m_rightFlywheel.get());
+    
+    webFlywheelSpeed = flywheelSpeedWidget.getDouble(0);
     
 
     shooterStaged = isNoteStaged();
