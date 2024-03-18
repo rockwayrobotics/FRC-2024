@@ -27,6 +27,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
   public GenericEntry angleEncoderWidget;
   public GenericEntry angleSetpointWidget; 
   public GenericEntry outputWidget; 
+  public GenericEntry outputClampedWidget; 
   public GenericEntry errorWidget; 
 
   public GenericEntry kPWidget;
@@ -69,6 +70,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     angleEncoderWidget = dashboardTab.addPersistent("Angle Encoder", 0).getEntry();
     angleSetpointWidget = dashboardTab.add("Angle Setpoint", 0).getEntry(); 
     outputWidget = dashboardTab.add("Output value", 0).getEntry();
+    outputClampedWidget = dashboardTab.add("Output Value Clamped", 0).getEntry(); 
     errorWidget = dashboardTab.add("PID Error Pos", 0).getEntry();
 
     kPWidget = dashboardTab.addPersistent("kP Value", 0.05).getEntry();
@@ -112,6 +114,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
   protected void useOutput(double output, double setpoint) {
     outputWidget.setDouble(output);
     output = MathUtil.clamp(output, negativeClamp, positiveClamp);
+    outputClampedWidget.setDouble(output); 
     setAngleMotor(output);
     
     errorWidget.setDouble(getAngleEncoder() - setpoint);
