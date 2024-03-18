@@ -49,7 +49,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
   public double angleSetpoint;
   public ScoringMode m_ScoringMode = ScoringMode.SPEAKER;
 
-  ShuffleboardTab dashboardTab = Shuffleboard.getTab("NewDashboard");
+  ShuffleboardTab dashboardTab = Shuffleboard.getTab("Angler");
 
 
   public AnglerPIDSubsystem(){

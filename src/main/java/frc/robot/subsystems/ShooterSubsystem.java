@@ -32,7 +32,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private double m_scale = 1;
 
-  ShuffleboardTab dashboardTab = Shuffleboard.getTab("NewDashboard");
+  ShuffleboardTab dashboardTab = Shuffleboard.getTab("Shooter");
 
   /** Creates a new HookSubsystem. */
   public ShooterSubsystem(int leftFlywheel, int rightFlywheel) {

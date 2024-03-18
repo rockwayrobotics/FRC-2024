@@ -24,7 +24,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   RelativeEncoder m_beltEncoder;
 
-  ShuffleboardTab dashboardTab = Shuffleboard.getTab("NewDashboard");
+  ShuffleboardTab dashboardTab = Shuffleboard.getTab("Intake");
 
   public IntakeSubsystem(int beltMotor, int leftIntake, int rightIntake) {
     m_beltMotor = new CANSparkMax(beltMotor, CANSparkMax.MotorType.kBrushless);

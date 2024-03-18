@@ -23,7 +23,7 @@ public class ClimberSubsystem extends SubsystemBase {
   private DigitalInput m_homeSensor;
 
 
-  ShuffleboardTab dashboardTab = Shuffleboard.getTab("NewDashboard");
+  ShuffleboardTab dashboardTab = Shuffleboard.getTab("Climber");
 
   GenericEntry homeSensorEntry;
   GenericEntry climberEncoderEntry;
