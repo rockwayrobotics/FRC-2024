@@ -217,6 +217,10 @@ public class RobotContainer {
     m_drivebase.disable();
   }
 
+  public void onTeleopInit(){
+    m_drivebase.setDrivebaseIdle(IdleMode.kCoast);
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

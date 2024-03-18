@@ -63,6 +63,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.m_angler.angleSetpointWidget.setDouble(0);
+    m_robotContainer.onDisable();
   }
 
   @Override
@@ -99,7 +100,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-
+    m_robotContainer.onTeleopInit();
    // m_robotContainer.m_drivebaseSubsystem.setDrivebaseIdle(DrivebaseSubsystem.IdleMode.kCoast);
   }
 
