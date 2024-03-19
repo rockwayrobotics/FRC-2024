@@ -51,12 +51,12 @@ public class RobotContainer {
   private final CommandXboxController m_driverController = new CommandXboxController(Gamepads.DRIVER);
   private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
 
-  private final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
-  private final ClimberSubsystem m_climber = new ClimberSubsystem(Constants.CAN.CLIMB);
-  private final LedSubsystem m_led = new LedSubsystem();
-  private final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.LEFT_FLYWHEEL,
+  public final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
+  public final ClimberSubsystem m_climber = new ClimberSubsystem(Constants.CAN.CLIMB);
+  public final LedSubsystem m_led = new LedSubsystem();
+  public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.LEFT_FLYWHEEL,
       Constants.CAN.RIGHT_FLYWHEEL);
-  private final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.CAN.BELT, Constants.CAN.LEFT_INTAKE,
+  public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.CAN.BELT, Constants.CAN.LEFT_INTAKE,
       Constants.CAN.RIGHT_INTAKE);
 
   public final AnglerPIDSubsystem m_angler = new AnglerPIDSubsystem(); 
@@ -220,6 +220,7 @@ public class RobotContainer {
   public void onTeleopInit(){
     m_drivebase.setDrivebaseIdle(IdleMode.kCoast);
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
