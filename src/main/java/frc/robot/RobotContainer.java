@@ -175,7 +175,7 @@ public class RobotContainer {
     m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setFlywheels(-1)));
     m_operatorController.b().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
 
-    m_operatorController.y().onTrue(new OperatorPullback(m_shooter, m_intake, m_led));
+    m_operatorController.y().onTrue(new InstantCommand(() -> m_intake.stagedFlag = true).andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
 
     m_operatorController.a().whileTrue(
         new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(-0.7))
@@ -196,7 +196,9 @@ public class RobotContainer {
     // m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Off)));
     // m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
-    m_operatorController.leftBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(1.5).andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
+    m_operatorController.leftBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(1.5)
+    .finallyDo((boolean interrupted) -> {m_intake.stagedFlag = !interrupted;})
+    .andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
     
     m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
 

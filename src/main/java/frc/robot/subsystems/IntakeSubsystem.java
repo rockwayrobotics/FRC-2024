@@ -10,9 +10,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.commands.OperatorPullback;
-import frc.robot.commands.OperatorPullupSensor;
 
 public class IntakeSubsystem extends SubsystemBase {
   private final CANSparkMax m_beltMotor;
@@ -20,9 +17,9 @@ public class IntakeSubsystem extends SubsystemBase {
   private final CANSparkMax m_rightIntake;
 
   private DigitalInput m_intakeLoadSensor; 
-  private RobotContainer m_robotContainer;
 
   public boolean intakeLoad; 
+  public boolean stagedFlag; 
 
   GenericEntry intakeLoadWidget; 
 
