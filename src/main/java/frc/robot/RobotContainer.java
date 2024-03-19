@@ -190,13 +190,13 @@ public class RobotContainer {
         new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
 
 
-    m_operatorController.rightBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.whiteDotLines)));
-    m_operatorController.rightBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
+    m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.whiteDotLines)));
+    m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
     // m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Off)));
     // m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
-    m_operatorController.leftBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(2)
+    m_operatorController.rightBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(2)
     .finallyDo((boolean interrupted) -> {m_intake.stagedFlag = !interrupted;})
     .andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
     
