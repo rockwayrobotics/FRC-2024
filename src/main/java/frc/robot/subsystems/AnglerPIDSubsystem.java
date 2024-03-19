@@ -29,6 +29,8 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
   public GenericEntry outputWidget; 
   public GenericEntry outputClampedWidget; 
   public GenericEntry errorWidget; 
+  public GenericEntry setpoint1Widget;
+  public GenericEntry setpoint2Widget;
 
   public GenericEntry kPWidget;
   public GenericEntry kIWidget;
@@ -39,7 +41,10 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
 
   private double kPVal;
   private double kIVal;
-  // private double kDVal; 
+  private double kDVal; 
+
+  private double setpoint1;
+  private double setpoint2;
 
   private double positiveClamp;
   private double negativeClamp;
@@ -68,14 +73,18 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(0, 0).getEntry();
     ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0, 0).getEntry();
     angleEncoderWidget = dashboardTab.addPersistent("Angle Encoder", 0).getEntry();
+
+    setpoint1Widget = dashboardTab.addPersistent("Setpoint 1", 0).getEntry();
+    setpoint2Widget = dashboardTab.addPersistent("Setpoint 2", 0).getEntry();
     angleSetpointWidget = dashboardTab.add("Angle Setpoint", 0).getEntry(); 
+
     outputWidget = dashboardTab.add("Output value", 0).getEntry();
     outputClampedWidget = dashboardTab.add("Output Value Clamped", 0).getEntry(); 
     errorWidget = dashboardTab.add("PID Error Pos", 0).getEntry();
-
+    
     kPWidget = dashboardTab.addPersistent("kP Value", 0.05).getEntry();
     kIWidget = dashboardTab.addPersistent("kI Value", 0).getEntry();
-    // kDWidget = dashboardTab.addPersistent("kD Value", 0).getEntry();
+    kDWidget = dashboardTab.addPersistent("kD Value", 0).getEntry();
 
     positiveClampWidget = dashboardTab.addPersistent("Positive Clamp", 0.05).getEntry();
     negativeClampWidget = dashboardTab.addPersistent("Negative Clamp", -0.1).getEntry();
@@ -83,6 +92,8 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     
     SmartDashboard.putData("Angle Encoder Reset", new InstantCommand(() -> resetAngleEncoder())); 
     SmartDashboard.putData("Put Back To Zero", new InstantCommand(() -> angleSetpointWidget.setDouble(0)));
+    SmartDashboard.putData("Setpoint 1", new InstantCommand(() -> angleSetpointWidget.setDouble(setpoint1)));
+    SmartDashboard.putData("Setpoint 2", new InstantCommand(() -> angleSetpointWidget.setDouble(setpoint2)));
 
     enable();
   }
@@ -134,8 +145,14 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     // ampAngleSetpoint = ampAngleWidget.getDouble(0);
     kPVal = kPWidget.getDouble(0.05);
     kIVal = kIWidget.getDouble(0);
+    kDVal = kDWidget.getDouble(0);
+
     getController().setP(kPVal);
     getController().setI(kIVal);
+    getController().setD(kDVal);
+
+    setpoint1 = setpoint1Widget.getDouble(0);
+    setpoint2 = setpoint2Widget.getDouble(0);
 
     angleSetpoint = angleSetpointWidget.getDouble(0);
     setSetpoint(angleSetpoint);
