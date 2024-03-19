@@ -42,7 +42,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_rightIntake.follow(m_leftIntake, true);
     m_beltEncoder = m_beltMotor.getEncoder();
 
-    m_robotContainer = new RobotContainer();
+    // m_robotContainer = new RobotContainer();
 
     m_intakeLoadSensor = new DigitalInput(Constants.Digital.INTAKE_LOAD_SENSOR);
     intakeLoadWidget = dashboardTab.addPersistent("Intake Load", false).getEntry();
@@ -63,11 +63,11 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void periodic(){
-    if (!intakeLoad && isNoteLoaded()){
-      new OperatorPullupSensor(m_robotContainer.m_shooter, m_robotContainer.m_intake, m_robotContainer.m_led)
-      .withTimeout(1.5).andThen(new OperatorPullback(m_robotContainer.m_shooter, m_robotContainer.m_intake, m_robotContainer.m_led))
-      .schedule();
-    }
+    // if (!intakeLoad && isNoteLoaded()){
+    //   new OperatorPullupSensor(m_robotContainer.m_shooter, m_robotContainer.m_intake, m_robotContainer.m_led)
+    //   .withTimeout(1.5).andThen(new OperatorPullback(m_robotContainer.m_shooter, m_robotContainer.m_intake, m_robotContainer.m_led))
+    //   .schedule();
+    // }
 
     intakeLoadWidget.setBoolean(isNoteLoaded());
 
