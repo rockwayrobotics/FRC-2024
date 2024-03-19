@@ -26,6 +26,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
   public GenericEntry ampAngleWidget;
   public GenericEntry angleEncoderWidget;
   public GenericEntry angleSetpointWidget; 
+  public GenericEntry angleResetWidget; 
   public GenericEntry outputWidget; 
   public GenericEntry outputClampedWidget; 
   public GenericEntry errorWidget; 
@@ -39,6 +40,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
   public GenericEntry positiveClampWidget;
   public GenericEntry negativeClampWidget;
 
+  private boolean isAngleReset; 
   private double kPVal;
   private double kIVal;
   private double kDVal; 
@@ -73,6 +75,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     speakerAngleWidget = dashboardTab.addPersistent("Speaker angle", 0).withPosition(0, 0).getEntry();
     ampAngleWidget = dashboardTab.addPersistent("Amp angle", 0).withPosition(0, 0).getEntry();
     angleEncoderWidget = dashboardTab.addPersistent("Angle Encoder", 0).getEntry();
+    angleResetWidget = dashboardTab.add("Angle Reset", false).getEntry();
 
     setpoint1Widget = dashboardTab.addPersistent("Setpoint 1", 0).getEntry();
     setpoint2Widget = dashboardTab.addPersistent("Setpoint 2", 0).getEntry();
@@ -89,8 +92,6 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     positiveClampWidget = dashboardTab.addPersistent("Positive Clamp", 0.05).getEntry();
     negativeClampWidget = dashboardTab.addPersistent("Negative Clamp", -0.1).getEntry();
 
-    
-    SmartDashboard.putData("Angle Encoder Reset", new InstantCommand(() -> resetAngleEncoder())); 
     SmartDashboard.putData("Put Back To Zero", new InstantCommand(() -> angleSetpointWidget.setDouble(0)));
     SmartDashboard.putData("Setpoint 1", new InstantCommand(() -> angleSetpointWidget.setDouble(setpoint1)));
     SmartDashboard.putData("Setpoint 2", new InstantCommand(() -> angleSetpointWidget.setDouble(setpoint2)));
@@ -141,8 +142,16 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
 
   @Override
   public void periodic(){
+    if (isAngleReset != angleResetWidget.getBoolean(false)){
+      isAngleReset = angleResetWidget.getBoolean(false);
+      if (isAngleReset){
+        resetAngleEncoder();
+      }
+    }
+
     // speakerAngleSetpoint = speakerAngleWidget.getDouble(0);
     // ampAngleSetpoint = ampAngleWidget.getDouble(0);
+
     kPVal = kPWidget.getDouble(0.05);
     kIVal = kIWidget.getDouble(0);
     kDVal = kDWidget.getDouble(0);
@@ -159,6 +168,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
 
     positiveClamp = positiveClampWidget.getDouble(0.05);
     negativeClamp = negativeClampWidget.getDouble(-0.1);
+
     
     super.periodic();
 
