@@ -84,6 +84,7 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.m_angler.resetAngleEncoder();
+    m_robotContainer.m_angler.angleSetpointWidget.setDouble(1);
   }
 
   /** This function is called periodically during autonomous. */
@@ -101,12 +102,17 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.onTeleopInit();
+    m_robotContainer.m_angler.angleSetpointWidget.setDouble(1);
+
    // m_robotContainer.m_drivebaseSubsystem.setDrivebaseIdle(DrivebaseSubsystem.IdleMode.kCoast);
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    // if (!m_robotContainer.m_intake.intakeLoad && m_robotContainer.m_intake.isNoteLoaded()){
+    //   m_robotContainer.noteStage();
+    // }
   }
 
   @Override

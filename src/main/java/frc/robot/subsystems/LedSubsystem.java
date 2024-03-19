@@ -76,7 +76,7 @@ public class LedSubsystem extends SubsystemBase {
 
   private void orange() {
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 255, 165, 0);
+      m_ledBuffer.setRGB(i, 255, 100, 0);
     }
   }
 
@@ -120,13 +120,11 @@ public class LedSubsystem extends SubsystemBase {
   }
 
   private void flashing_orange() {
+    int phase = (counter / 10) % 2;
+    int red = phase * 255;
+    int green = phase * 100;
     for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB(i, 255, 165, 0);
-    }
-    if (counter % 10 == 0) {
-      for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-        m_ledBuffer.setRGB(i, 0, 0, 0);
-      }
+      m_ledBuffer.setRGB(i, red, green, 0);
     }
     counter++;
   }

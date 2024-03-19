@@ -221,6 +221,12 @@ public class RobotContainer {
     m_drivebase.setDrivebaseIdle(IdleMode.kCoast);
   }
 
+  // public void noteStage(){
+  //   new OperatorPullupSensor(m_shooter, m_intake, m_led)
+  //   .withTimeout(1.5).andThen(new OperatorPullback(m_shooter, m_intake, m_led))
+  //   .schedule();
+  // }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
