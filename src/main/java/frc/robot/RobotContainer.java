@@ -196,7 +196,7 @@ public class RobotContainer {
     // m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Off)));
     // m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
-    m_operatorController.leftBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(1.5)
+    m_operatorController.leftBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(2)
     .finallyDo((boolean interrupted) -> {m_intake.stagedFlag = !interrupted;})
     .andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
     
