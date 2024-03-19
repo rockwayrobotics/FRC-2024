@@ -119,6 +119,18 @@ public class LedSubsystem extends SubsystemBase {
     counter++;
   }
 
+  private void flashing_orange() {
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, 255, 165, 0);
+    }
+    if (counter % 10 == 0) {
+      for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+        m_ledBuffer.setRGB(i, 0, 0, 0);
+      }
+    }
+    counter++;
+  }
+
   private BufferedImage imageLoad(String imagePath) {
     try {
       return ImageIO.read(new File(Filesystem.getDeployDirectory(), imagePath));
@@ -186,6 +198,9 @@ public class LedSubsystem extends SubsystemBase {
           break;
         case BreathingMagenta:
           breathing_monochrome(150);
+          break;
+        case FlashingOrange:
+          flashing_orange();
           break;
         case badApple:
           currentimage = badapple;

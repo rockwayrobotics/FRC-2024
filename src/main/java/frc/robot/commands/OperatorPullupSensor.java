@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -25,6 +26,7 @@ public class OperatorPullupSensor extends Command {
     // Resets encoder values to default
     //System.out.println("operator pullup");
     m_intake.setBelt(1);
+    m_led.setMode(Constants.LED.modes.FlashingOrange);
   }
 
   @Override
