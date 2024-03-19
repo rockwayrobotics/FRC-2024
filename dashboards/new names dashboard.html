@@ -1,0 +1,503 @@
+<dashboard-tab
+    tab-name="TeleOperated"
+    slot="tab"
+    source-provider="NetworkTables"
+></dashboard-tab><dashboard-tab
+    slot="tab"
+    tab-name="Everything"
+    source-provider="NetworkTables"
+    source-key="/Shuffleboard/NewDashboard/Drivedistance (m)"
+    selected=""
+><frc-sendable-chooser
+        source-provider="NetworkTables"
+        source-key="/Shuffleboard/RobotContainer/Auto Routine"
+        style="width: 114.4px; height: 80.5875px; transform: translate(0px, 0px);"
+        options="[]"
+        selected="Middle Four Piece Blue"
+    ></frc-sendable-chooser><vaadin-number-field
+        label="auto Drivedistance (m)"
+        value="1"
+        has-label=""
+        source-provider="NetworkTables"
+        style="width: 128px; height: 58.2px; transform: translate(0px, 80px);"
+        source-key="/Shuffleboard/RobotContainer/Drivedistance (m)"
+        has-value=""
+        min="NaN"
+        max="NaN"
+        placeholder=""
+    ><input
+            slot="input"
+            value="1"
+            type="number"
+            id="vaadin-number-field-2"
+            aria-labelledby="label-vaadin-number-field-73"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+            tabindex="0"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-73"
+            for="vaadin-number-field-2"
+        >Drivedistance (m)</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-73"
+            hidden=""
+        ></div>
+    </vaadin-number-field><frc-camera-wrapper
+        source-provider="NetworkTables"
+        style="transform: translate(894.4px, 1.20002px); width: 641.6px; height: 721.2px;"
+        source-key="/CameraPublisher/USB Camera 0"
+        streams="[]"
+        background-color="black"
+        wait-image="./no-camera-stream.jpg"
+        crosshair-color="white"
+    ></frc-camera-wrapper><vaadin-number-field
+        label="Time after shoot (s)"
+        value="1"
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(160px, 80px);"
+        source-key="/Shuffleboard/RobotContainer/Time After Shoot to Wait (Seconds)"
+        has-value=""
+        min="NaN"
+        max="NaN"
+        placeholder=""
+    ><input
+            slot="input"
+            value="1"
+            type="number"
+            id="vaadin-number-field-3"
+            aria-labelledby="label-vaadin-number-field-533"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-533"
+            for="vaadin-number-field-3"
+        >Time after shoot (s)</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-412"
+            hidden=""
+        ></div>
+    </vaadin-number-field><frc-boolean-box
+        source-provider="NetworkTables"
+        style="transform: translate(320px, 320px); width: 200px; height: 40px;"
+        source-key="/Shuffleboard/Intake/Intake Load"
+        label="intake load"
+    ></frc-boolean-box><vaadin-number-field
+        label="Climber encoder"
+        value="0"
+        has-value=""
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(0px, 160px);"
+        source-key="/Shuffleboard/Climber/Climber Encoder"
+        min="NaN"
+        max="NaN"
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-4"
+            aria-labelledby="label-vaadin-number-field-2604"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-2604"
+            for="vaadin-number-field-4"
+        >Climber encoder</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-1785"
+            hidden=""
+        ></div>
+    </vaadin-number-field><vaadin-number-field
+        label="Climber Speed"
+        value="0"
+        has-value=""
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(160px, 160px); width: 127.987px; height: 61.8px;"
+        source-key="/Shuffleboard/Climber/Climber Speed"
+        min="NaN"
+        max="NaN"
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-5"
+            aria-labelledby="label-vaadin-number-field-2752"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-2752"
+            for="vaadin-number-field-5"
+        >Climber Speed</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-1885"
+            hidden=""
+        ></div>
+    </vaadin-number-field><frc-toggle-button
+        source-provider="NetworkTables"
+        style="transform: translate(0px, 520px); width: 240px; height: 40px;"
+        source-key="/Shuffleboard/NewDashboard/Climber Soft Limit"
+        label="climber soft limit"
+    ></frc-toggle-button><vaadin-number-field
+        label="angle ecnonder "
+        value="0"
+        has-value=""
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(160px, 240px);"
+        source-key="/Shuffleboard/Angler/Angle Encoder"
+        min="NaN"
+        max="NaN"
+        placeholder=""
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-6"
+            aria-labelledby="label-vaadin-number-field-718"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-718"
+            for="vaadin-number-field-6"
+        >angle ecnonder </label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-491"
+            hidden=""
+        ></div>
+    </vaadin-number-field><vaadin-number-field
+        label="angle setpoint"
+        value="0"
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(0px, 240px);"
+        source-key="/Shuffleboard/Angler/Angle Setpoint"
+        min="NaN"
+        max="NaN"
+        has-value=""
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-7"
+            aria-labelledby="label-vaadin-number-field-811"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-811"
+            for="vaadin-number-field-7"
+        >angle setpoint</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-541"
+            hidden=""
+        ></div>
+    </vaadin-number-field><vaadin-number-field
+        label="PID error"
+        value="0"
+        has-value=""
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(160px, 320px); width: 128px; height: 71.4px;"
+        source-key="/Shuffleboard/Angler/PID Error Pos"
+        min="NaN"
+        max="NaN"
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-8"
+            aria-labelledby="label-vaadin-number-field-921"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-921"
+            for="vaadin-number-field-8"
+        >PID error</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-614"
+            hidden=""
+        ></div>
+    </vaadin-number-field><vaadin-number-field
+        label="output value"
+        value="0"
+        has-value=""
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(0px, 320px);"
+        source-key="/Shuffleboard/Angler/Output value"
+        min="NaN"
+        max="NaN"
+        placeholder=""
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-9"
+            aria-labelledby="label-vaadin-number-field-1247"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-1247"
+            for="vaadin-number-field-9"
+        >output value</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-829"
+            hidden=""
+        ></div>
+    </vaadin-number-field><frc-line-chart
+        chart-title="Clamped Output"
+        source-provider="NetworkTables"
+        style="transform: translate(560px, 240px); width: 320px; height: 240px;"
+        source-key="/Shuffleboard/Angler/Output Value Clamped"
+    >
+        <frc-line-chart-legend
+            source-provider="NetworkTables"
+            source-key="/Shuffleboard/NewDashboard/Output Value Clamped"
+        ></frc-line-chart-legend>
+        <frc-line-chart-axis
+            source-provider="NetworkTables"
+            lock-min=""
+            lock-max=""
+        ></frc-line-chart-axis>
+        <frc-line-chart-axis
+            side="right"
+            source-provider="NetworkTables"
+            hide=""
+        ></frc-line-chart-axis>
+        <frc-line-chart-data
+            source-provider="NetworkTables"
+            source-key="/Shuffleboard/Angler/Output Value Clamped"
+        ></frc-line-chart-data>
+    </frc-line-chart><vaadin-number-field
+        label="Positive clamp"
+        value="0"
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(336.8px, 8px);"
+        source-key="/Shuffleboard/Angler/Positive Clamp"
+        min="NaN"
+        max="NaN"
+        has-value=""
+        placeholder=""
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-10"
+            aria-labelledby="label-vaadin-number-field-4823"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-4823"
+            for="vaadin-number-field-10"
+        >Positive clamp</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-3166"
+            hidden=""
+        ></div>
+    </vaadin-number-field><vaadin-number-field
+        label="negative clamp"
+        value="0"
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(334.4px, 78.4px);"
+        source-key="/Shuffleboard/Angler/Negative Clamp"
+        min="NaN"
+        max="NaN"
+        has-value=""
+        placeholder=""
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-11"
+            aria-labelledby="label-vaadin-number-field-5022"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-5022"
+            for="vaadin-number-field-11"
+        >negative clamp</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-3302"
+            hidden=""
+        ></div>
+    </vaadin-number-field><vaadin-number-field
+        label="kP"
+        value="0"
+        has-label=""
+        source-provider="NetworkTables"
+        source-key="/Shuffleboard/Angler/kP Value"
+        style="width: 128px; height: 61.8px; transform: translate(334.4px, 156px);"
+        min="NaN"
+        max="NaN"
+        has-value=""
+        placeholder=""
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-12"
+            aria-labelledby="label-vaadin-number-field-5171"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-5171"
+            for="vaadin-number-field-12"
+        >kP</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-3401"
+            hidden=""
+        ></div>
+    </vaadin-number-field><frc-line-chart
+        chart-title="encoder reading"
+        source-provider="NetworkTables"
+        style="width: 320px; height: 240px; transform: translate(560px, 480px);"
+        source-key="/Shuffleboard/Angler/Angle Encoder"
+    >
+        <frc-line-chart-legend source-provider="NetworkTables"></frc-line-chart-legend>
+        <frc-line-chart-axis
+            source-provider="NetworkTables"
+            max="5"
+        ></frc-line-chart-axis>
+        <frc-line-chart-axis
+            side="right"
+            source-provider="NetworkTables"
+            hide=""
+        ></frc-line-chart-axis>
+        <frc-line-chart-data
+            source-provider="NetworkTables"
+            source-key="/Shuffleboard/Angler/Angle Encoder"
+        ></frc-line-chart-data>
+    </frc-line-chart><frc-boolean-box
+        source-provider="NetworkTables"
+        style="transform: translate(320px, 280px); width: 200px; height: 40px;"
+        source-key="/Shuffleboard/Climber/Climb Home Sensor"
+        label="climber"
+    ></frc-boolean-box><frc-boolean-box
+        source-provider="NetworkTables"
+        style="transform: translate(320px, 360px); width: 200px; height: 40px;"
+        source-key="/Shuffleboard/Shooter/Shooter Staged Sensor"
+        label="shooter stage sensor"
+    ></frc-boolean-box><frc-robot-command
+        source-provider="NetworkTables"
+        source-key="/SmartDashboard/Reset Climber Encoder"
+        style="width: 240px; height: 40px; transform: translate(0px, 440px);"
+        name="reset climber encoder"
+        label="reset climber encoder"
+    ></frc-robot-command><frc-robot-command
+        source-provider="NetworkTables"
+        style="transform: translate(0px, 600px); width: 240px; height: 40px;"
+        source-key="/SmartDashboard/Put Back To Zero"
+        label="setsetpoint zero"
+    ></frc-robot-command><frc-line-chart
+        chart-title="Output Unclamped"
+        source-provider="NetworkTables"
+        style="width: 320px; height: 240px; transform: translate(560px, 0px);"
+        source-key="/Shuffleboard/Angler/Output value"
+    >
+        <frc-line-chart-legend
+            source-provider="NetworkTables"
+            source-key="/Shuffleboard/NewDashboard/Output value"
+        ></frc-line-chart-legend>
+        <frc-line-chart-axis source-provider="NetworkTables"></frc-line-chart-axis>
+        <frc-line-chart-axis
+            side="right"
+            source-provider="NetworkTables"
+            hide=""
+        ></frc-line-chart-axis>
+        <frc-line-chart-data
+            source-provider="NetworkTables"
+            source-key="/Shuffleboard/Angler/Output value"
+        ></frc-line-chart-data>
+    </frc-line-chart><vaadin-number-field
+        label="Flywheel Speed"
+        value="0"
+        has-value=""
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(280px, 560px);"
+        source-key="/Shuffleboard/Shooter/Flywheel Speed"
+        min="NaN"
+        max="NaN"
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-13"
+            aria-labelledby="label-vaadin-number-field-14108"
+            aria-describedby=""
+            min="NaN"
+            max="NaN"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-14108"
+            for="vaadin-number-field-13"
+        >Flywheel Speed</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-9446"
+            hidden=""
+        ></div>
+    </vaadin-number-field><frc-robot-command
+        source-provider="NetworkTables"
+        style="transform: translate(2.38748px, 656px); width: 400.787px; height: 50px;"
+        source-key="/SmartDashboard/Angle Encoder Reset"
+        name="!!!💯💯💯 Reset Angle Encoder 💯💯💯!!!"
+        label="!!!💯💯💯 Reset Angle Encoder 💯💯💯!!!"
+    ></frc-robot-command></dashboard-tab><dashboard-tab
+    tab-name="danger"
+    slot="tab"
+    source-provider="NetworkTables"
+><frc-robot-command
+        source-provider="NetworkTables"
+        source-key="/SmartDashboard/Angle Encoder Reset"
+        label="reset angle encoder"
+        style="transform: translate(40px, 40px); width: 360px; height: 120px;"
+    ></frc-robot-command></dashboard-tab>
