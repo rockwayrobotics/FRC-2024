@@ -60,8 +60,8 @@ public class RobotContainer {
       Constants.CAN.RIGHT_INTAKE, m_led);
 
   public final AnglerPIDSubsystem m_angler = new AnglerPIDSubsystem(); 
-
   
+  private double anglerIncrementValue = 0.1;
 
   SendableChooser<AutoOption> m_autoChooser = new SendableChooser<>();
     
@@ -129,8 +129,8 @@ public class RobotContainer {
   // private double RightAxis(){
   //   return m_driverController.getRightX();
   // }
-
   private void configureBindings() {
+
 
     // Driver Controller buttons
     //m_driverController.povUp().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(0.5))));
@@ -197,9 +197,12 @@ public class RobotContainer {
     .andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
     
     m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
-    
-    m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) - 0.1)));
-    m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) + 0.1)));
+
+    m_operatorController.back().onTrue(new InstantCommand(() -> anglerIncrementValue = 0.3));
+    m_operatorController.back().onFalse(new InstantCommand(() -> anglerIncrementValue = 0.1));
+
+    m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) - anglerIncrementValue)));
+    m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) + anglerIncrementValue)));
 
     m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.ZERO_SETPOINT)));
     m_operatorController.povRight().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.SPEAKER_SETPOINT)));
