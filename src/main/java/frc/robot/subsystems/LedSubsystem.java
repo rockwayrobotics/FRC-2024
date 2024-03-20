@@ -159,12 +159,28 @@ public class LedSubsystem extends SubsystemBase {
     }
   }
 
-  public void setMode(modes mode) {
+/**
+ * <p>Set the LED mode to a specific color</p>
+ * @param mode the mode to set the LED to
+ * @param optionalOverride whether to override the current mode, defaults to false
+ */
+  public void setMode(modes mode, boolean... optionalOverride) {
+    // optionalOverride defaults to false
     if (m_mode != mode) {
+      if (optionalOverride.length > 0) {
+        System.out.println("Overriding LED mode to: " + mode);
+        m_mode = mode;
+        counter = 0;
+        return;
+      }
       m_mode = mode;
       counter = 0;
     }
     //System.out.println("Set LED to: " + mode);
+  }
+
+  public modes getMode() {
+    return m_mode;
   }
 
   @Override

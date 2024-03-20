@@ -70,6 +70,12 @@ public class IntakeSubsystem extends SubsystemBase {
     if (!intakeLoad && isNoteLoaded()){
       m_led.setMode(Constants.LED.modes.BreathingMagenta);
     }
+    if (intakeLoad && !isNoteLoaded()){
+      if (m_led.getMode() != Constants.LED.modes.FlashingOrange){
+        m_led.setMode(Constants.LED.modes.Rainbow);
+      }
+    }
+
     intakeLoad = isNoteLoaded();
     intakeLoadWidget.setBoolean(isNoteLoaded());
   }
