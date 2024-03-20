@@ -26,7 +26,7 @@ public class OperatorPullupSensor extends Command {
     // Resets encoder values to default
     //System.out.println("operator pullup");
     m_intake.setBelt(0.7);
-    m_led.setMode(Constants.LED.modes.FlashingOrange);
+    m_led.setMode(Constants.LED.modes.FlashingOrange, true);
   }
 
   @Override
