@@ -165,10 +165,10 @@ public class LedSubsystem extends SubsystemBase {
  * @param optionalOverride whether to override the current mode, defaults to false
  */
   public void setMode(modes mode, boolean... optionalOverride) {
+    // TODO: Override does not do anything
     // optionalOverride defaults to false
     if (m_mode != mode) {
       if (optionalOverride.length > 0) {
-        System.out.println("Overriding LED mode to: " + mode);
         m_mode = mode;
         counter = 0;
         return;
