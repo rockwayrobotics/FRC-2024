@@ -56,7 +56,7 @@ public class middleFourPieceRed extends SequentialCommandGroup {
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Red)))
                 .then(new InstantCommand(() -> m_intake.setBelt(-0.7)))
-                .then(new WaitCommand(0.2))
+                .then(new WaitCommand(0.3))
                 .then(new InstantCommand(() -> m_intake.setBelt(0)))
                 .then(new ShootSequenceFullAuto(m_shooter, m_intake, m_led))
 
@@ -75,7 +75,7 @@ public class middleFourPieceRed extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
                 .then(new DriveDistance(m_drivebase, -0.5, 1.1))
 
-                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, 0.9, -33))
+                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, 0.85, -31))
 
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
                 .then(new DriveRotate(m_drivebase, -25))
