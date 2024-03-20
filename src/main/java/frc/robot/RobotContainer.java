@@ -141,7 +141,7 @@ public class RobotContainer {
 
     m_driverController.a().onTrue(ShootSequenceWebAdj.create(m_shooter, m_intake, m_led));
 
-    m_driverController.y().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
+    m_driverController.rightBumper().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
 
     //m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake, m_led));
 
@@ -156,10 +156,10 @@ public class RobotContainer {
     m_driverController.start().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
     m_driverController.start().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
 
-    m_driverController.rightBumper().whileTrue(
+    m_driverController.y().whileTrue(
         new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.7))
             .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))));
-    m_driverController.rightBumper().onFalse(
+    m_driverController.y().onFalse(
         new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
 
     m_driverController.rightTrigger().whileTrue(
