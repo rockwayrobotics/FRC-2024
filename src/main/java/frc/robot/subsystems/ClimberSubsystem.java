@@ -54,7 +54,7 @@ public class ClimberSubsystem extends SubsystemBase {
     climberSpeedEntry = dashboardTab.add("Climber Speed", 0)
         .getEntry();
 
-    softLimitOverride = dashboardTab.add("Climber Soft Limit", false)
+    softLimitOverride = dashboardTab.add("Climber Soft Limit Override", false)
         .getEntry();
 
     SmartDashboard.putData("Reset Climber Encoder", new InstantCommand(() -> m_climberEncoder.setPosition(0)));

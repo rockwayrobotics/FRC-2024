@@ -98,7 +98,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     SmartDashboard.putData("Setpoint 1", new InstantCommand(() -> angleSetpointWidget.setDouble(setpoint1)));
     SmartDashboard.putData("Setpoint 2", new InstantCommand(() -> angleSetpointWidget.setDouble(setpoint2)));
 
-    softLimitOverride = dashboardTab.add("Angler Soft Limit", false)
+    softLimitOverride = dashboardTab.add("Angler Soft Limit Override", false)
     .getEntry();
 
     enable();

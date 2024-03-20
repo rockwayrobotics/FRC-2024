@@ -192,21 +192,12 @@ public class RobotContainer {
 
     m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.whiteDotLines)));
     m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
-
-    // m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Off)));
-    // m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
-
-    // m_operatorController.rightBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(2)
-    // .finallyDo((boolean interrupted) -> {
-    //     m_intake.stagedFlag = !interrupted;
-    //     System.out.println("Setting staged flag to " + m_intake.stagedFlag);})
-    // .andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
     
     m_operatorController.rightBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led)
     .andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
     
     m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
-
+    
     m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) - 0.1)));
     m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) + 0.1)));
 
