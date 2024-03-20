@@ -72,6 +72,13 @@ public final class Constants {
     
     public final static double SPEAKER_SETPOINT = 1.9;
     public final static double AMP_SETPOINT = 1; 
+
+    public final static double DEFAULT_PID_kP = 0.3;
+    public final static double DEFAULT_PID_kI = 0;
+    public final static double DEFAULT_PID_kD = 0;
+
+    public final static double DEFAULT_POSITIVE_CLAMP = 0.15;
+    public final static double DEFAULT_NEGATIVE_CLAMP = -0.15;
   }
 
   // Constants for LEDs 

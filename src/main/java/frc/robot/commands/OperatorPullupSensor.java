@@ -48,7 +48,7 @@ public class OperatorPullupSensor extends Command {
 
   @Override
   public void end(boolean cancelled) {
-    if (counter > 2 * 50){
+    if (counter > 2 * 70){
       m_intake.stagedFlag = false; 
     }
     else {

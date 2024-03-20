@@ -60,7 +60,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
 
 
   public AnglerPIDSubsystem(){
-    super(new PIDController(0.1, 0, 0));
+    super(new PIDController(Constants.Angler.DEFAULT_PID_kP, Constants.Angler.DEFAULT_PID_kI, Constants.Angler.DEFAULT_PID_kD));
     // getController().setTolerance(Constants.Angler.ANGLE_PID_TOLERANCE);
 
     m_angleMotor.setIdleMode(IdleMode.kBrake);
@@ -85,12 +85,12 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     outputClampedWidget = dashboardTab.add("Output Value Clamped", 0).getEntry(); 
     errorWidget = dashboardTab.add("PID Error Pos", 0).getEntry();
     
-    kPWidget = dashboardTab.addPersistent("kP Value", 0.05).getEntry();
-    kIWidget = dashboardTab.addPersistent("kI Value", 0).getEntry();
-    kDWidget = dashboardTab.addPersistent("kD Value", 0).getEntry();
+    kPWidget = dashboardTab.addPersistent("kP Value", Constants.Angler.DEFAULT_PID_kP).getEntry();
+    kIWidget = dashboardTab.addPersistent("kI Value", Constants.Angler.DEFAULT_PID_kI).getEntry();
+    kDWidget = dashboardTab.addPersistent("kD Value", Constants.Angler.DEFAULT_PID_kD).getEntry();
 
-    positiveClampWidget = dashboardTab.addPersistent("Positive Clamp", 0.05).getEntry();
-    negativeClampWidget = dashboardTab.addPersistent("Negative Clamp", -0.1).getEntry();
+    positiveClampWidget = dashboardTab.addPersistent("Positive Clamp", Constants.Angler.DEFAULT_POSITIVE_CLAMP).getEntry();
+    negativeClampWidget = dashboardTab.addPersistent("Negative Clamp",Constants.Angler.DEFAULT_NEGATIVE_CLAMP).getEntry();
 
     SmartDashboard.putData("Put Back To Zero", new InstantCommand(() -> angleSetpointWidget.setDouble(0)));
     SmartDashboard.putData("Setpoint 1", new InstantCommand(() -> angleSetpointWidget.setDouble(setpoint1)));
@@ -152,13 +152,15 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     // speakerAngleSetpoint = speakerAngleWidget.getDouble(0);
     // ampAngleSetpoint = ampAngleWidget.getDouble(0);
 
-    kPVal = kPWidget.getDouble(0.05);
-    kIVal = kIWidget.getDouble(0);
-    kDVal = kDWidget.getDouble(0);
+    kPVal = kPWidget.getDouble(Constants.Angler.DEFAULT_PID_kP);
+    kIVal = kIWidget.getDouble(Constants.Angler.DEFAULT_PID_kI);
+    kDVal = kDWidget.getDouble(Constants.Angler.DEFAULT_PID_kD);
 
     getController().setP(kPVal);
-    getController().setI(kIVal);
-    getController().setD(kDVal);
+    
+    // commented out in case someone sets the P and the I values on the dashboard
+    // getController().setI(kIVal);
+    // getController().setD(kDVal);
 
     setpoint1 = setpoint1Widget.getDouble(0);
     setpoint2 = setpoint2Widget.getDouble(0);
@@ -166,9 +168,8 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     angleSetpoint = angleSetpointWidget.getDouble(0);
     setSetpoint(angleSetpoint);
 
-    positiveClamp = positiveClampWidget.getDouble(0.05);
-    negativeClamp = negativeClampWidget.getDouble(-0.1);
-
+    positiveClamp = positiveClampWidget.getDouble(Constants.Angler.DEFAULT_POSITIVE_CLAMP);
+    negativeClamp = negativeClampWidget.getDouble(Constants.Angler.DEFAULT_NEGATIVE_CLAMP);
     
     super.periodic();
 
