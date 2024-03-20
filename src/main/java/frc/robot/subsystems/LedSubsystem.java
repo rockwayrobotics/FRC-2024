@@ -167,8 +167,9 @@ public class LedSubsystem extends SubsystemBase {
   public void setMode(modes mode, boolean... optionalOverride) {
     // optionalOverride defaults to false
     if (m_mode != mode) {
-      if (optionalOverride.length > 0 && optionalOverride[0] == true) {
-        mode = m_mode;
+      if (optionalOverride.length > 0) {
+        System.out.println("Overriding LED mode to: " + mode);
+        m_mode = mode;
         counter = 0;
         return;
       }
@@ -176,6 +177,10 @@ public class LedSubsystem extends SubsystemBase {
       counter = 0;
     }
     //System.out.println("Set LED to: " + mode);
+  }
+
+  public modes getMode() {
+    return m_mode;
   }
 
   @Override
