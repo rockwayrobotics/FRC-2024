@@ -128,6 +128,16 @@ public class LedSubsystem extends SubsystemBase {
     }
     counter++;
   }
+  
+  private void flashing_green() {
+    int phase = (counter / 2) % 2;
+    int red = phase * 0;
+    int green = phase * 255;
+    for (int i = 0; i < m_ledBuffer.getLength(); i++) {
+      m_ledBuffer.setRGB(i, red, green, 0);
+    }
+    counter++;
+  }
 
   private BufferedImage imageLoad(String imagePath) {
     try {
@@ -217,6 +227,9 @@ public class LedSubsystem extends SubsystemBase {
           break;
         case FlashingOrange:
           flashing_orange();
+          break;
+        case FlashingGreen:
+          flashing_green();
           break;
         case badApple:
           currentimage = badapple;

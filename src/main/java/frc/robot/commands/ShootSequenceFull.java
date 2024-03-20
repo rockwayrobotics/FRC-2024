@@ -1,15 +1,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShootSequenceFull extends SequentialCommandGroup {
+public class ShootSequenceFull extends ParallelRaceGroup {
   ShooterSubsystem m_shooter;
   IntakeSubsystem m_intake;
   LedSubsystem m_led; 
@@ -21,16 +20,25 @@ public class ShootSequenceFull extends SequentialCommandGroup {
     m_led = led;
 
     addRequirements(m_shooter, m_intake, m_led);
-
-    this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Yellow)));
-    this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(1)));
-    this.addCommands(new WaitCommand(0.8));
-    this.addCommands(new InstantCommand(() -> m_intake.setBelt(1)));
-    this.addCommands(new WaitCommand(1));
+    Command main = Commands.sequence(
+      Commands.runOnce(() -> m_led.setMode(Constants.LED.modes.Yellow)),
+      Commands.runOnce(() -> m_shooter.setFlywheels(1)),
+      Commands.waitSeconds(0.8),
+      Commands.runOnce(() -> m_intake.setBelt(1)),
+      Commands.waitSeconds(1)
+    ).finallyDo((interrupted) -> {
+      m_intake.setBelt(0);
+      m_shooter.setFlywheels(0);
+    });
     
-    this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
-    this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(0)));
-    this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
+    Command LEDindicator = Commands.sequence(
+      Commands.waitUntil(() -> m_shooter.isNoteStaged()),
+      Commands.waitUntil(() -> !m_shooter.isNoteStaged()),
+      Commands.runOnce(() -> m_led.setMode(Constants.LED.modes.FlashingGreen)),
+      Commands.waitSeconds(2)
+    ).finallyDo((interrupted) -> m_led.setMode(Constants.LED.modes.Rainbow));
+
+    this.addCommands(main, LEDindicator);
   }
 
   public static Command create(ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led) {

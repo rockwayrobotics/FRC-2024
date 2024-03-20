@@ -98,6 +98,7 @@ public final class Constants {
       BreathingYellow,
       BreathingMagenta,
       FlashingOrange,
+      FlashingGreen,
       badApple,
       heatGradient,
       whiteDotLines,
