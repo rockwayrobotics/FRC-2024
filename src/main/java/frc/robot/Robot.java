@@ -8,6 +8,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.ChangeLEDColourIntake;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -113,6 +114,9 @@ public class Robot extends TimedRobot {
     // if (!m_robotContainer.m_intake.intakeLoad && m_robotContainer.m_intake.isNoteLoaded()){
     //   m_robotContainer.noteStage();
     // }
+    if (m_robotContainer.m_intake.isNoteLoaded()) {
+      m_robotContainer.m_led.setMode(Constants.LED.modes.BreathingMagenta);
+    }
   }
 
   @Override
