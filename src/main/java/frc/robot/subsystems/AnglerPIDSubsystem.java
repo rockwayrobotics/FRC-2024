@@ -40,6 +40,8 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
   public GenericEntry positiveClampWidget;
   public GenericEntry negativeClampWidget;
 
+  public GenericEntry softLimitOverride;
+
   private boolean isAngleReset; 
   private double kPVal;
   private double kIVal;
@@ -95,6 +97,9 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     SmartDashboard.putData("Put Back To Zero", new InstantCommand(() -> angleSetpointWidget.setDouble(0)));
     SmartDashboard.putData("Setpoint 1", new InstantCommand(() -> angleSetpointWidget.setDouble(setpoint1)));
     SmartDashboard.putData("Setpoint 2", new InstantCommand(() -> angleSetpointWidget.setDouble(setpoint2)));
+
+    softLimitOverride = dashboardTab.add("Angler Soft Limit", false)
+    .getEntry();
 
     enable();
   }
@@ -157,10 +162,13 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     kDVal = kDWidget.getDouble(Constants.Angler.DEFAULT_PID_kD);
 
     getController().setP(kPVal);
-    
+
     // commented out in case someone sets the P and the I values on the dashboard
     // getController().setI(kIVal);
     // getController().setD(kDVal);
+
+    m_angleMotor.enableSoftLimit(SoftLimitDirection.kReverse, !softLimitOverride.getBoolean(false));
+    m_angleMotor.enableSoftLimit(SoftLimitDirection.kForward, !softLimitOverride.getBoolean(false));
 
     setpoint1 = setpoint1Widget.getDouble(0);
     setpoint2 = setpoint2Widget.getDouble(0);

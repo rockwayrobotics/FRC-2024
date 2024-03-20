@@ -102,7 +102,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.onTeleopInit();
-    m_robotContainer.m_angler.angleSetpointWidget.setDouble(1);
+    m_robotContainer.m_angler.angleSetpointWidget.setDouble(Constants.Angler.SPEAKER_SETPOINT);
 
    // m_robotContainer.m_drivebaseSubsystem.setDrivebaseIdle(DrivebaseSubsystem.IdleMode.kCoast);
   }
