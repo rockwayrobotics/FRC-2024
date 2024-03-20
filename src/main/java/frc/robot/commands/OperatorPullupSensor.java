@@ -13,6 +13,9 @@ public class OperatorPullupSensor extends Command {
   IntakeSubsystem m_intake;
   LedSubsystem m_led;
 
+  int counter = 0;
+
+
   public OperatorPullupSensor(ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led) {
     m_shooter = shooter;
     m_intake = intake;
@@ -26,21 +29,30 @@ public class OperatorPullupSensor extends Command {
     // Resets encoder values to default
     //System.out.println("operator pullup");
     m_intake.setBelt(0.7);
+    counter = 0;
     m_led.setMode(Constants.LED.modes.FlashingOrange, true);
   }
 
   @Override
   public void execute() {
+    counter += 1;
   }
 
   @Override
   public boolean isFinished() {
+    if (counter > 2 * 50){
+      return true;
+    }
     return m_shooter.isNoteStaged(); // Returns true if the shooter is staged
   }
 
   @Override
   public void end(boolean cancelled) {
-    // m_intake.setBelt(0);
-    //System.out.println(cancelled);
+    if (counter > 2 * 50){
+      m_intake.stagedFlag = false; 
+    }
+    else {
+      m_intake.stagedFlag = true;
+    }
   }
 }
