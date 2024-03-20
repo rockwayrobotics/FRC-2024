@@ -21,13 +21,15 @@ public class IntakeSubsystem extends SubsystemBase {
   public boolean intakeLoad; 
   public boolean stagedFlag; 
 
-  GenericEntry intakeLoadWidget; 
+  private LedSubsystem m_led; 
+
+  GenericEntry intakeLoadWidget;
 
   RelativeEncoder m_beltEncoder;
 
   ShuffleboardTab dashboardTab = Shuffleboard.getTab("Intake");
 
-  public IntakeSubsystem(int beltMotor, int leftIntake, int rightIntake) {
+  public IntakeSubsystem(int beltMotor, int leftIntake, int rightIntake, LedSubsystem led) {
     m_beltMotor = new CANSparkMax(beltMotor, CANSparkMax.MotorType.kBrushless);
     m_leftIntake = new CANSparkMax(leftIntake, CANSparkMax.MotorType.kBrushed);
     m_rightIntake = new CANSparkMax(rightIntake, CANSparkMax.MotorType.kBrushed);
@@ -39,7 +41,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_rightIntake.follow(m_leftIntake, true);
     m_beltEncoder = m_beltMotor.getEncoder();
 
-    // m_robotContainer = new RobotContainer();
+    m_led = led;
 
     m_intakeLoadSensor = new DigitalInput(Constants.Digital.INTAKE_LOAD_SENSOR);
     intakeLoadWidget = dashboardTab.addPersistent("Intake Load", false).getEntry();
@@ -65,10 +67,11 @@ public class IntakeSubsystem extends SubsystemBase {
     //   .withTimeout(1.5).andThen(new OperatorPullback(m_robotContainer.m_shooter, m_robotContainer.m_intake, m_robotContainer.m_led))
     //   .schedule();
     // }
-
-    intakeLoadWidget.setBoolean(isNoteLoaded());
-
+    if (!intakeLoad && isNoteLoaded()){
+      m_led.setMode(Constants.LED.modes.BreathingMagenta);
+    }
     intakeLoad = isNoteLoaded();
+    intakeLoadWidget.setBoolean(isNoteLoaded());
   }
 }
 

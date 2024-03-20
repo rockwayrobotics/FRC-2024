@@ -160,8 +160,10 @@ public class LedSubsystem extends SubsystemBase {
   }
 
   public void setMode(modes mode) {
-    m_mode = mode;
-    counter = 0;
+    if (m_mode != mode) {
+      m_mode = mode;
+      counter = 0;
+    }
     //System.out.println("Set LED to: " + mode);
   }
 

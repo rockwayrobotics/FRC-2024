@@ -57,7 +57,7 @@ public class RobotContainer {
   public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.LEFT_FLYWHEEL,
       Constants.CAN.RIGHT_FLYWHEEL);
   public final IntakeSubsystem m_intake = new IntakeSubsystem(Constants.CAN.BELT, Constants.CAN.LEFT_INTAKE,
-      Constants.CAN.RIGHT_INTAKE);
+      Constants.CAN.RIGHT_INTAKE, m_led);
 
   public final AnglerPIDSubsystem m_angler = new AnglerPIDSubsystem(); 
 
@@ -197,7 +197,10 @@ public class RobotContainer {
     // m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
     m_operatorController.rightBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led).withTimeout(2)
-    .finallyDo((boolean interrupted) -> {m_intake.stagedFlag = !interrupted;})
+    .finallyDo((boolean interrupted) -> {
+        m_intake.stagedFlag = !interrupted;
+        System.out.println("Setting staged flag to " + m_intake.stagedFlag);
+      })
     .andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
     
     m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));

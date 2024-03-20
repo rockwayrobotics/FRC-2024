@@ -28,6 +28,7 @@ public class OperatorPullback extends SequentialCommandGroup {
     
     this.addCommands(new InstantCommand(() -> {
       Constants.LED.modes mode = m_intake.stagedFlag ? Constants.LED.modes.Green : Constants.LED.modes.Red;
+      System.out.println("Setting LED mode to " + mode.toString());
       m_led.setMode(mode);
     }));
   }

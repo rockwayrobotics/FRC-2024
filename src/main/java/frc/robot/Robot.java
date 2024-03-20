@@ -114,9 +114,6 @@ public class Robot extends TimedRobot {
     // if (!m_robotContainer.m_intake.intakeLoad && m_robotContainer.m_intake.isNoteLoaded()){
     //   m_robotContainer.noteStage();
     // }
-    if (m_robotContainer.m_intake.isNoteLoaded()) {
-      m_robotContainer.m_led.setMode(Constants.LED.modes.BreathingMagenta);
-    }
   }
 
   @Override
