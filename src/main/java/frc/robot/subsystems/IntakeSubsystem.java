@@ -67,13 +67,11 @@ public class IntakeSubsystem extends SubsystemBase {
     //   .withTimeout(1.5).andThen(new OperatorPullback(m_robotContainer.m_shooter, m_robotContainer.m_intake, m_robotContainer.m_led))
     //   .schedule();
     // }
-    if (!intakeLoad && isNoteLoaded()){
+    if (!intakeLoad && isNoteLoaded() && m_led.getMode() != Constants.LED.modes.FlashingOrange){
       m_led.setMode(Constants.LED.modes.BreathingMagenta);
     }
-    if (intakeLoad && !isNoteLoaded()){
-      if (m_led.getMode() != Constants.LED.modes.FlashingOrange){
+    if (intakeLoad && !isNoteLoaded() && m_led.getMode() != Constants.LED.modes.FlashingOrange){
         m_led.setMode(Constants.LED.modes.Rainbow);
-      }
     }
 
     intakeLoad = isNoteLoaded();
