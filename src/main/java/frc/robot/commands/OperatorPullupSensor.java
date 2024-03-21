@@ -40,6 +40,7 @@ public class OperatorPullupSensor extends Command {
 
   @Override
   public boolean isFinished() {
+    //  TODO: Make this 70 a constant
     if (counter > 2 * 70){
       return true;
     }
