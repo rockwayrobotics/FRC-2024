@@ -20,7 +20,7 @@ public class OperatorPullback extends SequentialCommandGroup {
 
     addRequirements(m_intake, m_shooter, m_led);
 
-    this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.FlashingOrange, true)));
+    this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.FlashingOrange)));
 
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(-0.5)));
     this.addCommands(new WaitCommand(0.1));
