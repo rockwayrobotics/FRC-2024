@@ -40,7 +40,7 @@ public class OperatorPullupSensor extends Command {
 
   @Override
   public boolean isFinished() {
-    if (counter > 2 * 50){
+    if (counter > 2 * 70){
       return true;
     }
     return m_shooter.isNoteStaged(); // Returns true if the shooter is staged
@@ -48,7 +48,7 @@ public class OperatorPullupSensor extends Command {
 
   @Override
   public void end(boolean cancelled) {
-    if (counter > 2 * 49){
+    if (counter > 2 * 70){
       m_intake.stagedFlag = false; 
     }
     else {
