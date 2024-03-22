@@ -22,7 +22,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 
 
-/** Two piece auto from the side of the field, starting on the blue alliance.
+/** Two piece auto from the side of the field, starting on the red alliance.
  * Different for each alliance so we don't smack into the truss first 
  */
 public class sideTwoPieceRed extends SequentialCommandGroup {
@@ -61,9 +61,6 @@ public class sideTwoPieceRed extends SequentialCommandGroup {
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
                 
-                .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
-                .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
-
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
                 .then(new DriveRotate(m_drivebase, -50))
 
