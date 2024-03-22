@@ -84,7 +84,7 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.m_angler.resetAngleEncoder();
-    m_robotContainer.m_angler.angleSetpointWidget.setDouble(2);
+    m_robotContainer.m_angler.angleSetpointWidget.setDouble(Constants.Angler.SPEAKER_SETPOINT);
   }
 
   /** This function is called periodically during autonomous. */
