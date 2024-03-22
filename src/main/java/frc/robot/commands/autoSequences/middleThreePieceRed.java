@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.commands.AutoShootReset;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.DriveRotate;
 import frc.robot.commands.FailFastTimeoutGroup;
@@ -46,15 +47,10 @@ public class middleThreePieceRed extends SequentialCommandGroup {
         m_intake = intake;
         m_led = led; 
 
-        m_drivebase.setDrivebaseIdle(IdleMode.kBrake);
-
         addRequirements(m_drivebase, m_shooter, m_intake);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
-                .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Red)))
-                .then(new InstantCommand(() -> m_intake.setBelt(-0.7)))
-                .then(new WaitCommand(0.3))
-                .then(new InstantCommand(() -> m_intake.setBelt(0)))
+                .then(new AutoShootReset(m_drivebase, m_intake, m_led))
                 .then(new ShootSequenceFullAuto(m_shooter, m_intake, m_led))
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Blue)))
