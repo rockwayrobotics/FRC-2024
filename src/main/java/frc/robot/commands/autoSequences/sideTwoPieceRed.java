@@ -62,13 +62,13 @@ public class sideTwoPieceRed extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
                 
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
-                .then(new DriveRotate(m_drivebase, -50))
+                .then(new DriveRotate(m_drivebase, -30))
 
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
                 .then(new DriveDistance(m_drivebase, -0.5, 1.2))
 
-                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, 1.1, 50))
+                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, 1.1, 30))
 
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
