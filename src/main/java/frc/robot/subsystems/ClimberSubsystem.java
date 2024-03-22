@@ -54,7 +54,7 @@ public class ClimberSubsystem extends SubsystemBase {
     climberSpeedEntry = dashboardTab.add("Climber Speed", 0)
         .getEntry();
 
-    softLimitOverride = dashboardTab.add("Climber Soft Limit Override", false)
+    softLimitOverride = dashboardTab.add("Climber Soft Limit Override", true)
         .getEntry();
 
     SmartDashboard.putData("Reset Climber Encoder", new InstantCommand(() -> m_climberEncoder.setPosition(0)));
@@ -90,7 +90,7 @@ public class ClimberSubsystem extends SubsystemBase {
     homeSensorEntry.setBoolean(isAtHome());
     climberEncoderEntry.setDouble(m_climberEncoder.getPosition());
     climberSpeedEntry.setDouble(m_climberMotor.get());
-    m_climberMotor.enableSoftLimit(SoftLimitDirection.kReverse, !softLimitOverride.getBoolean(false));
-    m_climberMotor.enableSoftLimit(SoftLimitDirection.kForward, !softLimitOverride.getBoolean(false));
+    m_climberMotor.enableSoftLimit(SoftLimitDirection.kReverse, !softLimitOverride.getBoolean(true));
+    m_climberMotor.enableSoftLimit(SoftLimitDirection.kForward, !softLimitOverride.getBoolean(true));
   }
 }
