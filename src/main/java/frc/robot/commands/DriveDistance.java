@@ -22,7 +22,10 @@ public class DriveDistance extends Command {
   @Override
   public void initialize() {
     // Resets encoder values to default
+    System.out.println("Current Encoders: " + m_drivebase.getRDistance());
     m_drivebase.resetEncoders();
+    System.out.println("AFter Encoders: " + m_drivebase.getRDistance());
+
 
     System.out.println("Moving: " + m_distance);
   }
