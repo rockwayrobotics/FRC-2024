@@ -33,7 +33,7 @@ public class ShootFromGroundDriveFour extends SequentialCommandGroup {
     System.out.println("ShootFromGroundDriveFour");
     
     this.addCommands(
-        new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Orange))
+        new InstantCommand(() -> m_led.setMode(Constants.LED.modes.FlashingOrange))
       );
 
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(1)));

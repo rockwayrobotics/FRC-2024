@@ -24,7 +24,7 @@ public class ShootFromGroundDriveRotate extends SequentialCommandGroup {
 
     addRequirements(m_shooter, m_intake, m_led, m_drivebase);
 
-    this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Orange)));
+    this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.FlashingOrange)));
     
 
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0.7)));
