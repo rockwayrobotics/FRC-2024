@@ -70,7 +70,7 @@ public final class Constants {
     public final static float ANGLE_TOP_MAX = 0f;
     public final static float ANGLE_BOTTOM_MAX = 2.2f; 
     
-    public final static double SPEAKER_SETPOINT = 1.9;
+    public final static double SPEAKER_SETPOINT = 2.1;
     public final static double ZERO_SETPOINT = 0.2;
 
     public final static double DEFAULT_PID_kP = 0.3;
