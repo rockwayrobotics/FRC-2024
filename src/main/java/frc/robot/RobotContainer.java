@@ -218,7 +218,7 @@ public class RobotContainer {
     m_operatorController.povUp().onTrue(new InstantCommand(() -> m_climber.setClimber(0.7)));
     m_operatorController.povUp().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
-    m_operatorController.povDown().onTrue(new InstantCommand(() -> m_climber.setClimber(-0.7)));
+    m_operatorController.povDown().onTrue(new InstantCommand(() -> m_climber.setClimber(-1)));
     m_operatorController.povDown().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
   }
   
