@@ -33,12 +33,12 @@ public class DriveDistance extends Command {
   @Override
   public void execute() {
     m_drivebase.set(m_speed, 0);
-    System.out.println("Executing");
+    // System.out.println("Executing");
   }
 
   @Override
   public boolean isFinished() {
-    System.out.println("Current pos: " + Math.abs(m_drivebase.getRDistance()) + " Setpoint: " + m_distance);
+    // System.out.println("Current pos: " + Math.abs(m_drivebase.getRDistance()) + " Setpoint: " + m_distance);
     //SmartDashboard.putNumber("Auto Command Distance Travelled", m_drivebase.getRDistance());
     return (Math.abs(m_drivebase.getRDistance()) >= m_distance);
   }
