@@ -11,6 +11,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -190,8 +191,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   /** Resets drivebase encoder distances to 0. */
-  public void resetEncoders() {
-    m_leftDriveEncoder.setPosition(0);
-    m_rightDriveEncoder.setPosition(0);
+  public boolean resetEncoders() {
+   return m_leftDriveEncoder.setPosition(0) == REVLibError.kOk &&
+    m_rightDriveEncoder.setPosition(0) == REVLibError.kOk;
   }
 }
