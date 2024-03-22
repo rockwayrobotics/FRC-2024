@@ -25,7 +25,7 @@ public class ShootSequenceWebAdj extends SequentialCommandGroup {
     this.addCommands(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Green)));
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(m_shooter.webFlywheelSpeed)));
     this.addCommands(new WaitCommand(0.8));
-    this.addCommands(new InstantCommand(() -> m_intake.setBelt(0.5)));
+    this.addCommands(new InstantCommand(() -> m_intake.setBelt(1)));
     this.addCommands(new WaitCommand(1));
 
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
