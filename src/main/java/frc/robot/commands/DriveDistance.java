@@ -9,6 +9,10 @@ public class DriveDistance extends Command {
   private DrivebaseSubsystem m_drivebase;
   private double m_speed;
   private double m_distance;
+  private double m_leftBase;
+  private double m_rightBase;
+  private double m_leftDist;
+  private double m_rightDist;
 
   public DriveDistance(DrivebaseSubsystem subsystem, double speed, double distance) {
 
@@ -22,12 +26,15 @@ public class DriveDistance extends Command {
   @Override
   public void initialize() {
     // Resets encoder values to default
-    System.out.println("Current Encoders: " + m_drivebase.getRDistance());
-    m_drivebase.resetEncoders();
+    // System.out.println("Current Encoders: " + m_drivebase.getRDistance());
+    // m_drivebase.resetEncoders();
 
-    System.out.println("After Encoders: " + m_drivebase.getRDistance());
+    // System.out.println("After Encoders: " + m_drivebase.getRDistance());
+    m_leftBase = m_drivebase.getLDistance();
+    m_rightBase = m_drivebase.getRDistance();
 
-    System.out.println("Moving: " + m_distance);
+    System.out.printf("Moving: %.3f from %.3f, %.3f%n",
+      m_distance, m_leftBase, m_rightBase);
   }
 
   @Override
@@ -40,12 +47,15 @@ public class DriveDistance extends Command {
   public boolean isFinished() {
     // System.out.println("Current pos: " + Math.abs(m_drivebase.getRDistance()) + " Setpoint: " + m_distance);
     //SmartDashboard.putNumber("Auto Command Distance Travelled", m_drivebase.getRDistance());
-    return (Math.abs(m_drivebase.getRDistance()) >= m_distance);
+    double m_leftDist = m_drivebase.getLDistance() - m_leftBase;
+    double m_rightDist = m_drivebase.getRDistance() - m_rightBase;
+    double distance = (m_leftDist + m_rightDist) / 2.0;
+    return (Math.abs(distance) >= m_distance);
   }
 
   @Override
   public void end(boolean cancelled) {
-    System.out.println("Moved.");
     m_drivebase.stop(); // Resets the drivebase to 0, ends command
+    System.out.printf("Moved: %.3f, %.3f%n", m_leftDist, m_rightDist);
   }
 }
