@@ -65,15 +65,15 @@ public class middleFourPieceRed extends SequentialCommandGroup {
                 .then(new ShootFromGroundDriveFour(m_shooter, m_intake, m_led, m_drivebase, 1))
 
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
-                .then(new DriveRotate(m_drivebase, 28))
+                .then(new DriveRotate(m_drivebase, 27))
 
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
-                .then(new DriveDistance(m_drivebase, -0.5, 1.2))
+                .then(new DriveDistance(m_drivebase, -0.5, 1.25))
 
-                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, 0.95, -28))
+                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, 1, -30))
 
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
                 .then(new DriveRotate(m_drivebase, -25))
@@ -84,7 +84,7 @@ public class middleFourPieceRed extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
                 .then(new DriveDistance(m_drivebase, -0.5, 1.05))
 
-                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, 0.85, 25))
+                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, 0.85, 27))
 
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
