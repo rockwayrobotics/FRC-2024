@@ -25,7 +25,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 
 /** Three piece auto from the middle of the field, starting on the red alliance.
- * Different for each alliance so we don't smack into the truss first 
+ * Different for each alliance so we don't smack into the truss first
  */
 public class middleThreePieceRed extends SequentialCommandGroup {
     DrivebaseSubsystem m_drivebase;
@@ -45,9 +45,9 @@ public class middleThreePieceRed extends SequentialCommandGroup {
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_intake = intake;
-        m_led = led; 
+        m_led = led;
 
-        addRequirements(m_drivebase, m_shooter, m_intake);
+        // addRequirements(m_drivebase, m_shooter, m_intake);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new AutoShootReset(m_drivebase, m_intake, m_led))
@@ -55,7 +55,7 @@ public class middleThreePieceRed extends SequentialCommandGroup {
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Blue)))
                 .then(new WaitCommand(waittime))
-                
+
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
 
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
@@ -66,7 +66,7 @@ public class middleThreePieceRed extends SequentialCommandGroup {
 
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
                 .then(new DriveRotate(m_drivebase, 25))
-                
+
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
 

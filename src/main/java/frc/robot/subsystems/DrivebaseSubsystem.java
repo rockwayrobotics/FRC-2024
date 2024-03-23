@@ -38,7 +38,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
   private double yawOffset;
-  private DifferentialDriveOdometry driveOdometry; 
+  private DifferentialDriveOdometry driveOdometry;
+
+  // Tracking of whether we have encoder reset issues.
+  private int leftErrorCount = 0;
+  private int rightErrorCount = 0;
 
   public DrivebaseSubsystem() {
     m_leftDriveMotorF = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_F, MotorType.kBrushless);
@@ -121,13 +125,13 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_scale = scale;
   }
 
-  // Get the pose of the robot as Pose2d 
+  // Get the pose of the robot as Pose2d
   public Pose2d getPose(){
     return driveOdometry.getPoseMeters();
   }
 
 
-  // Reset the Pose2d of the robot 
+  // Reset the Pose2d of the robot
   public void resetPose(Pose2d pose2d) {
     this.resetEncoders();
     this.driveOdometry.resetPosition(
@@ -148,7 +152,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   /**
    * Gets the distance travelled by the left-side wheels of the drivebase since
    * last reset.
-   * 
+   *
    * @return Distance, in inches.
    */
   public double getLDistance() {
@@ -158,7 +162,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   /**
    * Gets the distance travelled by the right-side wheels of the drivebase since
    * last reset.
-   * 
+   *
    * @return Distance in inches.
    */
   public double getRDistance() {
@@ -191,8 +195,33 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   /** Resets drivebase encoder distances to 0. */
-  public boolean resetEncoders() {
-   return m_leftDriveEncoder.setPosition(0) == REVLibError.kOk &&
-    m_rightDriveEncoder.setPosition(0) == REVLibError.kOk;
+  public void resetEncoders() {
+    // Troubleshooting for theorized CAN failure where our attempt
+    // to reset an encoder fails.
+    // We're trying both (before checking failures, so we can
+    // track whether just one or both fail), and returning
+    // if all is well, but otherwise counting the failures and
+    // retrying.  We'll print the stats as we change states.
+    for (int i = 0; i < 5; i++) {
+      // Reset but check that return code is good.  In a future world
+      // we can do more like recording the specific error code, but
+      // since we're adding this mid-competition I want to be conservative.
+      boolean leftOk = m_leftDriveEncoder.setPosition(0) == REVLibError.kOk;
+      boolean rightOk = m_rightDriveEncoder.setPosition(0) == REVLibError.kOk;
+
+      if (leftOk && rightOk) {
+          break;  // Success! Get us out of here.
+      } else {
+          if (!leftOk)
+              leftErrorCount += 1;
+          if (!rightOk)
+              rightErrorCount += 1;
+      }
+    }
+  }
+
+  public void reportFailures(String state) {
+    System.out.printf("Reset failures (%s): %d, %d%n",
+      state, leftErrorCount, rightErrorCount);
   }
 }

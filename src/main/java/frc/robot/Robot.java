@@ -64,6 +64,12 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     m_robotContainer.m_angler.angleSetpointWidget.setDouble(0);
     m_robotContainer.onDisable();
+
+    // Expect this to print zeros at first, but do it anyway as a sanity-check.
+    // We should actually see the output from here twice, once at startup
+    // and once after the game is over when the robot should (in theory)
+    // be sent back to the disabled state.
+    m_robotContainer.m_drivebase.reportFailures("disabled"); // print encoder reset fail counts
   }
 
   @Override
@@ -93,6 +99,11 @@ public class Robot extends TimedRobot {
   }
 
   @Override
+  public void autonomousExit() {
+    m_robotContainer.m_drivebase.reportFailures("auto"); // print encoder reset fail counts
+  }
+
+  @Override
   public void teleopInit() {
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
@@ -113,6 +124,11 @@ public class Robot extends TimedRobot {
     // if (!m_robotContainer.m_intake.intakeLoad && m_robotContainer.m_intake.isNoteLoaded()){
     //   m_robotContainer.noteStage();
     // }
+  }
+
+  @Override
+  public void teleopExit() {
+    m_robotContainer.m_drivebase.reportFailures("teleop"); // print encoder reset fail counts
   }
 
   @Override

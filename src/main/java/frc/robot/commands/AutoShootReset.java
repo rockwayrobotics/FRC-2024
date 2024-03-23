@@ -13,7 +13,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 
 /** Four piece auto from the middle of the field, starting on the red alliance.
- * Different for each alliance so we don't smack into the truss first 
+ * Different for each alliance so we don't smack into the truss first
  */
 public class AutoShootReset extends SequentialCommandGroup {
     DrivebaseSubsystem m_drivebase;
@@ -24,9 +24,9 @@ public class AutoShootReset extends SequentialCommandGroup {
     public AutoShootReset(DrivebaseSubsystem drivebase, IntakeSubsystem intake, LedSubsystem led){
         m_drivebase = drivebase;
         m_intake = intake;
-        m_led = led; 
+        m_led = led;
 
-        addRequirements(m_drivebase, m_intake, m_led);
+        // addRequirements(m_drivebase, m_intake, m_led);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kBrake)))

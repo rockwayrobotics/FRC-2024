@@ -24,7 +24,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 
 /** Four piece auto from the middle of the field, starting on the red alliance.
- * Different for each alliance so we don't smack into the truss first 
+ * Different for each alliance so we don't smack into the truss first
  */
 public class middleFourPieceRed extends SequentialCommandGroup {
     DrivebaseSubsystem m_drivebase;
@@ -40,24 +40,24 @@ public class middleFourPieceRed extends SequentialCommandGroup {
         }
     }
 
-    // TODO optimize speeds and note positions 
+    // TODO optimize speeds and note positions
 
-    //  TODO why does it sometimes  break? weird behavioru lol 
+    //  TODO why does it sometimes  break? weird behavioru lol
 
     public middleFourPieceRed(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double drivemoreoffset){
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_intake = intake;
-        m_led = led; 
+        m_led = led;
 
-        addRequirements(m_drivebase, m_shooter, m_intake);
+        // addRequirements(m_drivebase, m_shooter, m_intake);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new AutoShootReset(m_drivebase, m_intake, m_led))
                 .then(new ShootSequenceFullAuto(m_shooter, m_intake, m_led))
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
-                
+
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
                 .then(new DriveDistance(m_drivebase, -0.5, 1))

@@ -24,7 +24,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 
 /** Four piece auto from the middle of the field, starting on the blue alliance.
- * Different for each alliance so we don't smack into the truss first 
+ * Different for each alliance so we don't smack into the truss first
  */
 public class middleFourPieceBlue extends SequentialCommandGroup {
     DrivebaseSubsystem m_drivebase;
@@ -39,14 +39,14 @@ public class middleFourPieceBlue extends SequentialCommandGroup {
             AutoFailedWidget.withProperties(Map.of("colorWhenFalse", "green"));
         }
     }
-    
+
     public middleFourPieceBlue(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led, double drivemoreoffset){
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_intake = intake;
-        m_led = led; 
+        m_led = led;
 
-        addRequirements(m_drivebase, m_shooter, m_intake);
+        // addRequirements(m_drivebase, m_shooter, m_intake);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new AutoShootReset(m_drivebase, m_intake, m_led))
@@ -57,7 +57,7 @@ public class middleFourPieceBlue extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
                 .then(new DriveDistance(m_drivebase, -0.5, 1))
-                
+
                 .then(new ShootFromGroundDriveFour(m_shooter, m_intake, m_led, m_drivebase, 1))
 
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
@@ -73,7 +73,7 @@ public class middleFourPieceBlue extends SequentialCommandGroup {
 
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
                 .then(new DriveRotate(m_drivebase, 25))
-        
+
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
 

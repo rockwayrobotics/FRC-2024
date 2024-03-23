@@ -43,9 +43,9 @@ public class shootMove extends SequentialCommandGroup {
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_intake = intake;
-        m_led = led; 
+        m_led = led;
 
-        addRequirements(m_drivebase, m_shooter, m_intake);
+        // addRequirements(m_drivebase, m_shooter, m_intake);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new AutoShootReset(m_drivebase, m_intake, m_led))

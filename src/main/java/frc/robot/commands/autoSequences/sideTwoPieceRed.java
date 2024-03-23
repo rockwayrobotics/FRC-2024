@@ -24,7 +24,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 
 /** Two piece auto from the side of the field, starting on the red alliance.
- * Different for each alliance so we don't smack into the truss first 
+ * Different for each alliance so we don't smack into the truss first
  */
 public class sideTwoPieceRed extends SequentialCommandGroup {
     DrivebaseSubsystem m_drivebase;
@@ -44,9 +44,9 @@ public class sideTwoPieceRed extends SequentialCommandGroup {
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_intake = intake;
-        m_led = led; 
+        m_led = led;
 
-        addRequirements(m_drivebase, m_shooter, m_intake);
+        // addRequirements(m_drivebase, m_shooter, m_intake);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new AutoShootReset(m_drivebase, m_intake, m_led))
@@ -56,7 +56,7 @@ public class sideTwoPieceRed extends SequentialCommandGroup {
                 .then(new WaitCommand(waittime))
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
-                
+
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
                 .then(new DriveRotate(m_drivebase, -35))
 

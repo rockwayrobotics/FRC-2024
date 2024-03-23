@@ -44,9 +44,9 @@ public class middleTwoPiece extends SequentialCommandGroup {
         m_drivebase = drivebase;
         m_shooter = shooter;
         m_intake = intake;
-        m_led = led; 
+        m_led = led;
 
-        addRequirements(m_drivebase, m_shooter, m_intake);
+        // addRequirements(m_drivebase, m_shooter, m_intake);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new AutoShootReset(m_drivebase, m_intake, m_led))
@@ -56,11 +56,11 @@ public class middleTwoPiece extends SequentialCommandGroup {
                 .then(new WaitCommand(waittime))
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
-                
+
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
                 .thenWithTimeout(new DriveDistance(m_drivebase, -0.3, drivedistance), 5)
-                
+
                 .then(new ShootFromGroundDrive(m_shooter, m_intake, m_led, m_drivebase, drivedistance))
 
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))

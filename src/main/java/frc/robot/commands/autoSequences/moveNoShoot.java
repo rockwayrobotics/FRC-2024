@@ -38,9 +38,9 @@ public class moveNoShoot extends SequentialCommandGroup {
     public moveNoShoot(DrivebaseSubsystem drivebase, ShooterSubsystem shooter, LedSubsystem led, double waittime, double drivedistance){
         m_drivebase = drivebase;
         m_shooter = shooter;
-        m_led = led; 
+        m_led = led;
 
-        addRequirements(m_drivebase, m_shooter);
+        // addRequirements(m_drivebase, m_shooter);
 
         FailFastTimeoutGroup sequence = new FailFastTimeoutGroup()
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kBrake)))
