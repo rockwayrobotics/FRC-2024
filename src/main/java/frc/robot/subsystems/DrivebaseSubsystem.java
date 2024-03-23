@@ -5,6 +5,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import com.kauailabs.navx.frc.AHRS;
@@ -18,6 +20,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.networktables.GenericEntry;
 
 public class DrivebaseSubsystem extends SubsystemBase {
 
@@ -35,6 +38,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   private double m_scale = 1;
 
+  public double rotationScale; 
+
+  GenericEntry rotationScaleWidget; 
+
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
   private double yawOffset;
@@ -43,6 +50,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   // Tracking of whether we have encoder reset issues.
   private int leftErrorCount = 0;
   private int rightErrorCount = 0;
+
+  ShuffleboardTab dashboardTab = Shuffleboard.getTab("Drivebase");
 
   public DrivebaseSubsystem() {
     m_leftDriveMotorF = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_F, MotorType.kBrushless);
@@ -77,6 +86,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveEncoder.setPositionConversionFactor(Constants.Drive.DISTANCE_PER_ENCODER_PULSE);
     m_leftDriveEncoder.setPosition(0);
     m_rightDriveEncoder.setPosition(0);
+
+    rotationScaleWidget = dashboardTab.addPersistent("Driving Rotation Scale Factor", 0.76)
+    .getEntry(); 
 
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
@@ -223,5 +235,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public void reportFailures(String state) {
     System.out.printf("Reset failures (%s): %d, %d%n",
       state, leftErrorCount, rightErrorCount);
+  }
+
+  @Override
+  public void periodic(){
+    rotationScale = rotationScaleWidget.getDouble(0.76); 
   }
 }
