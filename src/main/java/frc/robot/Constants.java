@@ -67,8 +67,8 @@ public final class Constants {
   }
 
   public static final class Angler {
-    public final static float ANGLE_TOP_MAX = 0f;
-    public final static float ANGLE_BOTTOM_MAX = 2.2f; 
+    public final static float ANGLE_TOP_MAX = 0.2f;
+    public final static float ANGLE_BOTTOM_MAX = 14f; 
     
     public final static double SPEAKER_SETPOINT = 2.1;
     public final static double ZERO_SETPOINT = 0.2;
