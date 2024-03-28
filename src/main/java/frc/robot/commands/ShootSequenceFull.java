@@ -23,8 +23,8 @@ public class ShootSequenceFull extends ParallelRaceGroup {
     Command main = Commands.sequence(
       Commands.runOnce(() -> m_led.setMode(Constants.LED.modes.Yellow)),
       Commands.runOnce(() -> m_shooter.setFlywheels(1)),
-      Commands.waitSeconds(0.8),
-      //Commands.waitUntil(() -> m_shooter.getFlywheelVelocity() >= 3000),     
+      //Commands.waitSeconds(0.8),
+      Commands.waitUntil(() -> m_shooter.getFlywheelVelocity() >= 5000),     
       Commands.runOnce(() -> m_intake.setBelt(1)),
       Commands.waitSeconds(1)
     ).finallyDo((interrupted) -> {
