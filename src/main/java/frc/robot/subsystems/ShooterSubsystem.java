@@ -28,10 +28,15 @@ public class ShooterSubsystem extends SubsystemBase {
   GenericEntry shooterTopSensorWidget; 
   GenericEntry leftFlywheelWidget;
   GenericEntry rightFlywheelWidget; 
-  GenericEntry rpmWidget; 
+  GenericEntry leftRPMWidget; 
+  GenericEntry rightRPMWidget;
+
+  GenericEntry FlywheelSetRPMWidget;
+  GenericEntry FlywheelScaleWidget; 
 
   public double webFlywheelSpeed; 
   public double webFlywheelWait;
+  public double flywheelRPMSetpoint;
 
   private double m_scale = 1;
 
@@ -48,22 +53,29 @@ public class ShooterSubsystem extends SubsystemBase {
     m_leftFlywheel.setSmartCurrentLimit(40);
     m_rightFlywheel.setSmartCurrentLimit(40);
 
-    m_rightFlywheel.follow(m_leftFlywheel, true);
+    //m_rightFlywheel.follow(m_leftFlywheel, true);
 
     m_shooterTopSensor = new DigitalInput(Constants.Digital.SHOOTER_TOP_SENSOR);
 
     shooterTopSensorWidget = dashboardTab.addPersistent("Shooter Staged Sensor", false).getEntry();
-    leftFlywheelWidget = dashboardTab.addPersistent("Left Flywheel Speed", 0).getEntry();
-    rightFlywheelWidget = dashboardTab.addPersistent("Right Flywheel Speed", 0).getEntry();
+    leftFlywheelWidget = dashboardTab.addPersistent("Left Flywheel RPM", 0).getEntry();
+    rightFlywheelWidget = dashboardTab.addPersistent("Right Flywheel RPM", 0).getEntry();
+    FlywheelSetRPMWidget = dashboardTab.addPersistent("Flywheel Set RPM Setpoint", 5000).getEntry();
+    FlywheelScaleWidget = dashboardTab.addPersistent("Flywheel Scale", 1).getEntry();
     flywheelSpeedWidget = dashboardTab.addPersistent("Flywheel Speed", 0.5).getEntry();
     flywheelWaitWidget = dashboardTab.addPersistent("Flywheel Wait To Ramp", 1).getEntry(); 
-    rpmWidget = dashboardTab.add("Flywheel RPM", 0).getEntry();
+    leftRPMWidget = dashboardTab.add("Left Flywheel RPM", 0).getEntry();
+    rightRPMWidget = dashboardTab.add("Right Flywheel RPM", 0).getEntry();
   
 
   }
 
-  public double getFlywheelVelocity(){
+  public double getLeftFlywheelVelocity(){
     return m_leftFlywheel.getEncoder().getVelocity();
+  }
+
+  public double getRightFlywheelVelocity(){
+    return m_rightFlywheel.getEncoder().getVelocity();
   }
   
   public void setFlywheelsScale(double scale) {
@@ -71,8 +83,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setFlywheels(double m_pow) {
-    // System.out.println("Flywheels: " + m_pow);
     m_leftFlywheel.set(m_pow * m_scale);
+    m_rightFlywheel.set(m_pow);
   }
 
   public boolean isNoteStaged() {
@@ -89,12 +101,18 @@ public class ShooterSubsystem extends SubsystemBase {
     //dashboardTab.add("Encoder revolutions", getAngleEncoder());
 
     shooterTopSensorWidget.setBoolean(isNoteStaged());
-    leftFlywheelWidget.setDouble(m_leftFlywheel.get());
-    rightFlywheelWidget.setDouble(m_rightFlywheel.get());
-    rpmWidget.setDouble(getFlywheelVelocity());
+    // leftFlywheelWidget.setDouble(m_leftFlywheel.get());
+    // rightFlywheelWidget.setDouble(m_rightFlywheel.get());
+
+
+    leftRPMWidget.setDouble(getLeftFlywheelVelocity());
+    rightRPMWidget.setDouble(getRightFlywheelVelocity());
     
     webFlywheelSpeed = flywheelSpeedWidget.getDouble(0.5);
     webFlywheelWait = flywheelWaitWidget.getDouble(1);
+
+    flywheelRPMSetpoint = FlywheelSetRPMWidget.getDouble(5000);
+    m_scale = FlywheelScaleWidget.getDouble(1);
 
     shooterStaged = isNoteStaged();
   }
