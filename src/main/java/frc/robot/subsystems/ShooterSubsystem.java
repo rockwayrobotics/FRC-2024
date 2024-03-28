@@ -58,8 +58,8 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shooterTopSensor = new DigitalInput(Constants.Digital.SHOOTER_TOP_SENSOR);
 
     shooterTopSensorWidget = dashboardTab.addPersistent("Shooter Staged Sensor", false).getEntry();
-    leftFlywheelWidget = dashboardTab.addPersistent("Left Flywheel RPM", 0).getEntry();
-    rightFlywheelWidget = dashboardTab.addPersistent("Right Flywheel RPM", 0).getEntry();
+    //leftFlywheelWidget = dashboardTab.addPersistent("Left Flywheel Speed", 0).getEntry();
+    //rightFlywheelWidget = dashboardTab.addPersistent("Right Flywheel Speed", 0).getEntry();
     FlywheelSetRPMWidget = dashboardTab.addPersistent("Flywheel Set RPM Setpoint", 5000).getEntry();
     FlywheelScaleWidget = dashboardTab.addPersistent("Flywheel Scale", 1).getEntry();
     flywheelSpeedWidget = dashboardTab.addPersistent("Flywheel Speed", 0.5).getEntry();
