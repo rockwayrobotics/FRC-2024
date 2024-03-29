@@ -78,9 +78,9 @@ public class ShooterSubsystem extends SubsystemBase {
     return m_rightFlywheel.getEncoder().getVelocity();
   }
   
-  public void setFlywheelsScale(double scale) {
-    m_scale = scale;
-  }
+  // public void setFlywheelsScale(double scale) {
+  //   m_scale = scale;
+  // }
 
   public void setFlywheels(double m_pow) {
     m_leftFlywheel.set(m_pow * m_scale);
