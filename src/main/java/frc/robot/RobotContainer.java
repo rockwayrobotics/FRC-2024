@@ -205,7 +205,7 @@ public class RobotContainer {
     m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
     
     m_operatorController.rightBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led)
-    .andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
+    .andThen(new OperatorRevThenPullback(m_shooter, m_intake, m_led)));
     
     m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
 
