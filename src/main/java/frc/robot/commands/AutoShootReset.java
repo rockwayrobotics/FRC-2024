@@ -32,7 +32,7 @@ public class AutoShootReset extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kBrake)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Red)))
                 .then(new InstantCommand(() -> m_intake.setBelt(-0.7)))
-                .then(new WaitCommand(0.3))
+                .then(new WaitCommand(0.1))
                 .then(new InstantCommand(() -> m_intake.setBelt(0)));
 
         this.addCommands(sequence);
