@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -33,12 +34,15 @@ public class ShootFromGroundDriveRotateFour extends SequentialCommandGroup {
 
     this.addCommands(new DriveDistance(m_drivebase, 0.5, drivedistance)); 
 
+    this.addCommands(new WaitUntilCommand(() -> m_shooter.isNoteStaged()));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
+    this.addCommands(new OperatorPullback(shooter, intake, led));    
+    
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(1)));
     this.addCommands(new DriveRotate(m_drivebase, angle));
     this.addCommands(new DriveDistance(m_drivebase, 0.5, 0.1));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(1)));
-    this.addCommands(new WaitCommand(1));
+    this.addCommands(new WaitCommand(0.5));
 
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(0)));
