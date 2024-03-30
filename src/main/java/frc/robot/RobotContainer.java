@@ -38,6 +38,8 @@ enum AutoOption {
   sideTwoPieceBlue,
   sideThreePieceRed,
   sideThreePieceBlue,
+  sideLongSourceRed,
+  sideLongSourceBlue,
   pathPlannerExample,
 }
 
@@ -110,6 +112,8 @@ public class RobotContainer {
     m_autoChooser.addOption("Side Two Piece Blue", AutoOption.sideTwoPieceBlue);
     m_autoChooser.addOption("Side Three Piece Red", AutoOption.sideThreePieceRed);
     m_autoChooser.addOption("Side Three Piece Blue", AutoOption.sideThreePieceBlue);
+    m_autoChooser.addOption("Side Long Source Red", AutoOption.sideLongSourceRed);
+    m_autoChooser.addOption("Side Long Source Blue", AutoOption.sideLongSourceBlue);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
 
 
@@ -262,6 +266,8 @@ public class RobotContainer {
       case sideTwoPieceBlue -> new sideTwoPieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case sideThreePieceRed -> new sideThreePieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case sideThreePieceBlue -> new sideThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case sideLongSourceRed -> new sideLongSourceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case sideLongSourceBlue -> new sideLongSourceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case pathPlannerExample -> new PathPlannerAuto("New Auto");
     };
   }
