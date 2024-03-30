@@ -164,6 +164,9 @@ public class RobotContainer {
     m_driverController.start().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
     m_driverController.start().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
 
+    // m_driverController.y().onTrue(new InstantCommand(() -> m_shooter.setFlywheels(1)));
+    // m_driverController.y().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+
     // m_driverController.y().whileTrue(
     //     new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.7))
     //         .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))));

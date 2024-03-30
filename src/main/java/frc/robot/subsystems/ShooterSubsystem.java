@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -9,6 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -17,6 +19,8 @@ import frc.robot.Constants;
 public class ShooterSubsystem extends SubsystemBase {
   private final CANSparkMax m_leftFlywheel;
   private final CANSparkMax m_rightFlywheel;
+
+  private final SparkPIDController m_leftPID, m_rightPID;
 
   private DigitalInput m_shooterTopSensor; 
 
@@ -46,12 +50,21 @@ public class ShooterSubsystem extends SubsystemBase {
   public ShooterSubsystem(int leftFlywheel, int rightFlywheel) {
     m_leftFlywheel = new CANSparkMax(Constants.CAN.LEFT_FLYWHEEL, MotorType.kBrushless);
     m_rightFlywheel = new CANSparkMax(Constants.CAN.RIGHT_FLYWHEEL, MotorType.kBrushless);
+    m_leftPID = m_leftFlywheel.getPIDController();
+    m_rightPID = m_rightFlywheel.getPIDController();    
+
     m_leftFlywheel.setIdleMode(IdleMode.kCoast);
     m_leftFlywheel.setInverted(true);
     m_rightFlywheel.setIdleMode(IdleMode.kCoast);
 
     m_leftFlywheel.setSmartCurrentLimit(40);
     m_rightFlywheel.setSmartCurrentLimit(40);
+
+    m_leftPID.setFF(0.00019);
+    m_leftPID.setP(0.00008);
+    m_rightPID.setFF(0.00018);
+    m_rightPID.setP(0.00008);
+
 
     //m_rightFlywheel.follow(m_leftFlywheel, true);
 
@@ -66,6 +79,8 @@ public class ShooterSubsystem extends SubsystemBase {
     flywheelWaitWidget = dashboardTab.addPersistent("Flywheel Wait To Ramp", 1).getEntry(); 
     leftRPMWidget = dashboardTab.add("Left Flywheel RPM", 0).getEntry();
     rightRPMWidget = dashboardTab.add("Right Flywheel RPM", 0).getEntry();
+
+
   
 
   }
@@ -87,8 +102,15 @@ public class ShooterSubsystem extends SubsystemBase {
   // }
 
   public void setFlywheels(double m_pow) {
-    m_leftFlywheel.set(m_pow * m_scale);
-    m_rightFlywheel.set(m_pow);
+    if(m_pow == 0) {
+      m_leftFlywheel.stopMotor();
+      m_rightFlywheel.stopMotor();
+    } else {
+      m_leftPID.setReference(m_pow * flywheelRPMSetpoint, ControlType.kVelocity);
+      m_rightPID.setReference(m_pow * flywheelRPMSetpoint, ControlType.kVelocity);
+    }
+    // m_leftFlywheel.set(m_pow * m_scale);
+    // m_rightFlywheel.set(m_pow);
   }
 
   public boolean isNoteStaged() {
