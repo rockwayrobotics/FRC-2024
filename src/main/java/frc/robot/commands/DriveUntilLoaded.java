@@ -16,6 +16,8 @@ public class DriveUntilLoaded extends Command {
   private double m_leftDist;
   private double m_rightDist;
 
+  private double m_totalDistance;
+
   public DriveUntilLoaded(DrivebaseSubsystem subsystem, IntakeSubsystem intake, double speed, double distance) {
 
     m_drivebase = subsystem;
@@ -54,6 +56,8 @@ public class DriveUntilLoaded extends Command {
     double m_rightDist = m_drivebase.getRDistance() - m_rightBase;
     double distance = (m_leftDist + m_rightDist) / 2.0;
 
+    m_totalDistance = distance; 
+
     if (m_intake.isNoteLoaded()) {
       System.out.println("Intake is loaded");
       return true;
@@ -65,7 +69,7 @@ public class DriveUntilLoaded extends Command {
   @Override
   public void end(boolean cancelled) {
     m_drivebase.stop(); // Resets the drivebase to 0, ends command
-    m_drivebase.distanceDrivenAuto = (m_drivebase.getLDistance() - m_leftBase) + (m_drivebase.getRDistance() - m_rightBase) / 2.0; // Sets the distance driven to the average of the two distances
+    m_drivebase.distanceDrivenAuto = Math.abs(m_totalDistance); // Sets the distance driven to the average of the two distances
     System.out.println("Distance Driven: " + m_drivebase.distanceDrivenAuto);
     System.out.printf("Moved: %.3f, %.3f%n", m_leftDist, m_rightDist);
   }
