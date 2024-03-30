@@ -91,6 +91,10 @@ public class ShooterSubsystem extends SubsystemBase {
     return !m_shooterTopSensor.get();
   }
 
+  public boolean atSpeed() {
+    return getRightFlywheelVelocity() >= flywheelRPMSetpoint;
+  }
+
 
   @Override
   public void periodic() {
