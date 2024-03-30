@@ -118,7 +118,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean atSpeed() {
-    return getRightFlywheelVelocity() >= flywheelRPMSetpoint;
+    return getLeftFlywheelVelocity() >= flywheelRPMSetpoint - 50 
+    && getRightFlywheelVelocity() >= flywheelRPMSetpoint - 50;
   }
 
 
