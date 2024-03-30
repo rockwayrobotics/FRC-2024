@@ -72,6 +72,7 @@ public final class Constants {
     
     public final static double SPEAKER_SETPOINT = 14;
     public final static double ZERO_SETPOINT = 0.2;
+    public final static double HALF_CYCLE_SETPOINT = 25; 
 
     public final static double DEFAULT_PID_kP = 0.3;
     public final static double DEFAULT_PID_kI = 0;

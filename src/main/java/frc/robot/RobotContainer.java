@@ -183,8 +183,10 @@ public class RobotContainer {
     // example led
     // m_operatorController.y().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.badApple)));;
 
-    m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setFlywheels(-1)));
-    m_operatorController.b().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+    // m_operatorController.b().onTrue(new InstantCommand(() -> m_shooter.setFlywheels(-1)));
+    // m_operatorController.b().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
+
+    m_operatorController.b().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.ZERO_SETPOINT)));
 
     m_operatorController.y().onTrue(new InstantCommand(() -> m_intake.stagedFlag = true).andThen(new OperatorPullback(m_shooter, m_intake, m_led)));
 
@@ -209,13 +211,13 @@ public class RobotContainer {
     
     m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
 
-    m_operatorController.back().onTrue(new InstantCommand(() -> anglerIncrementValue = 0.3));
-    m_operatorController.back().onFalse(new InstantCommand(() -> anglerIncrementValue = 0.1));
+    m_operatorController.back().onTrue(new InstantCommand(() -> anglerIncrementValue = 0.5));
+    m_operatorController.back().onFalse(new InstantCommand(() -> anglerIncrementValue = 0.25));
 
     m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) - anglerIncrementValue)));
     m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) + anglerIncrementValue)));
 
-    m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.ZERO_SETPOINT)));
+    m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.HALF_CYCLE_SETPOINT)));
     m_operatorController.povRight().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.SPEAKER_SETPOINT)));
 
     m_operatorController.povUp().onTrue(new InstantCommand(() -> m_climber.setClimber(0.7)));
