@@ -38,6 +38,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   private double m_scale = 1;
 
+  public double distanceDrivenAuto; 
   public double rotationScale; 
 
   GenericEntry rotationScaleWidget; 

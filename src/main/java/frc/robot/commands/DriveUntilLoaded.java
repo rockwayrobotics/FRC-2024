@@ -57,13 +57,14 @@ public class DriveUntilLoaded extends Command {
     if (m_intake.isNoteLoaded()) {
       return true;
     }
-    
+
     return (Math.abs(distance) >= m_distance);
   }
 
   @Override
   public void end(boolean cancelled) {
     m_drivebase.stop(); // Resets the drivebase to 0, ends command
+    m_drivebase.distanceDrivenAuto = (m_rightDist + m_leftDist) / 2.0; // Sets the distance driven to the average of the two distances
     System.out.printf("Moved: %.3f, %.3f%n", m_leftDist, m_rightDist);
   }
 }
