@@ -8,7 +8,7 @@ import frc.robot.Constants;
 import frc.robot.commands.AutoShootReset;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.FailFastTimeoutGroup;
-import frc.robot.commands.ShootFromGroundDrive;
+import frc.robot.commands.ShootFromGroundDriveFour;
 import frc.robot.commands.ShootSequenceFullAuto;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -61,7 +61,7 @@ public class middleTwoPiece extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
                 .thenWithTimeout(new DriveDistance(m_drivebase, -0.3, drivedistance), 5)
 
-                .then(new ShootFromGroundDrive(m_shooter, m_intake, m_led, m_drivebase, drivedistance))
+                .then(new ShootFromGroundDriveFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance))
 
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
