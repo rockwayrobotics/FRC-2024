@@ -46,7 +46,7 @@ public class ShootFromGroundDriveFour extends SequentialCommandGroup {
 
     this.addCommands(new WaitUntilCommand(() -> m_shooter.isNoteStaged()));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
-    this.addCommands(new OperatorPullback(shooter, intake, led));
+    this.addCommands(new AutoPullback(shooter, intake, led));
 
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(1)));
     this.addCommands(new WaitUntilCommand(() -> m_shooter.atSpeed()));

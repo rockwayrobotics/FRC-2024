@@ -34,7 +34,7 @@ public class ShootFromGroundDriveRotateAdjust extends SequentialCommandGroup {
 
     this.addCommands(new DriveDistance(m_drivebase, 0.5, drivedistance)); 
 
-    this.addCommands(new OperatorPullback(shooter, intake, led)); 
+    this.addCommands(new AutoPullback(shooter, intake, led)); 
     
     this.addCommands(new DriveRotate(m_drivebase, angle));
     this.addCommands(new DriveDistance(m_drivebase, 0.5, drivelengthangle));
