@@ -7,6 +7,7 @@ import frc.robot.Constants;
 import frc.robot.commands.AutoShootReset;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.DriveRotate;
+import frc.robot.commands.DriveUntilLoaded;
 import frc.robot.commands.FailFastTimeoutGroup;
 import frc.robot.commands.ShootFromGroundDriveFour;
 import frc.robot.commands.ShootFromGroundDriveRotateFour;
@@ -67,7 +68,7 @@ public class middleFourPieceBlue extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
-                .then(new DriveDistance(m_drivebase, -0.5, 1.25))
+                .then(new DriveUntilLoaded(m_drivebase, m_intake, -0.5, 2))
 
                 .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, 1, 30))
 
