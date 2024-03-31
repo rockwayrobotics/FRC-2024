@@ -3,11 +3,11 @@ package frc.robot.commands.autoSequences;
 import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.AutoShootReset;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.DriveRotate;
+import frc.robot.commands.DriveUntilLoaded;
 import frc.robot.commands.FailFastTimeoutGroup;
 import frc.robot.commands.ShootFromGroundDriveFour;
 import frc.robot.commands.ShootFromGroundDriveRotateFour;
@@ -71,9 +71,9 @@ public class middleFourPieceRed extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
-                .then(new DriveDistance(m_drivebase, -0.5, 1.25))
+                .then(new DriveUntilLoaded(m_drivebase, m_intake, -0.5, 1.5))
 
-                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, 1, -30))
+                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, (m_drivebase.distanceDrivenAuto - 0.25), -30))
 
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
                 .then(new DriveRotate(m_drivebase, -25))

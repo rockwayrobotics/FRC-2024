@@ -57,14 +57,14 @@ public class sideLongSourceRed extends SequentialCommandGroup {
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
 
-                .then(new DriveDistance(m_drivebase, -0.5, 2))
+                .then(new DriveDistance(m_drivebase, -0.5, 3.7))
                 .then(new DriveRotate(m_drivebase,25))
 
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
-                .then(new DriveDistance(m_drivebase, -0.5, 3))
+                .then(new DriveDistance(m_drivebase, -0.5, 4.2))
 
-                .then(new ShootFromGroundDriveRotateAdjust(m_shooter, m_intake, m_led, m_drivebase, 3, -25, 2))
+                .then(new ShootFromGroundDriveRotateAdjust(m_shooter, m_intake, m_led, m_drivebase, 2, -25, 5.5))
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
