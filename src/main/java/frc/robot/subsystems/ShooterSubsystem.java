@@ -101,6 +101,11 @@ public class ShooterSubsystem extends SubsystemBase {
   //   m_scale = scale;
   // }
 
+  public void instantStopFlywheels(){
+      m_leftPID.setReference(0, ControlType.kVelocity);
+      m_rightPID.setReference(0, ControlType.kVelocity);
+  }
+
   public void setFlywheels(double m_pow) {
     if(m_pow == 0) {
       m_leftFlywheel.stopMotor();
