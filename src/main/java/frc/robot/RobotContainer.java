@@ -67,7 +67,7 @@ public class RobotContainer {
 
   public final AnglerPIDSubsystem m_angler = new AnglerPIDSubsystem(); 
   
-  private double anglerIncrementValue = 0.1;
+  private double anglerIncrementValue = 0.25;
 
   SendableChooser<AutoOption> m_autoChooser = new SendableChooser<>();
     
