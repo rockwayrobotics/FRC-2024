@@ -40,8 +40,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   public double distanceDrivenAuto; 
   public double rotationScale; 
+  boolean isBrakeMode; 
 
   GenericEntry rotationScaleWidget; 
+  GenericEntry brakeModeWidget; 
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -90,6 +92,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     rotationScaleWidget = dashboardTab.addPersistent("Driving Rotation Scale Factor", 0.76)
     .getEntry(); 
+
+    brakeModeWidget = dashboardTab.add("Brake Mode", false).getEntry();
 
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
@@ -241,5 +245,12 @@ public class DrivebaseSubsystem extends SubsystemBase {
   @Override
   public void periodic(){
     rotationScale = rotationScaleWidget.getDouble(0.76); 
+
+    if (isBrakeMode != brakeModeWidget.getBoolean(false)){
+      isBrakeMode = brakeModeWidget.getBoolean(false);
+      if (isBrakeMode){
+        setDrivebaseIdle(IdleMode.kBrake);
+      } 
+    }
   }
 }
