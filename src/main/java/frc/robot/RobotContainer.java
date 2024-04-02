@@ -237,6 +237,10 @@ public class RobotContainer {
 
   public void onTeleopInit(){
     m_drivebase.setDrivebaseIdle(IdleMode.kCoast);
+    m_led.setMode(Constants.LED.modes.Rainbow);
+    m_intake.setBelt(0);
+    m_intake.setIntake(0);
+    m_shooter.setFlywheels(0);
   }
 
   // public void noteStage(){
