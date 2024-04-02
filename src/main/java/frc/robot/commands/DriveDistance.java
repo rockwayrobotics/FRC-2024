@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.function.Supplier;
+
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DrivebaseSubsystem;
@@ -8,23 +10,30 @@ public class DriveDistance extends Command {
 
   private DrivebaseSubsystem m_drivebase;
   private double m_speed;
+  private Supplier<Double> m_distanceSupplier;
   private double m_distance;
   private double m_leftBase;
   private double m_rightBase;
   private double m_leftDist;
   private double m_rightDist;
 
-  public DriveDistance(DrivebaseSubsystem subsystem, double speed, double distance) {
+  public DriveDistance(DrivebaseSubsystem subsystem, double speed, Supplier<Double> distance) {
 
     m_drivebase = subsystem;
     m_speed = speed;
-    m_distance = distance;
+    m_distanceSupplier = distance;
 
     addRequirements(m_drivebase);
   }
 
+  public DriveDistance(DrivebaseSubsystem subsystem, double speed, double distance) {
+    this(subsystem, speed, () -> { return distance; });
+  }
+
   @Override
   public void initialize() {
+    m_distance = m_distanceSupplier.get();
+
     // Resets encoder values to default
     // System.out.println("Current Encoders: " + m_drivebase.getRDistance());
     // m_drivebase.resetEncoders();

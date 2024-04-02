@@ -32,7 +32,10 @@ public class ShootFromGroundDriveRotateDriveAuto extends SequentialCommandGroup 
     this.addCommands(new InstantCommand(() -> m_intake.setIntake(0)));
 
     this.addCommands(new InstantCommand(() -> System.out.println("Driving distance in ShootFromGroundDriveRotateFour: " + (m_drivebase.distanceDrivenAuto + offset))));
-    this.addCommands(new DriveDistance(m_drivebase, 0.5, (m_drivebase.distanceDrivenAuto + offset))); 
+
+    // .then(new DriveDistance(drivebase, 0.5, () -> { return m_drivebase.distanceDrivenAuto; }))
+    
+    this.addCommands(new DriveDistance(m_drivebase, 0.5, (() -> {return(m_drivebase.distanceDrivenAuto + offset);}))); 
 
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
     this.addCommands(new InstantCommand(() -> m_shooter.setFlywheels(1)));
