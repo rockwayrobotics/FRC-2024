@@ -70,7 +70,7 @@ public class middleFourPieceBlue extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
                 .then(new DriveUntilLoaded(m_drivebase, m_intake, -0.5, 1.5))
 
-                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, (m_drivebase.distanceDrivenAuto - 0.25), 30))
+                .then(new InstantCommand(() -> new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, (m_drivebase.distanceDrivenAuto - 0.25), 30)))
 
                 .then(new DriveDistance(m_drivebase, -0.5, 0.1))
                 .then(new DriveRotate(m_drivebase, 25))
