@@ -7,7 +7,6 @@ import frc.robot.Constants;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
@@ -17,7 +16,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
  */
 public class AutoShootReset extends SequentialCommandGroup {
     DrivebaseSubsystem m_drivebase;
-    ShooterSubsystem m_shooter;
     IntakeSubsystem m_intake;
     LedSubsystem m_led;
 
