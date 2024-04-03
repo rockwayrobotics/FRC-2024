@@ -20,7 +20,6 @@
         has-value=""
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="1"
@@ -60,7 +59,6 @@
         has-value=""
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="1"
@@ -97,6 +95,7 @@
         source-key="/Shuffleboard/Climber/Climber Encoder"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -127,6 +126,7 @@
         source-key="/Shuffleboard/Climber/Climber Speed"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -152,7 +152,6 @@
         style="transform: translate(0px, 520px); width: 240px; height: 40px;"
         source-key="/Shuffleboard/Climber/Climber Soft Limit Override"
         label="climber soft limit"
-        toggled=""
     ></frc-toggle-button><vaadin-number-field
         label="angle ecnonder "
         value="0"
@@ -163,7 +162,6 @@
         source-key="/Shuffleboard/Angler/Angle Encoder"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -194,6 +192,7 @@
         min="NaN"
         max="NaN"
         has-value=""
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -224,6 +223,7 @@
         source-key="/Shuffleboard/Angler/PID Error Pos"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -254,7 +254,6 @@
         source-key="/Shuffleboard/Angler/Output value"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -285,7 +284,6 @@
         min="NaN"
         max="NaN"
         has-value=""
-        placeholder=""
     ><input
             slot="input"
             value="0.05"
@@ -316,7 +314,6 @@
         min="NaN"
         max="NaN"
         has-value=""
-        placeholder=""
     ><input
             slot="input"
             value="-0.07"
@@ -347,7 +344,6 @@
         min="NaN"
         max="NaN"
         has-value=""
-        placeholder=""
     ><input
             slot="input"
             value="0.3"
@@ -401,6 +397,7 @@
         source-key="/Shuffleboard/Shooter/Flywheel Speed"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -431,6 +428,7 @@
         source-key="/Shuffleboard/Angler/kD Value"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -461,6 +459,7 @@
         source-key="/Shuffleboard/Angler/Output Value Clamped"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -496,7 +495,6 @@
         min="NaN"
         max="NaN"
         has-value=""
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -527,6 +525,7 @@
         source-key="/Shuffleboard/Shooter/Flywheel Set RPM Setpoint"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -557,6 +556,7 @@
         source-key="/Shuffleboard/Shooter/Flywheel Scale"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -587,6 +587,7 @@
         source-key="/Shuffleboard/Shooter/Left Flywheel RPM"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -617,6 +618,7 @@
         source-key="/Shuffleboard/Shooter/Right Flywheel RPM"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -647,6 +649,7 @@
         source-key="/Shuffleboard/Shooter/Flywheel Wait To Ramp"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -671,12 +674,15 @@
         source-provider="NetworkTables"
         style="transform: translate(611.6px, 357.6px); width: 197.588px; height: 49.9875px;"
         source-key="/Shuffleboard/Angler/Angler Soft Limit Override"
-        toggled=""
         label="Override Angler Soft Limit"
     ></frc-toggle-button><frc-toggle-button
         source-provider="NetworkTables"
         style="transform: translate(612.8px, 448.8px); width: 215.2px; height: 62.8px;"
         source-key="/Shuffleboard/Drivebase/Brake Mode"
-        toggled=""
         label="Brake Mode"
+    ></frc-toggle-button><frc-toggle-button
+        source-provider="NetworkTables"
+        style="transform: translate(622.6px, 541.6px); width: 204.787px; height: 50px;"
+        source-key="/Shuffleboard/Drivebase/Coast Mode"
+        label="Coast Mode"
     ></frc-toggle-button></dashboard-tab>
