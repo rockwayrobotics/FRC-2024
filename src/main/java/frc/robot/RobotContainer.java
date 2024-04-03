@@ -153,11 +153,13 @@ public class RobotContainer {
 
     m_driverController.a().onTrue(ShootSequenceWebAdj.create(m_shooter, m_intake, m_led));
 
-    m_driverController.rightBumper().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
+    // m_driverController.rightBumper().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
+
+    m_driverController.rightBumper().onTrue(ShootSequenceFullNoFlywheels.create(m_shooter, m_intake, m_led));
 
     //m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake, m_led));
 
-    m_driverController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake, m_led));
+    //m_driverController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake, m_led));
 
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(drivescale.getDouble(0.3))));
     m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
@@ -207,13 +209,15 @@ public class RobotContainer {
         new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
 
 
-    m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.whiteDotLines)));
-    m_operatorController.leftBumper().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
-    
+    m_operatorController.leftStick().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.whiteDotLines)));
+    m_operatorController.leftStick().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
+
+    m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_shooter.setFlywheels(1))); 
+
     m_operatorController.rightBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led)
     .andThen(new OperatorRevThenPullback(m_shooter, m_intake, m_led)));
     
-    m_operatorController.start().onTrue(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)));
+    m_operatorController.start().onTrue(new InstantCommand(() -> m_shooter.instantStopFlywheels()));
 
     m_operatorController.back().onTrue(new InstantCommand(() -> anglerIncrementValue = 0.5));
     m_operatorController.back().onFalse(new InstantCommand(() -> anglerIncrementValue = 0.25));
