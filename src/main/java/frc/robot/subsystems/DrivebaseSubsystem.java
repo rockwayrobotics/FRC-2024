@@ -41,9 +41,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public double distanceDrivenAuto; 
   public double rotationScale; 
   boolean isBrakeMode; 
+  boolean isCoastMode; 
 
   GenericEntry rotationScaleWidget; 
   GenericEntry brakeModeWidget; 
+  GenericEntry coastModeWidget; 
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -94,6 +96,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     .getEntry(); 
 
     brakeModeWidget = dashboardTab.add("Brake Mode", false).getEntry();
+    coastModeWidget = dashboardTab.add("Coast Mode", false).getEntry();
 
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
@@ -251,6 +254,14 @@ public class DrivebaseSubsystem extends SubsystemBase {
       if (isBrakeMode){
         setDrivebaseIdle(IdleMode.kBrake);
       } 
+
+    if (isCoastMode != coastModeWidget.getBoolean(false)){
+      isCoastMode = coastModeWidget.getBoolean(false);
+      if (isCoastMode){
+        setDrivebaseIdle(IdleMode.kCoast);
+      } 
+
+      }
     }
   }
 }
