@@ -25,7 +25,7 @@ public class OperatorRevThenPullback extends SequentialCommandGroup {
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0.5)));
     this.addCommands(new WaitCommand(0.2));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(-0.5)));
-    this.addCommands(new WaitCommand(0.1));
+    this.addCommands(new WaitCommand(0.2));
     this.addCommands(new InstantCommand(() -> m_intake.setBelt(0)));
     
     this.addCommands(new InstantCommand(() -> {
