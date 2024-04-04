@@ -58,14 +58,14 @@ public class sideLongAmpBlue extends SequentialCommandGroup {
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
 
-                .then(new DriveDistance(m_drivebase, -0.5, 1.5))
+                .then(new DriveDistance(m_drivebase, -0.5, 0.5))
                 .then(new DriveRotate(m_drivebase, 28))
 
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
                 .then(new DriveUntilLoaded(m_drivebase, m_intake, -0.5, 4.35))
 
-                .then(new ShootFromGroundDriveRotateAdjustDriveAuto(m_shooter, m_intake, m_led, m_drivebase, -45, 1.5, 1))
+                .then(new ShootFromGroundDriveRotateAdjustDriveAuto(m_shooter, m_intake, m_led, m_drivebase, -45, 0.5, 1))
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
