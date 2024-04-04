@@ -8,8 +8,9 @@ import frc.robot.Constants;
 import frc.robot.commands.AutoShootReset;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.DriveRotate;
+import frc.robot.commands.DriveUntilLoaded;
 import frc.robot.commands.FailFastTimeoutGroup;
-import frc.robot.commands.ShootFromGroundDriveRotateAdjust;
+import frc.robot.commands.ShootFromGroundDriveRotateAdjustDriveAuto;
 import frc.robot.commands.ShootSequenceFullAuto;
 import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -57,14 +58,14 @@ public class sideLongSourceRed extends SequentialCommandGroup {
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
 
-                .then(new DriveDistance(m_drivebase, -0.5, 4.2))
-                .then(new DriveRotate(m_drivebase,23))
+                .then(new DriveDistance(m_drivebase, -0.5, 3.5))
+                .then(new DriveRotate(m_drivebase, 30))
 
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
-                .then(new DriveDistance(m_drivebase, -0.5, 4))
+                .then(new DriveUntilLoaded(m_drivebase, m_intake, -0.5, 4.35))
 
-                .then(new ShootFromGroundDriveRotateAdjust(m_shooter, m_intake, m_led, m_drivebase, 2, -40, 5.5))
+                .then(new ShootFromGroundDriveRotateAdjustDriveAuto(m_shooter, m_intake, m_led, m_drivebase, -45, 5, 2))
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
 
