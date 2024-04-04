@@ -47,6 +47,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
   GenericEntry brakeModeWidget; 
   GenericEntry coastModeWidget; 
 
+  GenericEntry leftMotorFWidget;
+  GenericEntry leftMotorRWidget;
+  GenericEntry rightMotorFWidget;
+  GenericEntry rightMotorRWidget; 
+
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
   private double yawOffset;
@@ -97,6 +102,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     brakeModeWidget = dashboardTab.add("Brake Mode", false).getEntry();
     coastModeWidget = dashboardTab.add("Coast Mode", false).getEntry();
+
+    leftMotorFWidget = dashboardTab.add("Left Motor F", 0).getEntry(); 
+    leftMotorRWidget = dashboardTab.add("Left Motor R", 0).getEntry(); 
+    rightMotorFWidget = dashboardTab.add("Right Motor F", 0).getEntry(); 
+    rightMotorRWidget = dashboardTab.add("Right Motor R", 0).getEntry(); 
 
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
@@ -260,6 +270,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
       if (isCoastMode){
         setDrivebaseIdle(IdleMode.kCoast);
       } 
+
+      leftMotorFWidget.setDouble(m_leftDriveMotorF.getOutputCurrent()); 
+      leftMotorRWidget.setDouble(m_leftDriveMotorR.getOutputCurrent());
+      rightMotorFWidget.setDouble(m_rightDriveMotorF.getOutputCurrent());
+      rightMotorRWidget.setDouble(m_rightDriveMotorR.getOutputCurrent());
 
       }
     }
