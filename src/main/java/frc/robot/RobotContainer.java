@@ -153,7 +153,7 @@ public class RobotContainer {
 
     m_driverController.a().onTrue(ShootSequenceWebAdj.create(m_shooter, m_intake, m_led));
 
-    // m_driverController.rightBumper().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
+    m_driverController.y().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
 
     m_driverController.rightBumper().onTrue(ShootSequenceFullNoFlywheels.create(m_shooter, m_intake, m_led));
 
