@@ -213,6 +213,8 @@ public class RobotContainer {
 
     m_operatorController.rightBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led)
     .andThen(new OperatorRevThenPullback(m_shooter, m_intake, m_led)));
+
+    m_operatorController.rightStick().onTrue(new InstantCommand(() -> m_angler.resetAngleEncoder())); 
     
     m_operatorController.start().onTrue(new InstantCommand(() -> m_shooter.instantStopFlywheels()));
 
