@@ -58,7 +58,7 @@ public class sideLongSourceRed extends SequentialCommandGroup {
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
 
-                .then(new DriveDistance(m_drivebase, -0.5, 3.5))
+                .then(new DriveDistance(m_drivebase, -0.5, 3.7))
                 .then(new DriveRotate(m_drivebase, 30))
 
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
