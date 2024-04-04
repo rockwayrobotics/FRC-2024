@@ -83,9 +83,9 @@ public class middleFourPieceRed extends SequentialCommandGroup {
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
 
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.BreathingMagenta)))
-                .then(new DriveDistance(m_drivebase, -0.5, 1.05))
+                .then(new DriveDistance(m_drivebase, -0.5, 1.1))
 
-                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, 0.85, 27))
+                .then(new ShootFromGroundDriveRotateFour(m_shooter, m_intake, m_led, m_drivebase, 0.9, 27))
 
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
