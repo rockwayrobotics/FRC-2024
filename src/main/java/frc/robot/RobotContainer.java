@@ -210,8 +210,10 @@ public class RobotContainer {
     m_operatorController.x().onFalse(
         new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
 
-    m_operatorController.leftStick().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.whiteDotLines)));
-    m_operatorController.leftStick().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
+    // m_operatorController.leftStick().onTrue(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.whiteDotLines)));
+    // m_operatorController.leftStick().onFalse(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
+
+    m_operatorController.leftStick().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.LOW_HALF_CYCLE_SETPOINT)));
 
     m_operatorController.leftBumper().onTrue(new InstantCommand(() -> m_shooter.setFlywheels(1))); 
 

@@ -68,12 +68,13 @@ public final class Constants {
 
   public static final class Angler {
     public final static float ANGLE_TOP_MAX = 0f;
-    public final static float ANGLE_BOTTOM_MAX = 35f; 
+    public final static float ANGLE_BOTTOM_MAX = 40f; 
     
     public final static double AUTO_SPEAKER_SETPOINT = 13.5; 
     public final static double SPEAKER_SETPOINT = 14;
     public final static double ZERO_SETPOINT = 0;
     public final static double HALF_CYCLE_SETPOINT = 25; 
+    public final static double LOW_HALF_CYCLE_SETPOINT = 40; 
 
     public final static double DEFAULT_PID_kP = 0.3;
     public final static double DEFAULT_PID_kI = 0;
