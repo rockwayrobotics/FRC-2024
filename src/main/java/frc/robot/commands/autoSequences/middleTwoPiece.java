@@ -59,9 +59,9 @@ public class middleTwoPiece extends SequentialCommandGroup {
 
                 .then(new InstantCommand(() -> m_intake.setBelt(0.8)))
                 .then(new InstantCommand(() -> m_intake.setIntake(0.5)))
-                .thenWithTimeout(new DriveDistance(m_drivebase, -0.3, drivedistance), 5)
+                .thenWithTimeout(new DriveDistance(m_drivebase, -0.5, 1), 5)
 
-                .then(new ShootFromGroundDriveFour(m_shooter, m_intake, m_led, m_drivebase, drivedistance))
+                .then(new ShootFromGroundDriveFour(m_shooter, m_intake, m_led, m_drivebase, 1))
 
                 .then(new InstantCommand(() -> m_drivebase.setDrivebaseIdle(IdleMode.kCoast)))
                 .then(new InstantCommand(() -> m_led.setMode(Constants.LED.modes.Rainbow)));
