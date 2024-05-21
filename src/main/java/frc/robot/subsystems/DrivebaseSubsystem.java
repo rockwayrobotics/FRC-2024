@@ -52,6 +52,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
   GenericEntry rightMotorFWidget;
   GenericEntry rightMotorRWidget; 
 
+  GenericEntry navxMonitorWidget;
+  GenericEntry counterWidget; 
+
+  double counter = 0;
+
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
   private double yawOffset;
@@ -107,6 +112,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
     leftMotorRWidget = dashboardTab.add("Left Motor R", 0).getEntry(); 
     rightMotorFWidget = dashboardTab.add("Right Motor F", 0).getEntry(); 
     rightMotorRWidget = dashboardTab.add("Right Motor R", 0).getEntry(); 
+
+    navxMonitorWidget = dashboardTab.add("NavX Monitor", 0).getEntry();
+    counterWidget = dashboardTab.add("Counter Widget", 0).getEntry();
 
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
@@ -176,7 +184,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void drive(ChassisSpeeds speeds){
-    set(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
+    set(speeds.vxMetersPerSecond, -speeds.omegaRadiansPerSecond);
   }
 
   /**
@@ -257,6 +265,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   @Override
   public void periodic(){
+    driveOdometry.update(m_gyro.getRotation2d(), getLDistance(), getRDistance());
     rotationScale = rotationScaleWidget.getDouble(0.76); 
 
     if (isBrakeMode != brakeModeWidget.getBoolean(false)){
@@ -270,13 +279,20 @@ public class DrivebaseSubsystem extends SubsystemBase {
       if (isCoastMode){
         setDrivebaseIdle(IdleMode.kCoast);
       } 
-
+      }
+    }
       leftMotorFWidget.setDouble(m_leftDriveMotorF.getOutputCurrent()); 
       leftMotorRWidget.setDouble(m_leftDriveMotorR.getOutputCurrent());
       rightMotorFWidget.setDouble(m_rightDriveMotorF.getOutputCurrent());
       rightMotorRWidget.setDouble(m_rightDriveMotorR.getOutputCurrent());
 
+      navxMonitorWidget.setDouble(m_gyro.getAngle());
+
+      counter++; 
+
+      if (counter == 50){
+        counter = 0; 
       }
-    }
+      counterWidget.setDouble(counter);
   }
 }
