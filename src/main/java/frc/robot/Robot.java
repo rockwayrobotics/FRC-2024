@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -82,6 +84,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    m_robotContainer.m_angler.resetAngleEncoder();
+    //m_robotContainer.m_drivebase.resetPose(new Pose2d(2,7, new Rotation2d(0))); 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -89,7 +93,6 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
 
-    m_robotContainer.m_angler.resetAngleEncoder();
     //m_robotContainer.m_angler.angleSetpointWidget.setDouble(Constants.Angler.AUTO_SPEAKER_SETPOINT);
   }
 

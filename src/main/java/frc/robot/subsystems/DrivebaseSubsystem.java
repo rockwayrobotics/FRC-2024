@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -159,6 +160,12 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_drive.curvatureDrive(speed * m_scale, rotation * m_scale, true);
   }
 
+  public void setPathPlannerSpeed(double speed, double rotation) {
+    MathUtil.clamp(speed, -0.2, 0.1);
+    MathUtil.clamp(rotation, -0.2, 0.1);
+    m_drive.curvatureDrive(speed, rotation, true);
+  }
+
   public void setScale(double scale) {
     m_scale = scale;
   }
@@ -177,15 +184,17 @@ public class DrivebaseSubsystem extends SubsystemBase {
         getLDistance(),
         getRDistance(),
         pose2d);
+    System.out.printf("Resetting pose to %s%n", pose2d.toString());
   }
 
   public ChassisSpeeds getCurrentSpeeds(){
-    return new ChassisSpeeds(getLDistance(), getRDistance(), getAngle());
+    return new ChassisSpeeds(m_leftDriveEncoder.getVelocity(), m_rightDriveEncoder.getVelocity(), getAngle());
   }
 
   public void drive(ChassisSpeeds speeds){
-    set(speeds.vxMetersPerSecond, -speeds.omegaRadiansPerSecond);
+    setPathPlannerSpeed(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
   }
+
 
   /**
    * Gets the distance travelled by the left-side wheels of the drivebase since
