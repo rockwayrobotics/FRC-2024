@@ -227,7 +227,7 @@ public class RobotContainer {
     m_operatorController.back().onTrue(new InstantCommand(() -> anglerIncrementValue = 0.5));
     m_operatorController.back().onFalse(new InstantCommand(() -> anglerIncrementValue = 0.25));
 
-    m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) - anglerIncrementValue)));
+    m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_angler.m_angleEncoder.setPosition(3)));
     m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) + anglerIncrementValue)));
 
     m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.HALF_CYCLE_SETPOINT)));

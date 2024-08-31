@@ -85,7 +85,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_robotContainer.m_angler.resetAngleEncoder();
-    //m_robotContainer.m_drivebase.resetPose(new Pose2d(2,7, new Rotation2d(0))); 
+    //m_robotContainer.m_drivebase.resetPose(new Pose2d(2,7, new Rotation2d(0)));
+    m_robotContainer.m_angler.angleSetpointWidget.setDouble(Constants.Angler.SPEAKER_SETPOINT);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)

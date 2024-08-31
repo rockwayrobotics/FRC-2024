@@ -20,7 +20,7 @@ import frc.robot.Constants.Shooter.ScoringMode;
 public class AnglerPIDSubsystem extends PIDSubsystem {
 
   private final CANSparkMax m_angleMotor = new CANSparkMax(Constants.CAN.GEAR, MotorType.kBrushless);
-  RelativeEncoder m_angleEncoder = m_angleMotor.getEncoder();
+  public RelativeEncoder m_angleEncoder = m_angleMotor.getEncoder();
   
   public GenericEntry speakerAngleWidget;
   public GenericEntry ampAngleWidget;
@@ -166,9 +166,7 @@ public class AnglerPIDSubsystem extends PIDSubsystem {
     // commented out in case someone sets the P and the I values on the dashboard
     // getController().setI(kIVal);
     // getController().setD(kDVal);
-    
-    m_angleMotor.enableSoftLimit(SoftLimitDirection.kReverse, !softLimitOverride.getBoolean(false));
-    m_angleMotor.enableSoftLimit(SoftLimitDirection.kForward, !softLimitOverride.getBoolean(false));
+  
 
     setpoint1 = setpoint1Widget.getDouble(0);
     setpoint2 = setpoint2Widget.getDouble(0);
