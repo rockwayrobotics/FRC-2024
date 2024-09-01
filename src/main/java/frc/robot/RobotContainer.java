@@ -159,8 +159,8 @@ public class RobotContainer {
 
     m_driverController.y().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
 
-    m_operatorController.x().onTrue(new OperatorManualLoad(m_shooter, m_intake, m_led)); 
-    m_operatorController.x().onFalse(
+    m_driverController.x().onTrue(new OperatorManualLoad(m_shooter, m_intake, m_led)); 
+    m_driverController.x().onFalse(
         new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
 
     // m_driverController.rightBumper().onTrue(ShootSequenceFullNoFlywheels.create(m_shooter, m_intake, m_led));
@@ -187,8 +187,11 @@ public class RobotContainer {
     m_driverController.povDown().onTrue(new InstantCommand(() -> m_climber.setClimber(-1)));
     m_driverController.povDown().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
-    m_operatorController.rightBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led)
+    m_driverController.rightBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led)
     .andThen(new OperatorRevThenPullback(m_shooter, m_intake, m_led)));
+
+    m_driverController.back().onTrue(new InstantCommand(() -> m_angler.m_angleEncoder.setPosition(3)));
+
 
     // m_driverController.y().onTrue(new InstantCommand(() -> m_shooter.setFlywheels(1)));
     // m_driverController.y().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
