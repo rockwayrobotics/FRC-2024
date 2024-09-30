@@ -159,11 +159,7 @@ public class RobotContainer {
 
     m_driverController.y().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
 
-    m_driverController.x().onTrue(new OperatorManualLoad(m_shooter, m_intake, m_led)); 
-    m_driverController.x().onFalse(
-        new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));
-
-    // m_driverController.rightBumper().onTrue(ShootSequenceFullNoFlywheels.create(m_shooter, m_intake, m_led));
+    m_driverController.rightBumper().onTrue(ShootSequenceFullNoFlywheels.create(m_shooter, m_intake, m_led));
 
     //m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake, m_led));
 
@@ -172,26 +168,11 @@ public class RobotContainer {
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(drivescale.getDouble(0.3))));
     m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
 
-    // m_driverController.leftTrigger().whileTrue(new RepeatCommand(new InstantCommand(() -> m_drivebase.set(0.175, m_driverController.getRightX()))));
-    // m_driverController.leftTrigger().onFalse(new InstantCommand(() -> m_drivebase.set(0,0)));
-
-    m_driverController.leftTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.ZERO_SETPOINT)));
-    m_driverController.rightTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.SPEAKER_SETPOINT)));
+    m_driverController.leftTrigger().whileTrue(new RepeatCommand(new InstantCommand(() -> m_drivebase.set(0.175, m_driverController.getRightX()))));
+    m_driverController.leftTrigger().onFalse(new InstantCommand(() -> m_drivebase.set(0,0)));
 
     m_driverController.start().whileTrue(new RepeatCommand(new InstantCommand(() -> m_shooter.setFlywheels(-1))));
     m_driverController.start().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
-
-    m_driverController.povUp().onTrue(new InstantCommand(() -> m_climber.setClimber(0.7)));
-    m_driverController.povUp().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
-
-    m_driverController.povDown().onTrue(new InstantCommand(() -> m_climber.setClimber(-1)));
-    m_driverController.povDown().onFalse(new InstantCommand(() -> m_climber.setClimber(0)));
-
-    m_driverController.rightBumper().onTrue(new OperatorPullupSensor(m_shooter, m_intake, m_led)
-    .andThen(new OperatorRevThenPullback(m_shooter, m_intake, m_led)));
-
-    m_driverController.back().onTrue(new InstantCommand(() -> m_angler.m_angleEncoder.setPosition(3)));
-
 
     // m_driverController.y().onTrue(new InstantCommand(() -> m_shooter.setFlywheels(1)));
     // m_driverController.y().onFalse(new InstantCommand(() -> m_shooter.setFlywheels(0)));
@@ -246,7 +227,7 @@ public class RobotContainer {
     m_operatorController.back().onTrue(new InstantCommand(() -> anglerIncrementValue = 0.5));
     m_operatorController.back().onFalse(new InstantCommand(() -> anglerIncrementValue = 0.25));
 
-    m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_angler.m_angleEncoder.setPosition(3)));
+    m_operatorController.leftTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) - anglerIncrementValue)));
     m_operatorController.rightTrigger().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(m_angler.angleSetpointWidget.getDouble(0) + anglerIncrementValue)));
 
     m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_angler.angleSetpointWidget.setDouble(Constants.Angler.HALF_CYCLE_SETPOINT)));

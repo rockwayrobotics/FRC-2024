@@ -54,8 +54,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
   GenericEntry rightMotorRWidget; 
 
   GenericEntry navxMonitorWidget;
-  GenericEntry velocitySpeedWidget;
-  GenericEntry radiansRotationWidget;
+  GenericEntry counterWidget; 
+
+  double counter = 0;
 
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
@@ -114,8 +115,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     rightMotorRWidget = dashboardTab.add("Right Motor R", 0).getEntry(); 
 
     navxMonitorWidget = dashboardTab.add("NavX Monitor", 0).getEntry();
-    velocitySpeedWidget = dashboardTab.add("Velocity Speed", 0).getEntry();
-    radiansRotationWidget = dashboardTab.add("Radians Rotation", 0).getEntry();
+    counterWidget = dashboardTab.add("Counter Widget", 0).getEntry();
 
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
@@ -161,8 +161,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void setPathPlannerSpeed(double speed, double rotation) {
-    MathUtil.clamp(speed, -0.5, 0.5);
-    MathUtil.clamp(rotation, -0.5, 0.5);
+    MathUtil.clamp(speed, -0.2, 0.1);
+    MathUtil.clamp(rotation, -0.2, 0.1);
     m_drive.curvatureDrive(speed, rotation, true);
   }
 
@@ -192,9 +192,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void drive(ChassisSpeeds speeds){
-    velocitySpeedWidget.setDouble(speeds.vxMetersPerSecond);
-    radiansRotationWidget.setDouble(speeds.omegaRadiansPerSecond);
-    setPathPlannerSpeed(speeds.vxMetersPerSecond * 0.1, speeds.omegaRadiansPerSecond * 0.001);
+    setPathPlannerSpeed(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
   }
 
 
@@ -297,6 +295,13 @@ public class DrivebaseSubsystem extends SubsystemBase {
       rightMotorFWidget.setDouble(m_rightDriveMotorF.getOutputCurrent());
       rightMotorRWidget.setDouble(m_rightDriveMotorR.getOutputCurrent());
 
-      navxMonitorWidget.setDouble(m_gyro.getAngle());  
-    }
+      navxMonitorWidget.setDouble(m_gyro.getAngle());
+
+      counter++; 
+
+      if (counter == 50){
+        counter = 0; 
+      }
+      counterWidget.setDouble(counter);
+  }
 }
