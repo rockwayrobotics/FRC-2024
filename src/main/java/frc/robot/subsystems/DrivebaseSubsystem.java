@@ -47,11 +47,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   GenericEntry rotationScaleWidget; 
   GenericEntry brakeModeWidget; 
   GenericEntry coastModeWidget; 
-
-  GenericEntry leftMotorFWidget;
-  GenericEntry leftMotorRWidget;
-  GenericEntry rightMotorFWidget;
-  GenericEntry rightMotorRWidget; 
+  GenericEntry leftDistanceWidget;
+  GenericEntry rightDistanceWidget;
 
   GenericEntry navxMonitorWidget;
   GenericEntry counterWidget; 
@@ -98,8 +95,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveEncoder = m_rightDriveMotorF.getEncoder();
     // when robot goes forward, left encoder spins positive and right encoder spins
     // negative
-    m_leftDriveEncoder.setPositionConversionFactor(Constants.Drive.DISTANCE_PER_ENCODER_PULSE);
-    m_rightDriveEncoder.setPositionConversionFactor(Constants.Drive.DISTANCE_PER_ENCODER_PULSE);
+    //m_leftDriveEncoder.setPositionConversionFactor(Constants.Drive.DISTANCE_PER_ENCODER_PULSE);
+    //m_rightDriveEncoder.setPositionConversionFactor(Constants.Drive.DISTANCE_PER_ENCODER_PULSE);
     m_leftDriveEncoder.setPosition(0);
     m_rightDriveEncoder.setPosition(0);
 
@@ -109,14 +106,12 @@ public class DrivebaseSubsystem extends SubsystemBase {
     brakeModeWidget = dashboardTab.add("Brake Mode", false).getEntry();
     coastModeWidget = dashboardTab.add("Coast Mode", false).getEntry();
 
-    leftMotorFWidget = dashboardTab.add("Left Motor F", 0).getEntry(); 
-    leftMotorRWidget = dashboardTab.add("Left Motor R", 0).getEntry(); 
-    rightMotorFWidget = dashboardTab.add("Right Motor F", 0).getEntry(); 
-    rightMotorRWidget = dashboardTab.add("Right Motor R", 0).getEntry(); 
-
     navxMonitorWidget = dashboardTab.add("NavX Monitor", 0).getEntry();
     counterWidget = dashboardTab.add("Counter Widget", 0).getEntry();
 
+    leftDistanceWidget = dashboardTab.add("Left Distance", 0).getEntry();
+    rightDistanceWidget = dashboardTab.add("Right Distance", 0).getEntry();
+  
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
     AutoBuilder.configureRamsete(
@@ -276,6 +271,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public void periodic(){
     driveOdometry.update(m_gyro.getRotation2d(), getLDistance(), getRDistance());
     rotationScale = rotationScaleWidget.getDouble(0.76); 
+    leftDistanceWidget.setDouble(getLDistance());
+    rightDistanceWidget.setDouble(getRDistance());
 
     if (isBrakeMode != brakeModeWidget.getBoolean(false)){
       isBrakeMode = brakeModeWidget.getBoolean(false);
@@ -290,11 +287,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
       } 
       }
     }
-      leftMotorFWidget.setDouble(m_leftDriveMotorF.getOutputCurrent()); 
-      leftMotorRWidget.setDouble(m_leftDriveMotorR.getOutputCurrent());
-      rightMotorFWidget.setDouble(m_rightDriveMotorF.getOutputCurrent());
-      rightMotorRWidget.setDouble(m_rightDriveMotorR.getOutputCurrent());
-
       navxMonitorWidget.setDouble(m_gyro.getAngle());
 
       counter++; 
