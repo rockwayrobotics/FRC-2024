@@ -96,8 +96,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     // when robot goes forward, left encoder spins positive and right encoder spins
     // negative
 
-    m_leftDriveEncoder.setPositionConversionFactor(Constants.Drive.WHEEL_ENCODER_SCALING);
-    m_rightDriveEncoder.setPositionConversionFactor(Constants.Drive.WHEEL_ENCODER_SCALING);
+    m_leftDriveEncoder.setPositionConversionFactor(Constants.Drive.WHEEL_ENCODER_SCALING * Constants.Drive.LEFT_SCALING);
+    m_rightDriveEncoder.setPositionConversionFactor(Constants.Drive.WHEEL_ENCODER_SCALING * Constants.Drive.RIGHT_SCALING);
 
     m_leftDriveEncoder.setPosition(0);
     m_rightDriveEncoder.setPosition(0);
