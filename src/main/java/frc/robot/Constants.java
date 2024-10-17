@@ -44,9 +44,9 @@ public final class Constants {
 
 
   public static final class Drive {
-    public final static double ENCODER_PULSES_PER_REVOLUTION = 360;
-    public final static double WHEEL_DIAMETER = 6;
-    public final static double DISTANCE_PER_ENCODER_PULSE = WHEEL_DIAMETER * Math.PI / ENCODER_PULSES_PER_REVOLUTION;
+    public final static double WHEEL_CIRCUM = 46.8;
+    public final static double WHEEL_GEAR_RATIO = 8.46;
+    public final static double WHEEL_ENCODER_SCALING = WHEEL_CIRCUM / WHEEL_GEAR_RATIO;
 
     public final static boolean LEFT_DRIVE_INVERTED = true;
     public final static boolean RIGHT_DRIVE_INVERTED = false;
