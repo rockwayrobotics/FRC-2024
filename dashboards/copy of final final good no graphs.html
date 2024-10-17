@@ -20,6 +20,7 @@
         has-value=""
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="1"
@@ -59,6 +60,7 @@
         has-value=""
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="1"
@@ -95,7 +97,6 @@
         source-key="/Shuffleboard/Climber/Climber Encoder"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -126,7 +127,6 @@
         source-key="/Shuffleboard/Climber/Climber Speed"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -162,6 +162,7 @@
         source-key="/Shuffleboard/Angler/Angle Encoder"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -192,7 +193,6 @@
         min="NaN"
         max="NaN"
         has-value=""
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -223,7 +223,6 @@
         source-key="/Shuffleboard/Angler/PID Error Pos"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -254,6 +253,7 @@
         source-key="/Shuffleboard/Angler/Output value"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -284,6 +284,7 @@
         min="NaN"
         max="NaN"
         has-value=""
+        placeholder=""
     ><input
             slot="input"
             value="0.05"
@@ -314,6 +315,7 @@
         min="NaN"
         max="NaN"
         has-value=""
+        placeholder=""
     ><input
             slot="input"
             value="-0.07"
@@ -344,6 +346,7 @@
         min="NaN"
         max="NaN"
         has-value=""
+        placeholder=""
     ><input
             slot="input"
             value="0.3"
@@ -397,7 +400,6 @@
         source-key="/Shuffleboard/Shooter/Flywheel Speed"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -428,7 +430,6 @@
         source-key="/Shuffleboard/Angler/kD Value"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -459,7 +460,6 @@
         source-key="/Shuffleboard/Angler/Output Value Clamped"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -495,6 +495,7 @@
         min="NaN"
         max="NaN"
         has-value=""
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -525,7 +526,6 @@
         source-key="/Shuffleboard/Shooter/Flywheel Set RPM Setpoint"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -556,7 +556,6 @@
         source-key="/Shuffleboard/Shooter/Flywheel Scale"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -587,7 +586,6 @@
         source-key="/Shuffleboard/Shooter/Left Flywheel RPM"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -618,7 +616,6 @@
         source-key="/Shuffleboard/Shooter/Right Flywheel RPM"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -649,7 +646,6 @@
         source-key="/Shuffleboard/Shooter/Flywheel Wait To Ramp"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -685,4 +681,66 @@
         style="transform: translate(622.6px, 541.6px); width: 204.787px; height: 50px;"
         source-key="/Shuffleboard/Drivebase/Coast Mode"
         label="Coast Mode"
-    ></frc-toggle-button></dashboard-tab>
+    ></frc-toggle-button><vaadin-number-field
+        label="Left Encoders"
+        value="0"
+        has-value=""
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(554px, 217.8px);"
+        source-key="/Shuffleboard/Drivebase/Left Distance"
+        placeholder=""
+        min="NaN"
+        max="NaN"
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-24"
+            aria-labelledby="label-vaadin-number-field-24"
+            aria-describedby=""
+            min="undefined"
+            max="undefined"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-24"
+            for="vaadin-number-field-24"
+        >Left Encoders</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-24"
+            hidden=""
+        ></div>
+    </vaadin-number-field><vaadin-number-field
+        label="Right Encoders"
+        value="0"
+        has-value=""
+        has-label=""
+        source-provider="NetworkTables"
+        style="transform: translate(721.6px, 216.8px);"
+        source-key="/Shuffleboard/Drivebase/Right Distance"
+        placeholder=""
+        min="NaN"
+        max="NaN"
+    ><input
+            slot="input"
+            value="0"
+            type="number"
+            id="vaadin-number-field-66"
+            aria-labelledby="label-vaadin-number-field-66"
+            aria-describedby=""
+            min="undefined"
+            max="undefined"
+            step="any"
+        ><label
+            slot="label"
+            id="label-vaadin-number-field-66"
+            for="vaadin-number-field-66"
+        >Right Encoders</label>
+        <div
+            slot="error-message"
+            id="error-message-vaadin-number-field-54"
+            hidden=""
+        ></div>
+    </vaadin-number-field></dashboard-tab>
