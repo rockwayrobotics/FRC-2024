@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -25,6 +24,9 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.networktables.GenericEntry;
 
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+
+import frc.robot.Constants;
+import frc.robot.Constants.Drive;
 
 public class DrivebaseSubsystem extends SubsystemBase {
 
@@ -102,8 +104,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     // when robot goes forward, left encoder spins positive and right encoder spins
     // negative
 
-    m_leftDriveEncoder.setPositionConversionFactor(Constants.Drive.WHEEL_ENCODER_SCALING);
-    m_rightDriveEncoder.setPositionConversionFactor(Constants.Drive.WHEEL_ENCODER_SCALING);
+    m_leftDriveEncoder.setPositionConversionFactor(Drive.WHEEL_ENCODER_SCALING * Drive.LEFT_SCALING);
+    m_rightDriveEncoder.setPositionConversionFactor(Drive.WHEEL_ENCODER_SCALING * Drive.RIGHT_SCALING);
 
     m_leftDriveEncoder.setPosition(0);
     m_rightDriveEncoder.setPosition(0);
