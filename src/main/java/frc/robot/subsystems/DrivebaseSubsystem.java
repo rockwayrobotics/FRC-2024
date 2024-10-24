@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -23,6 +24,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.networktables.GenericEntry;
 
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+
 public class DrivebaseSubsystem extends SubsystemBase {
 
   CANSparkMax m_leftDriveMotorF;
@@ -39,19 +42,22 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   private double m_scale = 1;
 
-  public double distanceDrivenAuto; 
-  public double rotationScale; 
-  boolean isBrakeMode; 
-  boolean isCoastMode; 
+  public double distanceDrivenAuto;
+  public double rotationScale;
+  boolean isBrakeMode;
+  boolean isCoastMode;
 
-  GenericEntry rotationScaleWidget; 
-  GenericEntry brakeModeWidget; 
-  GenericEntry coastModeWidget; 
+  GenericEntry rotationScaleWidget;
+  GenericEntry brakeModeWidget;
+  GenericEntry coastModeWidget;
   GenericEntry leftDistanceWidget;
   GenericEntry rightDistanceWidget;
 
   GenericEntry navxMonitorWidget;
-  GenericEntry counterWidget; 
+  GenericEntry counterWidget;
+
+  Field2d field;
+  GenericEntry fieldWidget;
 
   double counter = 0;
 
@@ -96,14 +102,14 @@ public class DrivebaseSubsystem extends SubsystemBase {
     // when robot goes forward, left encoder spins positive and right encoder spins
     // negative
 
-    m_leftDriveEncoder.setPositionConversionFactor(Constants.Drive.WHEEL_ENCODER_SCALING * Constants.Drive.LEFT_SCALING);
-    m_rightDriveEncoder.setPositionConversionFactor(Constants.Drive.WHEEL_ENCODER_SCALING * Constants.Drive.RIGHT_SCALING);
+    m_leftDriveEncoder.setPositionConversionFactor(Constants.Drive.WHEEL_ENCODER_SCALING);
+    m_rightDriveEncoder.setPositionConversionFactor(Constants.Drive.WHEEL_ENCODER_SCALING);
 
     m_leftDriveEncoder.setPosition(0);
     m_rightDriveEncoder.setPosition(0);
 
     rotationScaleWidget = dashboardTab.addPersistent("Driving Rotation Scale Factor", 0.76)
-    .getEntry(); 
+    .getEntry();
 
     brakeModeWidget = dashboardTab.add("Brake Mode", false).getEntry();
     coastModeWidget = dashboardTab.add("Coast Mode", false).getEntry();
@@ -113,7 +119,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     leftDistanceWidget = dashboardTab.add("Left Distance", 0).getEntry();
     rightDistanceWidget = dashboardTab.add("Right Distance", 0).getEntry();
-  
+
+    fieldWidget = dashboardTab.add("Field2d").getGenericEntry();
+    fieldWidget.setValue(field);
+
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
     AutoBuilder.configureRamsete(
@@ -272,29 +281,32 @@ public class DrivebaseSubsystem extends SubsystemBase {
   @Override
   public void periodic(){
     driveOdometry.update(m_gyro.getRotation2d(), getLDistance(), getRDistance());
-    rotationScale = rotationScaleWidget.getDouble(0.76); 
+    rotationScale = rotationScaleWidget.getDouble(0.76);
     leftDistanceWidget.setDouble(getLDistance());
     rightDistanceWidget.setDouble(getRDistance());
+
+    field.setRobotPose(driveOdometry.getPoseMeters());
+    fieldWidget.setValue(field);
 
     if (isBrakeMode != brakeModeWidget.getBoolean(false)){
       isBrakeMode = brakeModeWidget.getBoolean(false);
       if (isBrakeMode){
         setDrivebaseIdle(IdleMode.kBrake);
-      } 
+      }
 
     if (isCoastMode != coastModeWidget.getBoolean(false)){
       isCoastMode = coastModeWidget.getBoolean(false);
       if (isCoastMode){
         setDrivebaseIdle(IdleMode.kCoast);
-      } 
+      }
       }
     }
       navxMonitorWidget.setDouble(m_gyro.getAngle());
 
-      counter++; 
+      counter++;
 
       if (counter == 50){
-        counter = 0; 
+        counter = 0;
       }
       counterWidget.setDouble(counter);
   }
