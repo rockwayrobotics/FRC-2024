@@ -56,8 +56,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   GenericEntry navxMonitorWidget;
   GenericEntry counterWidget;
 
-  Field2d field;
-  GenericEntry fieldWidget;
+  Field2d field = new Field2d();
+  // GenericEntry fieldWidget;
 
   double counter = 0;
 
@@ -120,8 +120,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
     leftDistanceWidget = dashboardTab.add("Left Distance", 0).getEntry();
     rightDistanceWidget = dashboardTab.add("Right Distance", 0).getEntry();
 
-    fieldWidget = dashboardTab.add("Field2d").getGenericEntry();
-    fieldWidget.setValue(field);
+    // Note: the dashboard listens to changes on the field object
+    // so we don't have to publish changes explicitly.
+    dashboardTab.add("Field2d", field);
 
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
@@ -285,8 +286,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     leftDistanceWidget.setDouble(getLDistance());
     rightDistanceWidget.setDouble(getRDistance());
 
+    // This publishes changes through to the dashboard.
     field.setRobotPose(driveOdometry.getPoseMeters());
-    fieldWidget.setValue(field);
 
     if (isBrakeMode != brakeModeWidget.getBoolean(false)){
       isBrakeMode = brakeModeWidget.getBoolean(false);
