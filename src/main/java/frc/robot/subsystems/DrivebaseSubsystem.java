@@ -109,7 +109,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     m_leftDriveEncoder.setPosition(0);
     m_rightDriveEncoder.setPosition(0);
-
+    
     rotationScaleWidget = dashboardTab.addPersistent("Driving Rotation Scale Factor", 0.76)
     .getEntry();
 
@@ -170,8 +170,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void setPathPlannerSpeed(double speed, double rotation) {
-    MathUtil.clamp(speed, -0.2, 0.1);
-    MathUtil.clamp(rotation, -0.2, 0.1);
+    speed = MathUtil.clamp(speed, -0.2, 0.1);
+    rotation = MathUtil.clamp(rotation, -0.2, 0.1);
     m_drive.curvatureDrive(speed, rotation, true);
   }
 
