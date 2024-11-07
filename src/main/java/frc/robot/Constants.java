@@ -46,8 +46,8 @@ public final class Constants {
   public static final class Drive {
     public final static double WHEEL_CIRCUM = 46.8;
     public final static double WHEEL_GEAR_RATIO = 8.46;
-    public final static double LEFT_SCALING = 1377 / 1365.74;
-    public final static double RIGHT_SCALING = 1377 / 1375.38;
+    public final static double LEFT_SCALING = (1509 / 1501.89) / 100 ;
+    public final static double RIGHT_SCALING = (1509 / 1504.21) / 100;
     public final static double WHEEL_ENCODER_SCALING = WHEEL_CIRCUM / WHEEL_GEAR_RATIO;
 
     public final static boolean LEFT_DRIVE_INVERTED = true;
