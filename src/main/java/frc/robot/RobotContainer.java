@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.Constants.*;
-
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkBase.IdleMode;
 
@@ -15,15 +13,39 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
-
-import frc.robot.commands.autoSequences.*;
-
-import frc.robot.subsystems.*;
-import frc.robot.commands.*;
+import frc.robot.Constants.Gamepads;
+import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriverPullupIntake;
+import frc.robot.commands.OperatorManualLoad;
+import frc.robot.commands.OperatorPullback;
+import frc.robot.commands.OperatorPullupSensor;
+import frc.robot.commands.OperatorRevThenPullback;
+import frc.robot.commands.ShootSequenceFull;
+import frc.robot.commands.autoSequences.driveForward;
+import frc.robot.commands.autoSequences.middleFourPieceBlue;
+import frc.robot.commands.autoSequences.middleFourPieceRed;
+import frc.robot.commands.autoSequences.middleThreePieceBlue;
+import frc.robot.commands.autoSequences.middleThreePieceRed;
+import frc.robot.commands.autoSequences.middleTwoPiece;
+import frc.robot.commands.autoSequences.moveNoShoot;
+import frc.robot.commands.autoSequences.shootMove;
+import frc.robot.commands.autoSequences.sideLongAmpBlue;
+import frc.robot.commands.autoSequences.sideLongAmpRed;
+import frc.robot.commands.autoSequences.sideLongSourceBlue;
+import frc.robot.commands.autoSequences.sideLongSourceRed;
+import frc.robot.commands.autoSequences.sideThreePieceBlue;
+import frc.robot.commands.autoSequences.sideThreePieceRed;
+import frc.robot.commands.autoSequences.sideTwoPieceBlue;
+import frc.robot.commands.autoSequences.sideTwoPieceRed;
+import frc.robot.subsystems.AnglerPIDSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
+import frc.robot.subsystems.DrivebaseSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LedSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 enum AutoOption {
   driveForward,
@@ -163,9 +185,17 @@ public class RobotContainer {
 
     m_driverController.a().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
 
+    m_driverController.b().onTrue(new DriverPullupIntake(m_shooter, m_intake, m_led)
+    .andThen(new OperatorRevThenPullback(m_shooter, m_intake, m_led)));
+
     //m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake, m_led));
 
-    //m_driverController.b().onTrue(new LoadShooterSequenceNoReverse(m_shooter, m_intake, m_led));
+     /* m_driverController.b().whileTrue(
+        new RepeatCommand(new InstantCommand(() -> m_intake.setBelt(0.7))
+            .andThen(new InstantCommand(() -> m_intake.setIntake(0.2)))));
+
+      m_driverController.b().onFalse(
+        new InstantCommand(() -> m_intake.setBelt(0)).andThen(new InstantCommand(() -> m_intake.setIntake(0))));*/
 
     m_driverController.leftBumper().onTrue(new InstantCommand(() -> m_drivebase.setScale(drivescale.getDouble(0.3))));
     m_driverController.leftBumper().onFalse(new InstantCommand(() -> m_drivebase.setScale(1)));
