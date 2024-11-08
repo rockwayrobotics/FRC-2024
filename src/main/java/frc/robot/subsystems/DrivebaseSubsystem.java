@@ -209,7 +209,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
    * Gets the distance travelled by the left-side wheels of the drivebase since
    * last reset.
    *
-   * @return Distance, in inches.
+   * @return Distance, in meters.
    */
   public double getLDistance() {
     return m_leftDriveEncoder.getPosition();
@@ -219,7 +219,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
    * Gets the distance travelled by the right-side wheels of the drivebase since
    * last reset.
    *
-   * @return Distance in inches.
+   * @return Distance in meters.
    */
   public double getRDistance() {
     return m_rightDriveEncoder.getPosition();
