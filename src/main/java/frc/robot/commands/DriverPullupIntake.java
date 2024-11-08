@@ -43,7 +43,7 @@ public class DriverPullupIntake extends Command {
   @Override
   public boolean isFinished() {
     //  TODO: Make this 70 a constant
-    if (counter > 2 * 70){
+    if (counter > 2 * 140){
       return true;
     }
     return m_shooter.isNoteStaged(); // Returns true if the shooter is staged
@@ -51,7 +51,7 @@ public class DriverPullupIntake extends Command {
 
   @Override
   public void end(boolean cancelled) {
-    if (counter > 2 * 70){
+    if (counter > 2 * 140){
       m_intake.stagedFlag = false; 
     }
     else {
