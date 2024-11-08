@@ -155,11 +155,13 @@ public class RobotContainer {
     //m_driverController.povDown().whileTrue(new RepeatCommand(new InstantCommand(() -> m_climber.setClimber(-0.5))));
     //m_driverController.povDown().whileFalse(new InstantCommand(() -> m_climber.setClimber(0)));
 
-    m_driverController.a().onTrue(ShootSequenceWebAdj.create(m_shooter, m_intake, m_led));
+    //m_driverController.a().onTrue(ShootSequenceWebAdj.create(m_shooter, m_intake, m_led));
 
-    m_driverController.y().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
+    //m_driverController.y().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
 
-    m_driverController.rightBumper().onTrue(ShootSequenceFullNoFlywheels.create(m_shooter, m_intake, m_led));
+    //m_driverController.rightBumper().onTrue(ShootSequenceFullNoFlywheels.create(m_shooter, m_intake, m_led));
+
+    m_driverController.a().onTrue(ShootSequenceFull.create(m_shooter, m_intake, m_led));
 
     //m_driverController.x().onTrue(new LoadShooterSequence(m_shooter, m_intake, m_led));
 
@@ -245,7 +247,7 @@ public class RobotContainer {
   }
 
   public void onTeleopInit(){
-    m_drivebase.setDrivebaseIdle(IdleMode.kCoast);
+    m_drivebase.setDrivebaseIdle(IdleMode.kBrake);
     m_led.setMode(Constants.LED.modes.Rainbow);
     m_intake.setBelt(0);
     m_intake.setIntake(0);

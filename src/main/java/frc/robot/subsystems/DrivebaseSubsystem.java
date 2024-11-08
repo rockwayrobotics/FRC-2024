@@ -157,7 +157,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void disable(){
-    setDrivebaseIdle(IdleMode.kCoast);
+    setDrivebaseIdle(IdleMode.kBrake);
   }
 
   public void stop() {
@@ -170,8 +170,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void setPathPlannerSpeed(double speed, double rotation) {
-    speed = MathUtil.clamp(speed, -0.2, 0.1);
-    rotation = MathUtil.clamp(rotation, -0.2, 0.1);
+    speed = MathUtil.clamp(speed, -0.4, 0.4);
+    rotation = MathUtil.clamp(rotation, -0.4, 0.4);
     m_drive.curvatureDrive(speed, rotation, true);
   }
 
@@ -201,7 +201,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void drive(ChassisSpeeds speeds){
-    setPathPlannerSpeed(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
+    set(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
   }
 
 
