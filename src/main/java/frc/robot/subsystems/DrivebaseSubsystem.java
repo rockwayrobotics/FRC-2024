@@ -20,7 +20,9 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.GenericEntry;
 
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -36,6 +38,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   CANSparkMax m_rightDriveMotorR;
 
   private final DifferentialDrive m_drive;
+  DifferentialDriveKinematics m_kinematics;
 
   RelativeEncoder m_leftDriveEncoder;
   RelativeEncoder m_rightDriveEncoder;
@@ -43,6 +46,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   SlewRateLimiter filter = new SlewRateLimiter(0);
 
   private double m_scale = 1;
+
+  public ChassisSpeeds m_chassisSpeeds;
 
   public double distanceDrivenAuto;
   public double rotationScale;
@@ -125,7 +130,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
     // Note: the dashboard listens to changes on the field object
     // so we don't have to publish changes explicitly.
     dashboardTab.add("Field2d", field);
-
+    // NOTE: seems like m_chassisSpeeds is not being used. Tested with * 0, at least with rotation
+    m_chassisSpeeds = new ChassisSpeeds((m_leftDriveEncoder.getVelocity() + m_rightDriveEncoder.getVelocity()) / 2, 0, m_gyro.getRate() / 57.3);
+    m_kinematics = new DifferentialDriveKinematics(0.56);
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
     AutoBuilder.configureRamsete(
@@ -169,10 +176,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_drive.curvatureDrive(speed * m_scale, rotation * m_scale, true);
   }
 
-  public void setPathPlannerSpeed(double speed, double rotation) {
-    speed = MathUtil.clamp(speed, -0.4, 0.4);
-    rotation = MathUtil.clamp(rotation, -0.4, 0.4);
-    m_drive.curvatureDrive(speed, rotation, true);
+  public void setPathPlannerSpeed(ChassisSpeeds speeds) {
+    DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(speeds);
+    wheelSpeeds.desaturate(0.5);
+
+    m_drive.tankDrive(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond, false);
   }
 
   public void setScale(double scale) {
@@ -197,13 +205,13 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public ChassisSpeeds getCurrentSpeeds(){
-    return new ChassisSpeeds(m_leftDriveEncoder.getVelocity(), m_rightDriveEncoder.getVelocity(), getAngle());
+    return m_chassisSpeeds;
   }
-
+  
   public void drive(ChassisSpeeds speeds){
-    set(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
+    // set(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
+    setPathPlannerSpeed(speeds);
   }
-
 
   /**
    * Gets the distance travelled by the left-side wheels of the drivebase since
