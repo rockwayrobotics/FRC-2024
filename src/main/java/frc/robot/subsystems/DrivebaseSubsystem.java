@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
 import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.MathUtil;
@@ -207,9 +206,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(speeds);
     wheelSpeeds.desaturate(0.5);
 
-    System.out.printf("Tank drive %f %f%n", wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
     m_drive.tankDrive(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond, false);
-    System.out.printf("Motor: %f %f%n", m_leftDriveMotorF.get(), m_rightDriveMotorF.get());
   }
 
   public void setScale(double scale) {
@@ -219,12 +216,12 @@ public class DrivebaseSubsystem extends SubsystemBase {
   // Get the pose of the robot as Pose2d
   public Pose2d getPose(){
     var pose = driveOdometry.getPoseMeters();
-    System.out.printf("Pose: %f %f %f%n", pose.getX(), pose.getY(), pose.getRotation().getDegrees());
     return pose;
   }
 
 
   // Reset the Pose2d of the robot
+  // This gets called if the path has an initial pose - which ours does.
   public void resetPose(Pose2d pose2d) {
     this.resetEncoders();
     this.driveOdometry.resetPosition(
@@ -238,7 +235,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public ChassisSpeeds getCurrentSpeeds() {
     var wheelSpeeds = new DifferentialDriveWheelSpeeds(m_leftDriveEncoder.getVelocity(), m_rightDriveEncoder.getVelocity());
     var speeds = m_kinematics.toChassisSpeeds(wheelSpeeds);
-    System.out.printf("Got speeds: %f %f %f%n", speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
     return speeds;
   }
 
@@ -253,13 +249,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
       m_drivetrainSim.getLeftVelocityMetersPerSecond(),
       m_drivetrainSim.getRightVelocityMetersPerSecond());
     var speeds = m_kinematics.toChassisSpeeds(wheelSpeeds);
-    System.out.printf("Got sim speeds: %f %f %f%n", speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
     return speeds;
   }
   
   public void drive(ChassisSpeeds speeds){
-    System.out.printf("Drive: %f %f %f%n", speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
-    // set(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
     setPathPlannerSpeed(speeds);
   }
 
@@ -376,17 +369,25 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_drivetrainSim = new DifferentialDrivetrainSim(
       DCMotor.getNEO(2),
       Drive.WHEEL_GEAR_RATIO,
+      // FIXME: These values are defaults from
+      // https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/robot-simulation/drivesim-tutorial/drivetrain-model.html
+      // and really should be measured.
       7.5,
       60.0,
+      // This value is the wheel radius in metres
       Drive.WHEEL_CIRCUM / 100. / Math.PI / 2.,
+      // FIXME: Turn this into a constant - it's used above as well.
       0.56,
-      // std-dev for noise:
+      // TODO: Add noise to the simulation here as standard deviation values for noise:
       // x, y in m
       // heading in rad
       // l/r velocity m/s
       // l/r position in m
       VecBuilder.fill(0, 0, 0, 0, 0, 0, 0)
     );
+
+    // Add all the motors for simulation. Unknown if the rear motor simulation is needed
+    // or contributes anything.
     REVPhysicsSim.getInstance().addSparkMax(m_leftDriveMotorF, DCMotor.getNEO(1));
     REVPhysicsSim.getInstance().addSparkMax(m_leftDriveMotorR, DCMotor.getNEO(1));
     REVPhysicsSim.getInstance().addSparkMax(m_rightDriveMotorF, DCMotor.getNEO(1));
@@ -410,12 +411,17 @@ public class DrivebaseSubsystem extends SubsystemBase {
     final double period = (now - m_lastSimTime) / 1000000000.;
     m_lastSimTime = now;
 
+    // Run the REV physics simulation so that the motor values change
     REVPhysicsSim.getInstance().run();
-    //System.out.printf("Sim before update: %f %f %f %f%n", m_leftDriveEncoder.getPosition(), m_rightDriveEncoder.getPosition(), m_drivetrainSim.getLeftVelocityMetersPerSecond(), m_drivetrainSim.getRightVelocityMetersPerSecond());
-    //System.out.printf("Sim inputs: %f %f%n", m_leftDriveMotorF.get() * m_leftDriveMotorF.getBusVoltage(), -m_rightDriveMotorF.get() * m_rightDriveMotorF.getBusVoltage());
+
+    // Provide the drivetrain simulation inputs from the motors.
     m_drivetrainSim.setInputs(m_leftDriveMotorF.get() * m_leftDriveMotorF.getBusVoltage(), m_rightDriveMotorF.get() * m_rightDriveMotorF.getBusVoltage());
+
+    // Run the drivetrain simulation for the same amount of time as the physics simulation ran.
     m_drivetrainSim.update(period);
 
+    // Update the position encoders. NOTE: It would be great to update velocity here but we can't do it
+    // because the encoder we have has no method for updating velocity.
     m_leftDriveEncoder.setPosition(m_drivetrainSim.getLeftPositionMeters());
     m_rightDriveEncoder.setPosition(m_drivetrainSim.getRightPositionMeters());
 
