@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.hal.SimDevice;
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -9,12 +13,14 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
+import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -23,6 +29,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.networktables.GenericEntry;
 
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -47,7 +54,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   private double m_scale = 1;
 
-  public ChassisSpeeds m_chassisSpeeds;
+  private DifferentialDrivetrainSim m_drivetrainSim;
 
   public double distanceDrivenAuto;
   public double rotationScale;
@@ -79,7 +86,21 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   ShuffleboardTab dashboardTab = Shuffleboard.getTab("Drivebase");
 
-  public DrivebaseSubsystem() {
+  /////////////////////////////
+  // Simulation variables - would be nice to remove or minimize these to ensure there
+  // is no impact on non-simulation performance.
+  private boolean m_isSimulation = false;
+
+  /** Holds the last simulation time for duration calculation, matches REVPhysicsSim */
+  private long m_lastSimTime;
+
+  /** Allows first-time initialization of last simulation time. */
+  private boolean m_startedSimulation = false;
+  /////////////////////////////
+
+  public DrivebaseSubsystem(boolean isSimulation) {
+    m_isSimulation = isSimulation;
+
     m_leftDriveMotorF = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_F, MotorType.kBrushless);
     m_leftDriveMotorF.restoreFactoryDefaults();
     m_leftDriveMotorF.setSmartCurrentLimit(38);
@@ -109,8 +130,16 @@ public class DrivebaseSubsystem extends SubsystemBase {
     // when robot goes forward, left encoder spins positive and right encoder spins
     // negative
 
+    // Position is measured in motor revolutions by default, but we want metres.
+    // Wheel encoder scaling gives us centimetres and takes the gear ratio into account,
+    // and the scaling values appear to take more accurate wheel measurements and cm -> m
     m_leftDriveEncoder.setPositionConversionFactor(Drive.WHEEL_ENCODER_SCALING * Drive.LEFT_SCALING);
     m_rightDriveEncoder.setPositionConversionFactor(Drive.WHEEL_ENCODER_SCALING * Drive.RIGHT_SCALING);
+
+    // Distance conversion is the same as the position factor, but convert from minutes to seconds
+    // since velocity is measured in rpm by default but we want m/s.
+    m_leftDriveEncoder.setVelocityConversionFactor(m_leftDriveEncoder.getPositionConversionFactor() / 60);
+    m_rightDriveEncoder.setVelocityConversionFactor(m_rightDriveEncoder.getPositionConversionFactor() / 60);
 
     m_leftDriveEncoder.setPosition(0);
     m_rightDriveEncoder.setPosition(0);
@@ -130,15 +159,13 @@ public class DrivebaseSubsystem extends SubsystemBase {
     // Note: the dashboard listens to changes on the field object
     // so we don't have to publish changes explicitly.
     dashboardTab.add("Field2d", field);
-    // NOTE: seems like m_chassisSpeeds is not being used. Tested with * 0, at least with rotation
-    m_chassisSpeeds = new ChassisSpeeds((m_leftDriveEncoder.getVelocity() + m_rightDriveEncoder.getVelocity()) / 2, 0, m_gyro.getRate() / 57.3);
     m_kinematics = new DifferentialDriveKinematics(0.56);
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
     AutoBuilder.configureRamsete(
             this::getPose, // Robot pose supplier
             this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getCurrentSpeeds, // Current ChassisSpeeds supplier
+            m_isSimulation ? this::getSimulationSpeeds : this::getCurrentSpeeds, // Current ChassisSpeeds supplier
             this::drive, // Method that will drive the robot given ChassisSpeeds
             new ReplanningConfig(),
             () -> {
@@ -180,7 +207,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
     DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(speeds);
     wheelSpeeds.desaturate(0.5);
 
+    System.out.printf("Tank drive %f %f%n", wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond);
     m_drive.tankDrive(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond, false);
+    System.out.printf("Motor: %f %f%n", m_leftDriveMotorF.get(), m_rightDriveMotorF.get());
   }
 
   public void setScale(double scale) {
@@ -189,7 +218,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   // Get the pose of the robot as Pose2d
   public Pose2d getPose(){
-    return driveOdometry.getPoseMeters();
+    var pose = driveOdometry.getPoseMeters();
+    System.out.printf("Pose: %f %f %f%n", pose.getX(), pose.getY(), pose.getRotation().getDegrees());
+    return pose;
   }
 
 
@@ -204,11 +235,30 @@ public class DrivebaseSubsystem extends SubsystemBase {
     System.out.printf("Resetting pose to %s%n", pose2d.toString());
   }
 
-  public ChassisSpeeds getCurrentSpeeds(){
-    return m_chassisSpeeds;
+  public ChassisSpeeds getCurrentSpeeds() {
+    var wheelSpeeds = new DifferentialDriveWheelSpeeds(m_leftDriveEncoder.getVelocity(), m_rightDriveEncoder.getVelocity());
+    var speeds = m_kinematics.toChassisSpeeds(wheelSpeeds);
+    System.out.printf("Got speeds: %f %f %f%n", speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
+    return speeds;
+  }
+
+  /**
+   * This really should just use getCurrentSpeeds, but unfortunately the REVPhysicsSim doesn't seem to support
+   * a way of setting the encoder velocity, so although the drivetrain simulator returns the simulated velocity,
+   * we can't write those values to the encoders. As a result, this is a copy of getCurrentSpeeds with the only
+   * difference being the source of velocity.
+   */
+  private ChassisSpeeds getSimulationSpeeds() {
+    var wheelSpeeds = new DifferentialDriveWheelSpeeds(
+      m_drivetrainSim.getLeftVelocityMetersPerSecond(),
+      m_drivetrainSim.getRightVelocityMetersPerSecond());
+    var speeds = m_kinematics.toChassisSpeeds(wheelSpeeds);
+    System.out.printf("Got sim speeds: %f %f %f%n", speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
+    return speeds;
   }
   
   public void drive(ChassisSpeeds speeds){
+    System.out.printf("Drive: %f %f %f%n", speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond);
     // set(speeds.vxMetersPerSecond, speeds.omegaRadiansPerSecond);
     setPathPlannerSpeed(speeds);
   }
@@ -320,5 +370,59 @@ public class DrivebaseSubsystem extends SubsystemBase {
         counter = 0;
       }
       counterWidget.setDouble(counter);
+  }
+
+  public void onSimulationInit() {
+    m_drivetrainSim = new DifferentialDrivetrainSim(
+      DCMotor.getNEO(2),
+      Drive.WHEEL_GEAR_RATIO,
+      7.5,
+      60.0,
+      Drive.WHEEL_CIRCUM / 100. / Math.PI / 2.,
+      0.56,
+      // std-dev for noise:
+      // x, y in m
+      // heading in rad
+      // l/r velocity m/s
+      // l/r position in m
+      VecBuilder.fill(0, 0, 0, 0, 0, 0, 0)
+    );
+    REVPhysicsSim.getInstance().addSparkMax(m_leftDriveMotorF, DCMotor.getNEO(1));
+    REVPhysicsSim.getInstance().addSparkMax(m_leftDriveMotorR, DCMotor.getNEO(1));
+    REVPhysicsSim.getInstance().addSparkMax(m_rightDriveMotorF, DCMotor.getNEO(1));
+    REVPhysicsSim.getInstance().addSparkMax(m_rightDriveMotorR, DCMotor.getNEO(1));
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    // This code is basically a duplicate of the getPeriod method in REVPhysicsSim.SimProfile.
+    // It would be much better for debugging if we could simulate time passing rather than
+    // run it in realtime, but unfortunately we have at least two different timers running
+    // 1. Command scheduler timer
+    // 2. REVPhysicsSim.SimProfile uses System.nanoTime
+    // We want to ensure that our drivetrain simulator does its update with an equivalent
+    // duration, so it's copied here for now.
+    if (!m_startedSimulation) {
+      m_lastSimTime = System.nanoTime();
+      m_startedSimulation = true;
+    }
+    long now = System.nanoTime();
+    final double period = (now - m_lastSimTime) / 1000000000.;
+    m_lastSimTime = now;
+
+    REVPhysicsSim.getInstance().run();
+    //System.out.printf("Sim before update: %f %f %f %f%n", m_leftDriveEncoder.getPosition(), m_rightDriveEncoder.getPosition(), m_drivetrainSim.getLeftVelocityMetersPerSecond(), m_drivetrainSim.getRightVelocityMetersPerSecond());
+    //System.out.printf("Sim inputs: %f %f%n", m_leftDriveMotorF.get() * m_leftDriveMotorF.getBusVoltage(), -m_rightDriveMotorF.get() * m_rightDriveMotorF.getBusVoltage());
+    m_drivetrainSim.setInputs(m_leftDriveMotorF.get() * m_leftDriveMotorF.getBusVoltage(), m_rightDriveMotorF.get() * m_rightDriveMotorF.getBusVoltage());
+    m_drivetrainSim.update(period);
+
+    m_leftDriveEncoder.setPosition(m_drivetrainSim.getLeftPositionMeters());
+    m_rightDriveEncoder.setPosition(m_drivetrainSim.getRightPositionMeters());
+
+    // Update the gyro to match the simulated heading
+    // Suggested code from https://pdocs.kauailabs.com/navx-mxp/software/roborio-libraries/java/
+    int dev = SimDeviceDataJNI.getSimDeviceHandle("navX-Sensor[0]");
+    SimDouble angle = new SimDouble(SimDeviceDataJNI.getSimValueHandle(dev, "Yaw"));
+    angle.set(m_drivetrainSim.getHeading().getDegrees());
   }
 }

@@ -81,7 +81,7 @@ public class RobotContainer {
   private final CommandXboxController m_driverController = new CommandXboxController(Gamepads.DRIVER);
   private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
 
-  public final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
+  public final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem(Robot.isSimulation());
   public final ClimberSubsystem m_climber = new ClimberSubsystem(Constants.CAN.CLIMB);
   public final LedSubsystem m_led = new LedSubsystem();
   public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.LEFT_FLYWHEEL,
@@ -282,6 +282,10 @@ public class RobotContainer {
     m_intake.setBelt(0);
     m_intake.setIntake(0);
     m_shooter.setFlywheels(0);
+  }
+
+  public void onSimulationInit() {
+    m_drivebase.onSimulationInit();
   }
 
   // public void noteStage(){
