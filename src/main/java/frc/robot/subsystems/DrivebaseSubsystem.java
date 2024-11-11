@@ -160,7 +160,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     // so we don't have to publish changes explicitly.
     dashboardTab.add("Field2d", field);
     m_kinematics = new DifferentialDriveKinematics(0.56);
-    driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
+    driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d().unaryMinus(), getLDistance(), getRDistance());
 
     AutoBuilder.configureRamsete(
             this::getPose, // Robot pose supplier
@@ -228,7 +228,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public void resetPose(Pose2d pose2d) {
     this.resetEncoders();
     this.driveOdometry.resetPosition(
-        m_gyro.getRotation2d(),
+        m_gyro.getRotation2d().unaryMinus(),
         getLDistance(),
         getRDistance(),
         pose2d);
@@ -341,7 +341,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   @Override
   public void periodic(){
-    driveOdometry.update(m_gyro.getRotation2d(), getLDistance(), getRDistance());
+    driveOdometry.update(m_gyro.getRotation2d().unaryMinus(), getLDistance(), getRDistance());
     rotationScale = rotationScaleWidget.getDouble(0.76);
     leftDistanceWidget.setDouble(getLDistance());
     rightDistanceWidget.setDouble(getRDistance());
