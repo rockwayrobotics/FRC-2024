@@ -204,7 +204,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   public void setPathPlannerSpeed(ChassisSpeeds speeds) {
     DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(speeds);
-    wheelSpeeds.desaturate(0.5);
+    // wheelSpeeds.desaturate(0.5);
 
     m_drive.tankDrive(wheelSpeeds.leftMetersPerSecond, wheelSpeeds.rightMetersPerSecond, false);
   }
