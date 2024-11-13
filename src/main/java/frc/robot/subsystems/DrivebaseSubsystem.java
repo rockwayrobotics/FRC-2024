@@ -89,6 +89,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   ShuffleboardTab dashboardTab = Shuffleboard.getTab("Drivebase");
 
+  // Turn on LTV path building instead of ramsete.
+  private boolean m_experimentalLTV = false;
+
   /////////////////////////////
   // Simulation variables - would be nice to remove or minimize these to ensure there
   // is no impact on non-simulation performance.
@@ -167,7 +170,30 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     PathPlannerLogging.setLogActivePathCallback(this::saveActivePath);
     PathPlannerLogging.setLogTargetPoseCallback(this::saveTargetPose);
-    AutoBuilder.configureRamsete(
+
+    if (m_experimentalLTV) {
+      AutoBuilder.configureLTV(
+            this::getPose, // Robot pose supplier
+            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+            m_isSimulation ? this::getSimulationSpeeds : this::getCurrentSpeeds, // Current ChassisSpeeds supplier
+            this::drive, // Method that will drive the robot given ChassisSpeeds
+            0.02, // duration in seconds between update loop calls, defaults to 0.02s = 20ms
+            new ReplanningConfig(),
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+      );
+    } else {
+      AutoBuilder.configureRamsete(
             this::getPose, // Robot pose supplier
             this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
             m_isSimulation ? this::getSimulationSpeeds : this::getCurrentSpeeds, // Current ChassisSpeeds supplier
@@ -185,7 +211,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
               return false;
             },
             this // Reference to this subsystem to set requirements
-    );
+      );
+    }
   }
 
   private void saveActivePath(List<Pose2d> activePath) {
