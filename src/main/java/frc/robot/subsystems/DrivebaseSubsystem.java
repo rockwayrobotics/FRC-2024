@@ -14,8 +14,12 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.List;
+
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
@@ -161,6 +165,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_kinematics = new DifferentialDriveKinematics(0.56);
     driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d().unaryMinus(), getLDistance(), getRDistance());
 
+    PathPlannerLogging.setLogActivePathCallback(this::saveActivePath);
+    PathPlannerLogging.setLogTargetPoseCallback(this::saveTargetPose);
     AutoBuilder.configureRamsete(
             this::getPose, // Robot pose supplier
             this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -180,6 +186,14 @@ public class DrivebaseSubsystem extends SubsystemBase {
             },
             this // Reference to this subsystem to set requirements
     );
+  }
+
+  private void saveActivePath(List<Pose2d> activePath) {
+    field.getObject("activePath").setPoses(activePath);
+  }
+
+  private void saveTargetPose(Pose2d target) {
+    field.getObject("target").setPose(target);
   }
 
   public void setDrivebaseIdle(IdleMode setting) {
