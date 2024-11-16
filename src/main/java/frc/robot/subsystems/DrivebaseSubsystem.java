@@ -254,6 +254,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   public void disable() {
     setDrivebaseIdle(IdleMode.kBrake);
+    if (m_isSimulation) {
+      m_drivebaseSim.disable();
+    }
   }
 
   public void stop() {
@@ -266,30 +269,16 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void setPathPlannerSpeed(ChassisSpeeds speeds) {
-    final double maxSpeedMetersPerSecond = 4;
     DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(speeds);
-    wheelSpeeds.desaturate(maxSpeedMetersPerSecond);
+    wheelSpeeds.desaturate(Drive.MAX_SPEED_MPS);
 
     if (m_experimentalPID) {
-      // Weirdly there were times that it works better if we don't provide the
-      // velocity?
-      // Somehow the maxSpeedMetersPerSecond helps with that, because we are setting a
-      // speed control in [-1,1] but we
-      // get speeds from the path planner in meters per second and our simulation bot
-      // can go a little above 5 m/s.
-      // var leftOutput = m_leftPid.calculate(0, wheelSpeeds.leftMetersPerSecond);
-      // var rightOutput = m_rightPid.calculate(0, wheelSpeeds.rightMetersPerSecond);
-
       var leftOutput = m_leftPid.calculate(m_leftDriveEncoder.getVelocity(), wheelSpeeds.leftMetersPerSecond);
       var rightOutput = m_rightPid.calculate(m_rightDriveEncoder.getVelocity(), wheelSpeeds.rightMetersPerSecond);
-      // System.out.printf("%f %f %f, %f %f %f%n", m_leftDriveEncoder.getVelocity(),
-      // wheelSpeeds.leftMetersPerSecond, leftOutput,
-      // m_rightDriveEncoder.getVelocity(), wheelSpeeds.rightMetersPerSecond,
-      // rightOutput);
-      m_drive.tankDrive(leftOutput / maxSpeedMetersPerSecond, rightOutput / maxSpeedMetersPerSecond, false);
+      m_drive.tankDrive(leftOutput / Drive.MAX_SPEED_MPS, rightOutput / Drive.MAX_SPEED_MPS, false);
     } else {
-      m_drive.tankDrive(wheelSpeeds.leftMetersPerSecond / maxSpeedMetersPerSecond,
-          wheelSpeeds.rightMetersPerSecond / maxSpeedMetersPerSecond, false);
+      m_drive.tankDrive(wheelSpeeds.leftMetersPerSecond / Drive.MAX_SPEED_MPS,
+          wheelSpeeds.rightMetersPerSecond / Drive.MAX_SPEED_MPS, false);
     }
 
   }
@@ -308,11 +297,15 @@ public class DrivebaseSubsystem extends SubsystemBase {
   // This gets called if the path has an initial pose - which ours does.
   public void resetPose(Pose2d pose2d) {
     this.resetEncoders();
+    if (m_isSimulation) {
+      m_drivebaseSim.reset(pose2d);
+    }
     this.driveOdometry.resetPosition(
         m_gyro.getRotation2d().unaryMinus(),
         getLDistance(),
         getRDistance(),
         pose2d);
+
     System.out.printf("Resetting pose to %s%n", pose2d.toString());
   }
 
