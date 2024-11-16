@@ -92,11 +92,15 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private boolean m_experimentalPID = true;
 
   /////////////////////////////
-  // Simulation variables - would be nice to remove or minimize these to ensure there
+  // Simulation variables - would be nice to remove or minimize these to ensure
+  ///////////////////////////// there
   // is no impact on non-simulation performance.
   private boolean m_isSimulation = false;
 
-  /** Holds the last simulation time for duration calculation, matches REVPhysicsSim */
+  /**
+   * Holds the last simulation time for duration calculation, matches
+   * REVPhysicsSim
+   */
   private long m_lastSimTime;
 
   /** Allows first-time initialization of last simulation time. */
@@ -133,8 +137,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_drive = new DifferentialDrive(m_leftDriveMotorF, m_rightDriveMotorF);
     // If we don't want to use motor.set, we can control it more like this:
     // m_drive = new DifferentialDrive(
-    //   (double value) -> m_leftDriveMotorF.getPIDController().setReference(value, ControlType.kDutyCycle),
-    //   (double value) -> m_rightDriveMotorF.getPIDController().setReference(value, ControlType.kDutyCycle)
+    // (double value) -> m_leftDriveMotorF.getPIDController().setReference(value,
+    // ControlType.kDutyCycle),
+    // (double value) -> m_rightDriveMotorF.getPIDController().setReference(value,
+    // ControlType.kDutyCycle)
     // );
 
     setDrivebaseIdle(IdleMode.kBrake);
@@ -144,12 +150,15 @@ public class DrivebaseSubsystem extends SubsystemBase {
     // negative
 
     // Position is measured in motor revolutions by default, but we want metres.
-    // Wheel encoder scaling gives us centimetres and takes the gear ratio into account,
-    // and the scaling values appear to take more accurate wheel measurements and cm -> m
+    // Wheel encoder scaling gives us centimetres and takes the gear ratio into
+    // account,
+    // and the scaling values appear to take more accurate wheel measurements and cm
+    // -> m
     m_leftDriveEncoder.setPositionConversionFactor(Drive.WHEEL_ENCODER_SCALING * Drive.LEFT_SCALING);
     m_rightDriveEncoder.setPositionConversionFactor(Drive.WHEEL_ENCODER_SCALING * Drive.RIGHT_SCALING);
 
-    // Distance conversion is the same as the position factor, but convert from minutes to seconds
+    // Distance conversion is the same as the position factor, but convert from
+    // minutes to seconds
     // since velocity is measured in rpm by default but we want m/s.
     m_leftDriveEncoder.setVelocityConversionFactor(m_leftDriveEncoder.getPositionConversionFactor() / 60);
     m_rightDriveEncoder.setVelocityConversionFactor(m_rightDriveEncoder.getPositionConversionFactor() / 60);
@@ -158,11 +167,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveEncoder.setPosition(0);
 
     // When we had no velocity, we liked kp=0.2
-    m_leftPid = new PIDController(15.9, 0, 0);
-    m_rightPid = new PIDController(15.9, 0, 0);
-    
+    m_leftPid = new PIDController(1.7, 0, 0);
+    m_rightPid = new PIDController(1.7, 0, 0);
+
     rotationScaleWidget = dashboardTab.addPersistent("Driving Rotation Scale Factor", 0.76)
-    .getEntry();
+        .getEntry();
 
     brakeModeWidget = dashboardTab.add("Brake Mode", false).getEntry();
     coastModeWidget = dashboardTab.add("Coast Mode", false).getEntry();
@@ -184,44 +193,46 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     if (m_experimentalLTV) {
       AutoBuilder.configureLTV(
-            this::getPose, // Robot pose supplier
-            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getCurrentSpeeds, // Current ChassisSpeeds supplier
-            this::drive, // Method that will drive the robot given ChassisSpeeds
-            0.02, // duration in seconds between update loop calls, defaults to 0.02s = 20ms
-            new ReplanningConfig(),
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+          this::getPose, // Robot pose supplier
+          this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+          this::getCurrentSpeeds, // Current ChassisSpeeds supplier
+          this::drive, // Method that will drive the robot given ChassisSpeeds
+          0.02, // duration in seconds between update loop calls, defaults to 0.02s = 20ms
+          new ReplanningConfig(),
+          () -> {
+            // Boolean supplier that controls when the path will be mirrored for the red
+            // alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            this // Reference to this subsystem to set requirements
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          },
+          this // Reference to this subsystem to set requirements
       );
     } else {
       AutoBuilder.configureRamsete(
-            this::getPose, // Robot pose supplier
-            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getCurrentSpeeds, // Current ChassisSpeeds supplier
-            this::drive, // Method that will drive the robot given ChassisSpeeds
-            new ReplanningConfig(),
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+          this::getPose, // Robot pose supplier
+          this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+          this::getCurrentSpeeds, // Current ChassisSpeeds supplier
+          this::drive, // Method that will drive the robot given ChassisSpeeds
+          new ReplanningConfig(),
+          () -> {
+            // Boolean supplier that controls when the path will be mirrored for the red
+            // alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            this // Reference to this subsystem to set requirements
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          },
+          this // Reference to this subsystem to set requirements
       );
     }
   }
@@ -241,7 +252,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_leftDriveMotorR.setIdleMode(setting);
   }
 
-  public void disable(){
+  public void disable() {
     setDrivebaseIdle(IdleMode.kBrake);
   }
 
@@ -255,26 +266,32 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void setPathPlannerSpeed(ChassisSpeeds speeds) {
-    final int maxSpeedMetersPerSecond = 5;
+    final double maxSpeedMetersPerSecond = 4;
     DifferentialDriveWheelSpeeds wheelSpeeds = m_kinematics.toWheelSpeeds(speeds);
     wheelSpeeds.desaturate(maxSpeedMetersPerSecond);
 
     if (m_experimentalPID) {
-      // Weirdly there were times that it works better if we don't provide the velocity?
-      // Somehow the maxSpeedMetersPerSecond helps with that, because we are setting a speed control in [-1,1] but we
-      // get speeds from the path planner in meters per second and our simulation bot can go a little above 5 m/s.
-      //var leftOutput = m_leftPid.calculate(0, wheelSpeeds.leftMetersPerSecond);
-      //var rightOutput = m_rightPid.calculate(0, wheelSpeeds.rightMetersPerSecond);
+      // Weirdly there were times that it works better if we don't provide the
+      // velocity?
+      // Somehow the maxSpeedMetersPerSecond helps with that, because we are setting a
+      // speed control in [-1,1] but we
+      // get speeds from the path planner in meters per second and our simulation bot
+      // can go a little above 5 m/s.
+      // var leftOutput = m_leftPid.calculate(0, wheelSpeeds.leftMetersPerSecond);
+      // var rightOutput = m_rightPid.calculate(0, wheelSpeeds.rightMetersPerSecond);
 
       var leftOutput = m_leftPid.calculate(m_leftDriveEncoder.getVelocity(), wheelSpeeds.leftMetersPerSecond);
       var rightOutput = m_rightPid.calculate(m_rightDriveEncoder.getVelocity(), wheelSpeeds.rightMetersPerSecond);
-      //System.out.printf("%f %f %f, %f %f %f%n", m_leftDriveEncoder.getVelocity(), wheelSpeeds.leftMetersPerSecond, leftOutput, m_rightDriveEncoder.getVelocity(), wheelSpeeds.rightMetersPerSecond, rightOutput);
+      // System.out.printf("%f %f %f, %f %f %f%n", m_leftDriveEncoder.getVelocity(),
+      // wheelSpeeds.leftMetersPerSecond, leftOutput,
+      // m_rightDriveEncoder.getVelocity(), wheelSpeeds.rightMetersPerSecond,
+      // rightOutput);
       m_drive.tankDrive(leftOutput / maxSpeedMetersPerSecond, rightOutput / maxSpeedMetersPerSecond, false);
     } else {
-      m_drive.tankDrive(wheelSpeeds.leftMetersPerSecond / maxSpeedMetersPerSecond, wheelSpeeds.rightMetersPerSecond / maxSpeedMetersPerSecond, false);
+      m_drive.tankDrive(wheelSpeeds.leftMetersPerSecond / maxSpeedMetersPerSecond,
+          wheelSpeeds.rightMetersPerSecond / maxSpeedMetersPerSecond, false);
     }
-    
-    
+
   }
 
   public void setScale(double scale) {
@@ -282,11 +299,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   // Get the pose of the robot as Pose2d
-  public Pose2d getPose(){
+  public Pose2d getPose() {
     var pose = driveOdometry.getPoseMeters();
     return pose;
   }
-
 
   // Reset the Pose2d of the robot
   // This gets called if the path has an initial pose - which ours does.
@@ -301,12 +317,13 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public ChassisSpeeds getCurrentSpeeds() {
-    var wheelSpeeds = new DifferentialDriveWheelSpeeds(m_leftDriveEncoder.getVelocity(), m_rightDriveEncoder.getVelocity());
+    var wheelSpeeds = new DifferentialDriveWheelSpeeds(m_leftDriveEncoder.getVelocity(),
+        m_rightDriveEncoder.getVelocity());
     var speeds = m_kinematics.toChassisSpeeds(wheelSpeeds);
     return speeds;
   }
- 
-  public void drive(ChassisSpeeds speeds){
+
+  public void drive(ChassisSpeeds speeds) {
     setPathPlannerSpeed(speeds);
   }
 
@@ -362,32 +379,32 @@ public class DrivebaseSubsystem extends SubsystemBase {
     // We're trying both (before checking failures, so we can
     // track whether just one or both fail), and returning
     // if all is well, but otherwise counting the failures and
-    // retrying.  We'll print the stats as we change states.
+    // retrying. We'll print the stats as we change states.
     for (int i = 0; i < 5; i++) {
-      // Reset but check that return code is good.  In a future world
+      // Reset but check that return code is good. In a future world
       // we can do more like recording the specific error code, but
       // since we're adding this mid-competition I want to be conservative.
       boolean leftOk = m_leftDriveEncoder.setPosition(0) == REVLibError.kOk;
       boolean rightOk = m_rightDriveEncoder.setPosition(0) == REVLibError.kOk;
 
       if (leftOk && rightOk) {
-          break;  // Success! Get us out of here.
+        break; // Success! Get us out of here.
       } else {
-          if (!leftOk)
-              leftErrorCount += 1;
-          if (!rightOk)
-              rightErrorCount += 1;
+        if (!leftOk)
+          leftErrorCount += 1;
+        if (!rightOk)
+          rightErrorCount += 1;
       }
     }
   }
 
   public void reportFailures(String state) {
     System.out.printf("Reset failures (%s): %d, %d%n",
-      state, leftErrorCount, rightErrorCount);
+        state, leftErrorCount, rightErrorCount);
   }
 
   @Override
-  public void periodic(){
+  public void periodic() {
     driveOdometry.update(m_gyro.getRotation2d().unaryMinus(), getLDistance(), getRDistance());
     rotationScale = rotationScaleWidget.getDouble(0.76);
     leftDistanceWidget.setDouble(getLDistance());
@@ -396,27 +413,27 @@ public class DrivebaseSubsystem extends SubsystemBase {
     // This publishes changes through to the dashboard.
     field.setRobotPose(driveOdometry.getPoseMeters());
 
-    if (isBrakeMode != brakeModeWidget.getBoolean(false)){
+    if (isBrakeMode != brakeModeWidget.getBoolean(false)) {
       isBrakeMode = brakeModeWidget.getBoolean(false);
-      if (isBrakeMode){
+      if (isBrakeMode) {
         setDrivebaseIdle(IdleMode.kBrake);
       }
 
-    if (isCoastMode != coastModeWidget.getBoolean(false)){
-      isCoastMode = coastModeWidget.getBoolean(false);
-      if (isCoastMode){
-        setDrivebaseIdle(IdleMode.kCoast);
-      }
+      if (isCoastMode != coastModeWidget.getBoolean(false)) {
+        isCoastMode = coastModeWidget.getBoolean(false);
+        if (isCoastMode) {
+          setDrivebaseIdle(IdleMode.kCoast);
+        }
       }
     }
-      navxMonitorWidget.setDouble(m_gyro.getAngle());
+    navxMonitorWidget.setDouble(m_gyro.getAngle());
 
-      counter++;
+    counter++;
 
-      if (counter == 50){
-        counter = 0;
-      }
-      counterWidget.setDouble(counter);
+    if (counter == 50) {
+      counter = 0;
+    }
+    counterWidget.setDouble(counter);
   }
 
   public void onSimulationInit() {
@@ -425,12 +442,16 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
-    // This code is basically a duplicate of the getPeriod method in REVPhysicsSim.SimProfile.
-    // It would be much better for debugging if we could simulate time passing rather than
-    // run it in realtime, but unfortunately we have at least two different timers running
+    // This code is basically a duplicate of the getPeriod method in
+    // REVPhysicsSim.SimProfile.
+    // It would be much better for debugging if we could simulate time passing
+    // rather than
+    // run it in realtime, but unfortunately we have at least two different timers
+    // running
     // 1. Command scheduler timer
     // 2. REVPhysicsSim.SimProfile uses System.nanoTime
-    // We want to ensure that our drivetrain simulator does its update with an equivalent
+    // We want to ensure that our drivetrain simulator does its update with an
+    // equivalent
     // duration, so it's copied here for now.
     if (!m_startedSimulation) {
       m_lastSimTime = System.nanoTime();
