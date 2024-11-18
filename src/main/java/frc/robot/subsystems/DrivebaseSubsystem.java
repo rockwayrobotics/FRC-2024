@@ -475,6 +475,9 @@ public class DrivebaseSubsystem extends SubsystemBase {
     // or the voltage control. For simulator, the voltage control
     // does not work.
     if (m_isSimulation) {
+      // WARNING: Drive safety disabled when running sysid in simulator to avoid
+      // the check stopping the motors prematurely.
+      m_drive.setSafetyEnabled(false);
       m_leftDriveMotorF.set(voltage.magnitude() / RobotController.getBatteryVoltage());
       m_rightDriveMotorF.set(voltage.magnitude() / RobotController.getBatteryVoltage());
     } else {
