@@ -4,6 +4,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -27,9 +28,14 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.GenericEntry;
-
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import frc.robot.Constants;
 import frc.robot.Constants.Drive;
 import frc.robot.sim.DrivebaseSim;
@@ -462,5 +468,30 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_lastSimTime = now;
 
     m_drivebaseSim.update(period);
+  }
+
+  public void sysIdDrive(Measure<Voltage> voltage) {
+    // FIXME: Unclear whether we should set the speed control
+    // or the voltage control. For simulator, the voltage control
+    // does not work.
+    if (m_isSimulation) {
+      // WARNING: Drive safety disabled when running sysid in simulator to avoid
+      // the check stopping the motors prematurely.
+      m_drive.setSafetyEnabled(false);
+      m_leftDriveMotorF.set(voltage.magnitude() / RobotController.getBatteryVoltage());
+      m_rightDriveMotorF.set(voltage.magnitude() / RobotController.getBatteryVoltage());
+    } else {
+      m_leftDriveMotorF.setVoltage(voltage.magnitude());
+      m_rightDriveMotorF.setVoltage(voltage.magnitude());
+    }
+  }
+
+  public void sysIdUpdateMeasures(boolean isRight, MutableMeasure<Voltage> appliedVoltage,
+      MutableMeasure<Distance> distance, MutableMeasure<Velocity<Distance>> velocity) {
+    appliedVoltage.mut_replace(
+        (isRight ? m_rightDriveMotorF : m_leftDriveMotorF).get() * RobotController.getBatteryVoltage(), Units.Volts);
+    var encoder = isRight ? m_rightDriveEncoder : m_leftDriveEncoder;
+    distance.mut_replace(encoder.getPosition(), Units.Meters);
+    velocity.mut_replace(encoder.getVelocity(), Units.MetersPerSecond);
   }
 }

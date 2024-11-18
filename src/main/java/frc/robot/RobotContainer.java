@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.Gamepads;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.DriverPullupIntake;
@@ -46,6 +47,7 @@ import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.sysid.SysIdRunner;
 
 enum AutoOption {
   driveForward,
@@ -65,6 +67,7 @@ enum AutoOption {
   sideLongAmpBlue,
   sideLongAmpRed,
   pathPlannerExample,
+  sysIdSequence
 }
 
 /**
@@ -140,6 +143,7 @@ public class RobotContainer {
     m_autoChooser.addOption("Side Long Source Blue", AutoOption.sideLongSourceBlue);
     m_autoChooser.addOption("Side Long Amp Blue", AutoOption.sideLongAmpBlue);
     m_autoChooser.addOption("Side Long Amp Red", AutoOption.sideLongAmpRed);
+    m_autoChooser.addOption("SysId", AutoOption.sysIdSequence);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
 
 
@@ -320,6 +324,7 @@ public class RobotContainer {
       case sideLongAmpBlue -> new sideLongAmpBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case sideLongAmpRed -> new sideLongAmpRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case pathPlannerExample -> new PathPlannerAuto("New Auto");
+      case sysIdSequence -> new SysIdRunner(m_drivebase).sequence();
     };
   }
 }
