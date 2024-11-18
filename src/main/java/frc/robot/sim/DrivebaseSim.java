@@ -2,7 +2,7 @@ package frc.robot.sim;
 
 import javax.swing.text.Position;
 
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.hal.HALValue;
 import edu.wpi.first.hal.SimDouble;
@@ -45,8 +45,8 @@ public class DrivebaseSim {
   public static final String CONTROL_MODE = "Control Mode";
   public static final String FW_VERSION = "FW Version";
 
-  private CANSparkMax m_leftMotor;
-  private CANSparkMax m_rightMotor;
+  private SparkMax m_leftMotor;
+  private SparkMax m_rightMotor;
 
   private int m_leftMotorDeviceHandle;
   private int m_rightMotorDeviceHandle;
@@ -67,7 +67,7 @@ public class DrivebaseSim {
 
   private DifferentialDrivetrainSim m_drivetrainSim;
 
-  public DrivebaseSim(CANSparkMax leftMotor, CANSparkMax rightMotor) {
+  public DrivebaseSim(SparkMax leftMotor, SparkMax rightMotor) {
     m_drivetrainSim = new DifferentialDrivetrainSim(
         DCMotor.getNEO(2),
         Drive.WHEEL_GEAR_RATIO,

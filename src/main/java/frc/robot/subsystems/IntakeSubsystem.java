@@ -1,7 +1,10 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.networktables.GenericEntry;
@@ -12,9 +15,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private final CANSparkMax m_beltMotor;
-  private final CANSparkMax m_leftIntake;
-  private final CANSparkMax m_rightIntake;
+  private final SparkMax m_beltMotor;
+  private final SparkMax m_leftIntake;
+  private final SparkMax m_rightIntake;
 
   private DigitalInput m_intakeLoadSensor; 
 
@@ -30,15 +33,13 @@ public class IntakeSubsystem extends SubsystemBase {
   ShuffleboardTab dashboardTab = Shuffleboard.getTab("Intake");
 
   public IntakeSubsystem(int beltMotor, int leftIntake, int rightIntake, LedSubsystem led) {
-    m_beltMotor = new CANSparkMax(beltMotor, CANSparkMax.MotorType.kBrushless);
-    m_leftIntake = new CANSparkMax(leftIntake, CANSparkMax.MotorType.kBrushed);
-    m_rightIntake = new CANSparkMax(rightIntake, CANSparkMax.MotorType.kBrushed);
-    m_beltMotor.setIdleMode(IdleMode.kBrake);
-    m_beltMotor.setInverted(true);
-    m_leftIntake.setIdleMode(IdleMode.kCoast);
-    m_rightIntake.setIdleMode(IdleMode.kCoast);
+    m_beltMotor = new SparkMax(beltMotor, SparkMax.MotorType.kBrushless);
+    m_leftIntake = new SparkMax(leftIntake, SparkMax.MotorType.kBrushed);
+    m_rightIntake = new SparkMax(rightIntake, SparkMax.MotorType.kBrushed);
+    m_beltMotor.configure(new SparkMaxConfig().idleMode(IdleMode.kBrake).inverted(true), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    m_leftIntake.configure(new SparkMaxConfig().idleMode(IdleMode.kCoast), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    m_rightIntake.configure(new SparkMaxConfig().idleMode(IdleMode.kCoast).follow(m_leftIntake, true), ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-    m_rightIntake.follow(m_leftIntake, true);
     m_beltEncoder = m_beltMotor.getEncoder();
 
     m_led = led;

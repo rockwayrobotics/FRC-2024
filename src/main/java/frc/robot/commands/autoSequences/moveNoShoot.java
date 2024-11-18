@@ -14,7 +14,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 import java.util.Map;
 
-import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 
 /** Autonomously shoots the piece loaded in auto, and drives outside the short side of the community

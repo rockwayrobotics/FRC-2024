@@ -14,18 +14,25 @@ import java.util.List;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPLTVController;
 import com.pathplanner.lib.util.PathPlannerLogging;
-import com.pathplanner.lib.util.ReplanningConfig;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.networktables.GenericEntry;
 
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -36,10 +43,10 @@ import frc.robot.sim.DrivebaseSim;
 
 public class DrivebaseSubsystem extends SubsystemBase {
 
-  CANSparkMax m_leftDriveMotorF;
-  CANSparkMax m_leftDriveMotorR;
-  CANSparkMax m_rightDriveMotorF;
-  CANSparkMax m_rightDriveMotorR;
+  SparkMax m_leftDriveMotorF;
+  SparkMax m_leftDriveMotorR;
+  SparkMax m_rightDriveMotorF;
+  SparkMax m_rightDriveMotorR;
 
   private final DifferentialDrive m_drive;
   DifferentialDriveKinematics m_kinematics;
@@ -110,58 +117,46 @@ public class DrivebaseSubsystem extends SubsystemBase {
   public DrivebaseSubsystem(boolean isSimulation) {
     m_isSimulation = isSimulation;
 
-    m_leftDriveMotorF = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_F, MotorType.kBrushless);
-    m_leftDriveMotorF.restoreFactoryDefaults();
-    m_leftDriveMotorF.setSmartCurrentLimit(38);
+    // Position is measured in motor revolutions by default, but we want metres.
+    // Wheel encoder scaling gives us centimetres and takes the gear ratio into
+    // account,
+    // and the scaling values appear to take more accurate wheel measurements and cm
+    // -> m
+    // Distance conversion is the same as the position factor, but convert from
+    // minutes to seconds
+    // since velocity is measured in rpm by default but we want m/s.
+    EncoderConfig encoderConfig = new EncoderConfig()
+        .positionConversionFactor(Drive.WHEEL_ENCODER_SCALING * Drive.LEFT_SCALING)
+        .velocityConversionFactor(Drive.WHEEL_ENCODER_SCALING * Drive.LEFT_SCALING / 60);
 
-    m_leftDriveMotorR = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_R, MotorType.kBrushless);
-    m_leftDriveMotorR.restoreFactoryDefaults();
-    m_leftDriveMotorR.setSmartCurrentLimit(38);
+    m_leftDriveMotorF = new SparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_F, MotorType.kBrushless);
+    m_leftDriveMotorF.configure(
+        new SparkMaxConfig().smartCurrentLimit(38).inverted(Constants.Drive.LEFT_DRIVE_INVERTED).apply(encoderConfig),
+        ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-    m_rightDriveMotorF = new CANSparkMax(Constants.CAN.RIGHT_DRIVE_MOTOR_F, MotorType.kBrushless);
-    m_rightDriveMotorF.restoreFactoryDefaults();
-    m_rightDriveMotorF.setSmartCurrentLimit(38);
+    m_leftDriveMotorR = new SparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_R, MotorType.kBrushless);
+    m_leftDriveMotorR.configure(new SparkMaxConfig().smartCurrentLimit(38).follow(m_leftDriveMotorF),
+        ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-    m_rightDriveMotorR = new CANSparkMax(Constants.CAN.RIGHT_DRIVE_MOTOR_R, MotorType.kBrushless);
-    m_rightDriveMotorR.restoreFactoryDefaults();
-    m_rightDriveMotorR.setSmartCurrentLimit(38);
+    m_rightDriveMotorF = new SparkMax(Constants.CAN.RIGHT_DRIVE_MOTOR_F, MotorType.kBrushless);
+    m_rightDriveMotorF.configure(
+        new SparkMaxConfig().smartCurrentLimit(38).inverted(Constants.Drive.RIGHT_DRIVE_INVERTED).apply(encoderConfig),
+        ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-    m_leftDriveMotorR.follow(m_leftDriveMotorF);
-    m_leftDriveMotorF.setInverted(Constants.Drive.LEFT_DRIVE_INVERTED);
-    m_rightDriveMotorR.follow(m_rightDriveMotorF);
-    m_rightDriveMotorF.setInverted(Constants.Drive.RIGHT_DRIVE_INVERTED);
+    m_rightDriveMotorR = new SparkMax(Constants.CAN.RIGHT_DRIVE_MOTOR_R, MotorType.kBrushless);
+    m_rightDriveMotorR.configure(new SparkMaxConfig().smartCurrentLimit(38).follow(m_rightDriveMotorF),
+        ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
 
-    m_leftDriveMotorF.getPIDController().setP(0.2);
-    m_rightDriveMotorF.getPIDController().setP(0.2);
+    // m_leftDriveMotorF.getPIDController().setP(0.2);
+    // m_rightDriveMotorF.getPIDController().setP(0.2);
 
     m_drive = new DifferentialDrive(m_leftDriveMotorF, m_rightDriveMotorF);
-    // If we don't want to use motor.set, we can control it more like this:
-    // m_drive = new DifferentialDrive(
-    // (double value) -> m_leftDriveMotorF.getPIDController().setReference(value,
-    // ControlType.kDutyCycle),
-    // (double value) -> m_rightDriveMotorF.getPIDController().setReference(value,
-    // ControlType.kDutyCycle)
-    // );
 
     setDrivebaseIdle(IdleMode.kBrake);
     m_leftDriveEncoder = m_leftDriveMotorF.getEncoder();
     m_rightDriveEncoder = m_rightDriveMotorF.getEncoder();
     // when robot goes forward, left encoder spins positive and right encoder spins
     // negative
-
-    // Position is measured in motor revolutions by default, but we want metres.
-    // Wheel encoder scaling gives us centimetres and takes the gear ratio into
-    // account,
-    // and the scaling values appear to take more accurate wheel measurements and cm
-    // -> m
-    m_leftDriveEncoder.setPositionConversionFactor(Drive.WHEEL_ENCODER_SCALING * Drive.LEFT_SCALING);
-    m_rightDriveEncoder.setPositionConversionFactor(Drive.WHEEL_ENCODER_SCALING * Drive.RIGHT_SCALING);
-
-    // Distance conversion is the same as the position factor, but convert from
-    // minutes to seconds
-    // since velocity is measured in rpm by default but we want m/s.
-    m_leftDriveEncoder.setVelocityConversionFactor(m_leftDriveEncoder.getPositionConversionFactor() / 60);
-    m_rightDriveEncoder.setVelocityConversionFactor(m_rightDriveEncoder.getPositionConversionFactor() / 60);
 
     m_leftDriveEncoder.setPosition(0);
     m_rightDriveEncoder.setPosition(0);
@@ -191,50 +186,35 @@ public class DrivebaseSubsystem extends SubsystemBase {
     PathPlannerLogging.setLogActivePathCallback(this::saveActivePath);
     PathPlannerLogging.setLogTargetPoseCallback(this::saveTargetPose);
 
-    if (m_experimentalLTV) {
-      AutoBuilder.configureLTV(
-          this::getPose, // Robot pose supplier
-          this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-          this::getCurrentSpeeds, // Current ChassisSpeeds supplier
-          this::drive, // Method that will drive the robot given ChassisSpeeds
-          0.02, // duration in seconds between update loop calls, defaults to 0.02s = 20ms
-          new ReplanningConfig(),
-          () -> {
-            // Boolean supplier that controls when the path will be mirrored for the red
-            // alliance
-            // This will flip the path being followed to the red side of the field.
-            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    AutoBuilder.configure(
+        this::getPose, // Robot pose supplier
+        this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getCurrentSpeeds, // Current ChassisSpeeds supplier
+        this::drive, // Method that will drive the robot given ChassisSpeeds
+        new PPLTVController(0.02), // duration in seconds between update loop calls, defaults to 0.02s = 20ms
+        new RobotConfig(112., 7.5,
+            new ModuleConfig(
+              Drive.WHEEL_CIRCUM / 2 / Math.PI,
+              Drive.MAX_SPEED_MPS,
+              1.0 /* placeholder for coefficient of friction */,
+              DCMotor.getNEO(1).withReduction(Drive.WHEEL_GEAR_RATIO),
+              38,
+              2 /* is this 4? */),
+            Drive.TRACK_WIDTH_METERS),
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Red;
-            }
-            return false;
-          },
-          this // Reference to this subsystem to set requirements
-      );
-    } else {
-      AutoBuilder.configureRamsete(
-          this::getPose, // Robot pose supplier
-          this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-          this::getCurrentSpeeds, // Current ChassisSpeeds supplier
-          this::drive, // Method that will drive the robot given ChassisSpeeds
-          new ReplanningConfig(),
-          () -> {
-            // Boolean supplier that controls when the path will be mirrored for the red
-            // alliance
-            // This will flip the path being followed to the red side of the field.
-            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Red;
-            }
-            return false;
-          },
-          this // Reference to this subsystem to set requirements
-      );
-    }
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
   }
 
   private void saveActivePath(List<Pose2d> activePath) {
@@ -246,10 +226,11 @@ public class DrivebaseSubsystem extends SubsystemBase {
   }
 
   public void setDrivebaseIdle(IdleMode setting) {
-    m_rightDriveMotorF.setIdleMode(setting);
-    m_rightDriveMotorR.setIdleMode(setting);
-    m_leftDriveMotorF.setIdleMode(setting);
-    m_leftDriveMotorR.setIdleMode(setting);
+    var idleConfig = new SparkMaxConfig().idleMode(setting);
+    m_rightDriveMotorF.configure(idleConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    m_rightDriveMotorR.configure(idleConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    m_leftDriveMotorF.configure(idleConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
+    m_leftDriveMotorR.configure(idleConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
   public void disable() {

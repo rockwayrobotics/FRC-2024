@@ -21,7 +21,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 import java.util.Map;
 
-import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 
 
