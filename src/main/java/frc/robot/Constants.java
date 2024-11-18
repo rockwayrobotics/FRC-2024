@@ -44,6 +44,11 @@ public final class Constants {
 
 
   public static final class Drive {
+    // Measured by driving straight forwards approximately 15.8 m in 4.1 seconds and
+    // rounding up due to the acceleration.
+    public static final double MAX_SPEED_MPS = 4.;
+    public static final double TRACK_WIDTH_METERS = 0.56;
+
     public final static double WHEEL_CIRCUM = 46.8;
     public final static double WHEEL_GEAR_RATIO = 8.46;
     public final static double LEFT_SCALING = (1509 / 1501.89) / 100 ;

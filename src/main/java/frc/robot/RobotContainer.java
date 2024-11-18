@@ -5,7 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
