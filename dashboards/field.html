@@ -9,7 +9,7 @@
         source-key="/Shuffleboard/RobotContainer/Auto Routine"
         style="width: 114.4px; height: 80.5875px; transform: translate(0px, 0px);"
         options="[]"
-        selected="Middle Four Piece Blue"
+        selected="Path Planner Example"
     ></frc-sendable-chooser><vaadin-number-field
         label="auto Drivedistance (m)"
         value="1"
@@ -20,6 +20,7 @@
         has-value=""
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="1"
@@ -59,6 +60,7 @@
         has-value=""
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="1"
@@ -95,7 +97,6 @@
         source-key="/Shuffleboard/Climber/Climber Encoder"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -126,7 +127,6 @@
         source-key="/Shuffleboard/Climber/Climber Speed"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -162,6 +162,7 @@
         source-key="/Shuffleboard/Angler/Angle Encoder"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -192,7 +193,6 @@
         min="NaN"
         max="NaN"
         has-value=""
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -223,7 +223,6 @@
         source-key="/Shuffleboard/Angler/PID Error Pos"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -254,6 +253,7 @@
         source-key="/Shuffleboard/Angler/Output value"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -284,6 +284,7 @@
         min="NaN"
         max="NaN"
         has-value=""
+        placeholder=""
     ><input
             slot="input"
             value="0.05"
@@ -314,6 +315,7 @@
         min="NaN"
         max="NaN"
         has-value=""
+        placeholder=""
     ><input
             slot="input"
             value="-0.07"
@@ -344,6 +346,7 @@
         min="NaN"
         max="NaN"
         has-value=""
+        placeholder=""
     ><input
             slot="input"
             value="0.3"
@@ -397,7 +400,6 @@
         source-key="/Shuffleboard/Shooter/Flywheel Speed"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -428,7 +430,6 @@
         source-key="/Shuffleboard/Angler/kD Value"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -459,7 +460,6 @@
         source-key="/Shuffleboard/Angler/Output Value Clamped"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -495,6 +495,7 @@
         min="NaN"
         max="NaN"
         has-value=""
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -525,7 +526,6 @@
         source-key="/Shuffleboard/Shooter/Flywheel Set RPM Setpoint"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -556,7 +556,6 @@
         source-key="/Shuffleboard/Shooter/Flywheel Scale"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -587,7 +586,6 @@
         source-key="/Shuffleboard/Shooter/Left Flywheel RPM"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -618,7 +616,6 @@
         source-key="/Shuffleboard/Shooter/Right Flywheel RPM"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -649,7 +646,6 @@
         source-key="/Shuffleboard/Shooter/Flywheel Wait To Ramp"
         min="NaN"
         max="NaN"
-        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -690,6 +686,7 @@
         source-key="/Shuffleboard/Drivebase/Left Distance"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -720,6 +717,7 @@
         source-key="/Shuffleboard/Drivebase/Right Distance"
         min="NaN"
         max="NaN"
+        placeholder=""
     ><input
             slot="input"
             value="0"
@@ -748,23 +746,22 @@
         source-provider="NetworkTables"
         style="transform: translate(633.497px, 316.783px);"
         source-key="/Shuffleboard/Drivebase/NavX Monitor"
-        placeholder=""
         min="NaN"
         max="NaN"
     ><input
             slot="input"
             value="0"
             type="number"
-            id="vaadin-number-field-213"
+            id="vaadin-number-field-24"
             aria-labelledby="label-vaadin-number-field-232"
             aria-describedby=""
-            min="undefined"
-            max="undefined"
+            min="NaN"
+            max="NaN"
             step="any"
         ><label
             slot="label"
             id="label-vaadin-number-field-232"
-            for="vaadin-number-field-213"
+            for="vaadin-number-field-24"
         >Angle</label>
         <div
             slot="error-message"
@@ -774,9 +771,8 @@
     </vaadin-number-field><frc-field-wrapper
         source-key="/Shuffleboard/Drivebase/Field2d"
         source-provider="NetworkTables"
-        style="transform: translate(250.265px, 302.646px);"
+        style="transform: translate(535.063px, 0px); width: 747.162px; height: 407.2px;"
         game="Crescendo"
-        unit="cm"
         grid-size="1"
     >
     </frc-field-wrapper></dashboard-tab>
