@@ -301,13 +301,14 @@ public class DrivebaseSubsystem extends SubsystemBase {
   // Get the pose of the robot as Pose2d
   public Pose2d getPose() {
     var pose = driveOdometry.getPoseMeters();
+    //System.out.println("The pose is: " + pose.toString());
     return pose;
   }
 
   // Reset the Pose2d of the robot
   // This gets called if the path has an initial pose - which ours does.
   public void resetPose(Pose2d pose2d) {
-    this.resetEncoders();
+    //this.resetEncoders();
     this.driveOdometry.resetPosition(
         m_gyro.getRotation2d().unaryMinus(),
         getLDistance(),

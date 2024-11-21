@@ -53,7 +53,7 @@ public class DriveCommand extends Command {
     } else {
       rotation = m_right_x.getAsDouble();
     }
-    m_DrivebaseSubsystem.set(speed, rotation * 0.15);
+    m_DrivebaseSubsystem.set(speed, rotation);
 
     //SmartDashboard.putNumber("Y", m_left_y.getAsDouble());
     //SmartDashboard.putNumber("X", m_right_x.getAsDouble());
