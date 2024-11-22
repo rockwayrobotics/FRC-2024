@@ -50,7 +50,6 @@ public class DriveCommand extends Command {
     } else {
       rotation = rotate_clockwise;
     }
-    // REVERSE:
     m_DrivebaseSubsystem.set(speed, rotation);
 
     // SmartDashboard.putNumber("Y", m_left_y.getAsDouble());

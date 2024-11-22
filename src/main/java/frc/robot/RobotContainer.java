@@ -65,6 +65,7 @@ enum AutoOption {
   sideLongAmpBlue,
   sideLongAmpRed,
   pathPlannerExample,
+  pathPlannerStraight
 }
 
 /**
@@ -140,6 +141,7 @@ public class RobotContainer {
     m_autoChooser.addOption("Side Long Source Blue", AutoOption.sideLongSourceBlue);
     m_autoChooser.addOption("Side Long Amp Blue", AutoOption.sideLongAmpBlue);
     m_autoChooser.addOption("Side Long Amp Red", AutoOption.sideLongAmpRed);
+    m_autoChooser.addOption("Path Planner Straight", AutoOption.pathPlannerStraight);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
 
 
@@ -320,6 +322,7 @@ public class RobotContainer {
       case sideLongAmpBlue -> new sideLongAmpBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case sideLongAmpRed -> new sideLongAmpRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case pathPlannerExample -> new PathPlannerAuto("New Auto");
+      case pathPlannerStraight -> new PathPlannerAuto("New New Auto");
     };
   }
 }
