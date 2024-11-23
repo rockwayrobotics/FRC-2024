@@ -82,7 +82,7 @@ public class RobotContainer {
   private final CommandXboxController m_driverController = new CommandXboxController(Gamepads.DRIVER);
   private final CommandXboxController m_operatorController = new CommandXboxController(Gamepads.OPERATOR);
 
-  public final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem(Robot.isSimulation());
+  public final DrivebaseSubsystem m_drivebase = new DrivebaseSubsystem();
   public final ClimberSubsystem m_climber = new ClimberSubsystem(Constants.CAN.CLIMB);
   public final LedSubsystem m_led = new LedSubsystem();
   public final ShooterSubsystem m_shooter = new ShooterSubsystem(Constants.CAN.LEFT_FLYWHEEL,
@@ -122,8 +122,6 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
-
     m_autoChooser.setDefaultOption("Shoot Then Drive", AutoOption.shootMove);
     m_autoChooser.addOption("Just Forwards", AutoOption.driveForward);
     m_autoChooser.addOption("No Shoot Drive", AutoOption.moveNoShoot);
