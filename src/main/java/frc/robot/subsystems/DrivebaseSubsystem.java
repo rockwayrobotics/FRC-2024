@@ -97,25 +97,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
   // Use PIDs in before calling tankDrive.
   private boolean m_experimentalPID = true;
 
-  /////////////////////////////
-  // Simulation variables - would be nice to remove or minimize these to ensure
-  ///////////////////////////// there
-  // is no impact on non-simulation performance.
-  private boolean m_isSimulation = false;
-
-  /**
-   * Holds the last simulation time for duration calculation, matches
-   * REVPhysicsSim
-   */
-  private long m_lastSimTime;
-
-  /** Allows first-time initialization of last simulation time. */
-  private boolean m_startedSimulation = false;
-  /////////////////////////////
-
-  public DrivebaseSubsystem(boolean isSimulation) {
-    m_isSimulation = isSimulation;
-
+  public DrivebaseSubsystem() {
     m_leftDriveMotorF = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_F, MotorType.kBrushless);
     m_leftDriveMotorF.restoreFactoryDefaults();
     m_leftDriveMotorF.setSmartCurrentLimit(38);
@@ -451,25 +433,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
-    // This code is basically a duplicate of the getPeriod method in
-    // REVPhysicsSim.SimProfile.
-    // It would be much better for debugging if we could simulate time passing
-    // rather than
-    // run it in realtime, but unfortunately we have at least two different timers
-    // running
-    // 1. Command scheduler timer
-    // 2. REVPhysicsSim.SimProfile uses System.nanoTime
-    // We want to ensure that our drivetrain simulator does its update with an
-    // equivalent
-    // duration, so it's copied here for now.
-    if (!m_startedSimulation) {
-      m_lastSimTime = System.nanoTime();
-      m_startedSimulation = true;
-    }
-    long now = System.nanoTime();
-    final double period = (now - m_lastSimTime) / 1000000000.;
-    m_lastSimTime = now;
-
-    m_drivebaseSim.update(period);
+    m_drivebaseSim.periodic();
   }
 }

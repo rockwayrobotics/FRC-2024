@@ -33,7 +33,7 @@ public class DrivebaseSim {
   public static final String ALT_ENCODER_POSITION = "Alt Encoder Position";
   public static final String STALL_TORQUE = "Stall Torque";
   public static final String FREE_SPEED = "Free Speed";
-  
+
   // Simulation value handles that are ints
   public static final String FAULTS = "Faults";
   public static final String STICKY_FAULTS = "Sticky Faults";
@@ -56,52 +56,86 @@ public class DrivebaseSim {
   private SimDouble m_leftVelocityMetersPerSecond;
   private SimDouble m_rightVelocityMetersPerSecond;
 
-  // Suggested code from https://pdocs.kauailabs.com/navx-mxp/software/roborio-libraries/java/
+  // Suggested code from
+  // https://pdocs.kauailabs.com/navx-mxp/software/roborio-libraries/java/
   public static final String GYRO_DEVICE_NAME = "navX-Sensor[0]";
   private SimDouble m_yaw;
 
   private DifferentialDrivetrainSim m_drivetrainSim;
 
+  /**
+   * Holds the last simulation time for duration calculation, matches
+   * REVPhysicsSim
+   */
+  private long m_lastSimTime;
+
+  /** Allows first-time initialization of last simulation time. */
+  private boolean m_startedSimulation = false;
+
   public DrivebaseSim(CANSparkMax leftMotor, CANSparkMax rightMotor) {
     m_drivetrainSim = new DifferentialDrivetrainSim(
-      DCMotor.getNEO(2),
-      Drive.WHEEL_GEAR_RATIO,
-      // FIXME: These values are defaults from
-      // https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/robot-simulation/drivesim-tutorial/drivetrain-model.html
-      // and really should be measured.
-      7.5,
-      60.0,
-      // This value is the wheel radius in metres
-      Drive.WHEEL_CIRCUM / 100. / Math.PI / 2.,
-      Drive.TRACK_WIDTH_METERS,
-      // TODO: Add noise to the simulation here as standard deviation values for noise:
-      // x, y in m
-      // heading in rad
-      // l/r velocity m/s
-      // l/r position in m
-      VecBuilder.fill(0, 0, 0, 0, 0, 0, 0)
-    );
+        DCMotor.getNEO(2),
+        Drive.WHEEL_GEAR_RATIO,
+        // FIXME: These values are defaults from
+        // https://docs.wpilib.org/en/stable/docs/software/wpilib-tools/robot-simulation/drivesim-tutorial/drivetrain-model.html
+        // and really should be measured.
+        7.5,
+        60.0,
+        // This value is the wheel radius in metres
+        Drive.WHEEL_CIRCUM / 100. / Math.PI / 2.,
+        Drive.TRACK_WIDTH_METERS,
+        // TODO: Add noise to the simulation here as standard deviation values for
+        // noise:
+        // x, y in m
+        // heading in rad
+        // l/r velocity m/s
+        // l/r position in m
+        VecBuilder.fill(0, 0, 0, 0, 0, 0, 0));
 
     m_leftMotor = leftMotor;
     m_rightMotor = rightMotor;
     m_leftMotorDeviceHandle = SimDeviceDataJNI.getSimDeviceHandle("SPARK MAX [" + leftMotor.getDeviceId() + "]");
     m_rightMotorDeviceHandle = SimDeviceDataJNI.getSimDeviceHandle("SPARK MAX [" + rightMotor.getDeviceId() + "]");
-    m_leftAppliedOutput = new SimDouble(SimDeviceDataJNI.getSimValueHandle(m_leftMotorDeviceHandle, DrivebaseSim.APPLIED_OUTPUT));
-    m_rightAppliedOutput = new SimDouble(SimDeviceDataJNI.getSimValueHandle(m_rightMotorDeviceHandle, DrivebaseSim.APPLIED_OUTPUT));
+    m_leftAppliedOutput = new SimDouble(
+        SimDeviceDataJNI.getSimValueHandle(m_leftMotorDeviceHandle, DrivebaseSim.APPLIED_OUTPUT));
+    m_rightAppliedOutput = new SimDouble(
+        SimDeviceDataJNI.getSimValueHandle(m_rightMotorDeviceHandle, DrivebaseSim.APPLIED_OUTPUT));
     m_leftPositionMeters = new SimDouble(SimDeviceDataJNI.getSimValueHandle(m_leftMotorDeviceHandle, POSITION));
     m_rightPositionMeters = new SimDouble(SimDeviceDataJNI.getSimValueHandle(m_rightMotorDeviceHandle, POSITION));
-    m_leftVelocityMetersPerSecond = new SimDouble(SimDeviceDataJNI.getSimValueHandle(m_leftMotorDeviceHandle, VELOCITY));
-    m_rightVelocityMetersPerSecond = new SimDouble(SimDeviceDataJNI.getSimValueHandle(m_rightMotorDeviceHandle, VELOCITY));
+    m_leftVelocityMetersPerSecond = new SimDouble(
+        SimDeviceDataJNI.getSimValueHandle(m_leftMotorDeviceHandle, VELOCITY));
+    m_rightVelocityMetersPerSecond = new SimDouble(
+        SimDeviceDataJNI.getSimValueHandle(m_rightMotorDeviceHandle, VELOCITY));
 
     int gyroDeviceHandle = SimDeviceDataJNI.getSimDeviceHandle(GYRO_DEVICE_NAME);
     m_yaw = new SimDouble(SimDeviceDataJNI.getSimValueHandle(gyroDeviceHandle, "Yaw"));
   }
 
   private void updateAppliedOutput() {
-    //m_leftAppliedOutput.set(1 * m_leftMotor.getBusVoltage());
-    //m_rightAppliedOutput.set(1 * m_rightMotor.getBusVoltage());
     m_leftAppliedOutput.set(m_leftMotor.get() * m_leftMotor.getBusVoltage());
     m_rightAppliedOutput.set(m_rightMotor.get() * m_rightMotor.getBusVoltage());
+  }
+
+  public void periodic() {
+    // This code is basically a duplicate of the getPeriod method in
+    // REVPhysicsSim.SimProfile.
+    // It would be much better for debugging if we could simulate time passing
+    // rather than
+    // run it in realtime, but unfortunately we have at least two different timers
+    // running
+    // 1. Command scheduler timer
+    // 2. REVPhysicsSim.SimProfile uses System.nanoTime
+    // We want to ensure that our drivetrain simulator does its update with an
+    // equivalent
+    // duration, so it's copied here for now.
+    if (!m_startedSimulation) {
+      m_lastSimTime = System.nanoTime();
+      m_startedSimulation = true;
+    }
+    long now = System.nanoTime();
+    final double period = (now - m_lastSimTime) / 1000000000.;
+    m_lastSimTime = now;
+    this.update(period);
   }
 
   public void update(double period) {
@@ -112,7 +146,7 @@ public class DrivebaseSim {
     m_rightPositionMeters.set(m_drivetrainSim.getRightPositionMeters());
     m_leftVelocityMetersPerSecond.set(m_drivetrainSim.getLeftVelocityMetersPerSecond());
     m_rightVelocityMetersPerSecond.set(m_drivetrainSim.getRightVelocityMetersPerSecond());
-    m_yaw.set(m_drivetrainSim.getHeading().getDegrees());
+    m_yaw.set(-m_drivetrainSim.getHeading().getDegrees());
   }
 
   public static void printAllSimulationValues() {
