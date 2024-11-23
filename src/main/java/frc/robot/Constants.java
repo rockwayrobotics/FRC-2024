@@ -26,7 +26,7 @@ public final class Constants {
     // change this, swap the CAN ids instead.
     public static final double JOY_SPEED_SCALE = -0.15;
     // to be tested
-    public static final double JOY_ROTATE_SCALE = 0.15;
+    public static final double JOY_ROTATE_SCALE = -0.15;
   }
 
   public static final class CAN {

@@ -132,7 +132,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveMotorR.restoreFactoryDefaults();
     m_rightDriveMotorR.setSmartCurrentLimit(38);
 
-    // REVERSE: m_leftDriveMotorF inverted. if we switch left to false and right to true, it will be reversed
+    // REVERSE: m_leftDriveMotorF inverted. if we switch left to false and right to
+    // true, it will be reversed
     m_leftDriveMotorR.follow(m_leftDriveMotorF);
     m_leftDriveMotorF.setInverted(Constants.Drive.LEFT_DRIVE_INVERTED);
     m_rightDriveMotorR.follow(m_rightDriveMotorF);
@@ -193,7 +194,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
     // so we don't have to publish changes explicitly.
     dashboardTab.add("Field2d", field);
     m_kinematics = new DifferentialDriveKinematics(Drive.TRACK_WIDTH_METERS);
-    driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d().unaryMinus(), getLDistance(), getRDistance());
+    driveOdometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), getLDistance(), getRDistance());
 
     PathPlannerLogging.setLogActivePathCallback(this::saveActivePath);
     PathPlannerLogging.setLogTargetPoseCallback(this::saveTargetPose);
@@ -308,16 +309,16 @@ public class DrivebaseSubsystem extends SubsystemBase {
   // Get the pose of the robot as Pose2d
   public Pose2d getPose() {
     var pose = driveOdometry.getPoseMeters();
-    //System.out.println("The pose is: " + pose.toString());
+    // System.out.println("The pose is: " + pose.toString());
     return pose;
   }
 
   // Reset the Pose2d of the robot
   // This gets called if the path has an initial pose - which ours does.
   public void resetPose(Pose2d pose2d) {
-    //this.resetEncoders();
+    // this.resetEncoders();
     this.driveOdometry.resetPosition(
-        m_gyro.getRotation2d().unaryMinus(),
+        m_gyro.getRotation2d(),
         getLDistance(),
         getRDistance(),
         pose2d);
@@ -413,7 +414,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    driveOdometry.update(m_gyro.getRotation2d().unaryMinus(), getLDistance(), getRDistance());
+    driveOdometry.update(m_gyro.getRotation2d(), getLDistance(), getRDistance());
     rotationScale = rotationScaleWidget.getDouble(0.76);
     leftDistanceWidget.setDouble(getLDistance());
     rightDistanceWidget.setDouble(getRDistance());
