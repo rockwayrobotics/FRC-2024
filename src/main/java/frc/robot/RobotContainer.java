@@ -54,6 +54,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
+
 enum AutoOption {
   driveForward,
   shootMove,
@@ -102,7 +103,7 @@ public class RobotContainer {
 
   private double anglerIncrementValue = 0.25;
 
-  SendableChooser<AutoOption> m_autoChooser = new SendableChooser<>();
+  SendableChooser<String> m_autoChooser = new SendableChooser<>();
 
   private CommandChooser m_commandChooser = new CommandChooser();
 
@@ -126,29 +127,33 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    m_autoChooser.setDefaultOption("Shoot Then Drive", AutoOption.shootMove);
-    m_autoChooser.addOption("Just Forwards", AutoOption.driveForward);
-    m_autoChooser.addOption("No Shoot Drive", AutoOption.moveNoShoot);
-    m_autoChooser.addOption("Middle Two Piece", AutoOption.middleTwoPiece);
-    m_autoChooser.addOption("Middle Three Piece Red", AutoOption.middleThreePieceRed);
-    m_autoChooser.addOption("Path Planner Example", AutoOption.pathPlannerExample);
-    m_autoChooser.addOption("Middle Three Piece Blue", AutoOption.middleThreePieceBlue);
-    m_autoChooser.addOption("Middle Four Piece Red", AutoOption.middleFourPieceRed);
-    m_autoChooser.addOption("Middle Four Piece Blue", AutoOption.middleFourPieceBlue);
-    m_autoChooser.addOption("Side Two Piece Red", AutoOption.sideTwoPieceRed);
-    m_autoChooser.addOption("Side Two Piece Blue", AutoOption.sideTwoPieceBlue);
-    m_autoChooser.addOption("Side Three Piece Red", AutoOption.sideThreePieceRed);
-    m_autoChooser.addOption("Side Three Piece Blue", AutoOption.sideThreePieceBlue);
-    m_autoChooser.addOption("Side Long Source Red", AutoOption.sideLongSourceRed);
-    m_autoChooser.addOption("Side Long Source Blue", AutoOption.sideLongSourceBlue);
-    m_autoChooser.addOption("Side Long Amp Blue", AutoOption.sideLongAmpBlue);
-    m_autoChooser.addOption("Side Long Amp Red", AutoOption.sideLongAmpRed);
-    m_autoChooser.addOption("Path Planner Straight", AutoOption.pathPlannerStraight);
-    m_autoChooser.addOption("Hallway", AutoOption.hallway);
-    dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
+    m_autoChooser.setDefaultOption("Shoot Then Drive", "shootMove");
+    m_autoChooser.addOption("Just Forwards", "driveForward");
+    m_autoChooser.addOption("No Shoot Drive", "moveNoShoot");
+    m_autoChooser.addOption("Middle Two Piece", "middleTwoPiece");
+    m_autoChooser.addOption("Middle Three Piece Red", "middleThreePieceRed");
+    m_autoChooser.addOption("Path Planner Example", "pathPlannerExample");
+    m_autoChooser.addOption("Middle Three Piece Blue", "middleThreePieceBlue");
+    m_autoChooser.addOption("Middle Four Piece Red", "middleFourPieceRed");
+    m_autoChooser.addOption("Middle Four Piece Blue", "middleFourPieceBlue");
+    m_autoChooser.addOption("Side Two Piece Red", "sideTwoPieceRed");
+    m_autoChooser.addOption("Side Two Piece Blue", "sideTwoPieceBlue");
+    m_autoChooser.addOption("Side Three Piece Red", "sideThreePieceRed");
+    m_autoChooser.addOption("Side Three Piece Blue", "sideThreePieceBlue");
+    m_autoChooser.addOption("Side Long Source Red", "sideLongSourceRed");
+    m_autoChooser.addOption("Side Long Source Blue", "sideLongSourceBlue");
+    m_autoChooser.addOption("Side Long Amp Blue", "sideLongAmpBlue");
+    m_autoChooser.addOption("Side Long Amp Red", "sideLongAmpRed");
+    m_autoChooser.addOption("Path Planner Straight", "pathPlannerStraight");
 
-    var chooser = m_commandChooser.createChooser("Hallway", "hallPathTests");
-    dashboard.add("Hallway Tests", chooser).withSize(2, 1).withPosition(8, 1);
+    var commandChoosers = m_commandChooser.getChoosers();
+    int rowIndex = 1;
+    for (var entry : commandChoosers.entrySet()) {
+      m_autoChooser.addOption(entry.getKey(), entry.getKey());
+      dashboard.add(entry.getKey(), entry.getValue()).withSize(2, 1).withPosition(8, rowIndex);
+      rowIndex = rowIndex + 1;
+    }
+    dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
 
     m_drivebase
         .setDefaultCommand(new DriveCommand(m_driverController::getLeftY, m_driverController::getRightX, m_drivebase));
@@ -335,32 +340,32 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // The selected command will be run in autonomous
     return switch (m_autoChooser.getSelected()) {
-      case driveForward -> new driveForward(m_drivebase);
-      case shootMove ->
+      case "driveForward" -> new driveForward(m_drivebase);
+      case "shootMove" ->
         new shootMove(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case moveNoShoot ->
+      case "moveNoShoot" ->
         new moveNoShoot(m_drivebase, m_shooter, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case middleTwoPiece ->
+      case "middleTwoPiece" ->
         new middleTwoPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case middleThreePieceRed -> new middleThreePieceRed(m_drivebase, m_shooter, m_intake, m_led,
+      case "middleThreePieceRed" -> new middleThreePieceRed(m_drivebase, m_shooter, m_intake, m_led,
           waittime.getDouble(0), drivedistance.getDouble(1));
-      case middleThreePieceBlue -> new middleThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led,
+      case "middleThreePieceBlue" -> new middleThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led,
           waittime.getDouble(0), drivedistance.getDouble(1));
-      case middleFourPieceRed ->
+      case "middleFourPieceRed" ->
         new middleFourPieceRed(m_drivebase, m_shooter, m_intake, m_led, driveMoreOffsetEntry.getDouble(0.07));
-      case middleFourPieceBlue ->
+      case "middleFourPieceBlue" ->
         new middleFourPieceBlue(m_drivebase, m_shooter, m_intake, m_led, driveMoreOffsetEntry.getDouble(0.07));
-      case sideTwoPieceRed -> new sideTwoPieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case sideTwoPieceBlue -> new sideTwoPieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case sideThreePieceRed -> new sideThreePieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case sideThreePieceBlue -> new sideThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case sideLongSourceRed -> new sideLongSourceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case sideLongSourceBlue -> new sideLongSourceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case sideLongAmpBlue -> new sideLongAmpBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case sideLongAmpRed -> new sideLongAmpRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case pathPlannerExample -> new PathPlannerAuto("New Auto");
-      case pathPlannerStraight -> new PathPlannerAuto("New New Auto");
-      case hallway -> m_commandChooser.runAuto("Hallway");
+      case "sideTwoPieceRed" -> new sideTwoPieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case "sideTwoPieceBlue" -> new sideTwoPieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case "sideThreePieceRed" -> new sideThreePieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case "sideThreePieceBlue" -> new sideThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case "sideLongSourceRed" -> new sideLongSourceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case "sideLongSourceBlue" -> new sideLongSourceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case "sideLongAmpBlue" -> new sideLongAmpBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case "sideLongAmpRed" -> new sideLongAmpRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case "pathPlannerExample" -> new PathPlannerAuto("New Auto");
+      case "pathPlannerStraight" -> new PathPlannerAuto("New New Auto");
+      default -> m_commandChooser.runAuto(m_autoChooser.getSelected());
     };
   }
 }
