@@ -4,16 +4,10 @@
 
 package frc.robot;
 
-import java.io.File;
-import java.io.FilenameFilter;
-
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkBase.IdleMode;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -53,29 +47,6 @@ import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-
-
-enum AutoOption {
-  driveForward,
-  shootMove,
-  moveNoShoot,
-  middleTwoPiece,
-  middleThreePieceRed,
-  middleThreePieceBlue,
-  middleFourPieceRed,
-  middleFourPieceBlue,
-  sideTwoPieceRed,
-  sideTwoPieceBlue,
-  sideThreePieceRed,
-  sideThreePieceBlue,
-  sideLongSourceRed,
-  sideLongSourceBlue,
-  sideLongAmpBlue,
-  sideLongAmpRed,
-  pathPlannerExample,
-  pathPlannerStraight,
-  hallway
-}
 
 /**
  * This class is where the bulk of the robot should be declared. Since
