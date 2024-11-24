@@ -78,38 +78,6 @@ public class CommandChooser {
     }
   }
 
-  // FIXME: Remove this method?
-  public SendableChooser<String> createChooser(String key, String folder) {
-    SendableChooser<String> chooser = new SendableChooser<>();
-    File dir = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
-    File[] autolist = dir.listFiles(new FilenameFilter() {
-      @Override
-      public boolean accept(File dir, String name) {
-        return name.endsWith(".auto");
-      }
-    });
-
-    if (autolist != null) {
-      boolean defaultChosen = false;
-      for (var file : autolist) {
-        String folderName = getFolderForAuto(file);
-        if (!folder.equals(folderName)) {
-          continue;
-        }
-
-        String name = file.getName().replace(".auto", "");
-        if (!defaultChosen) {
-          chooser.setDefaultOption(name, name);
-        } else {
-          chooser.addOption(name, name);
-        }
-      }
-    }
-
-    m_choosers.put(key, chooser);
-    return chooser;
-  }
-
   public Command runAuto(String key) {
     var chooser = m_choosers.get(key);
     if (chooser == null) {
