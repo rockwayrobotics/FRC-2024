@@ -5,11 +5,14 @@
 package frc.robot;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -43,6 +46,7 @@ import frc.robot.commands.autoSequences.sideThreePieceBlue;
 import frc.robot.commands.autoSequences.sideThreePieceRed;
 import frc.robot.commands.autoSequences.sideTwoPieceBlue;
 import frc.robot.commands.autoSequences.sideTwoPieceRed;
+import frc.robot.pathplanner.CommandChooser;
 import frc.robot.subsystems.AnglerPIDSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DrivebaseSubsystem;
@@ -100,7 +104,7 @@ public class RobotContainer {
 
   SendableChooser<AutoOption> m_autoChooser = new SendableChooser<>();
 
-  SendableChooser<String> m_hallwayChooser = new SendableChooser<>();
+  private CommandChooser m_commandChooser = new CommandChooser();
 
   ShuffleboardTab dashboard = Shuffleboard.getTab("RobotContainer");
   // Configure the trigger bindings
@@ -142,24 +146,14 @@ public class RobotContainer {
     m_autoChooser.addOption("Path Planner Straight", AutoOption.pathPlannerStraight);
     m_autoChooser.addOption("Hallway", AutoOption.hallway);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
-    createHallwayTests();
+
+    var chooser = m_commandChooser.createChooser("Hallway", "hallPathTests");
+    dashboard.add("Hallway Tests", chooser).withSize(2, 1).withPosition(8, 1);
 
     m_drivebase
         .setDefaultCommand(new DriveCommand(m_driverController::getLeftY, m_driverController::getRightX, m_drivebase));
 
     configureBindings();
-  }
-
-  void createHallwayTests() {
-    File dir = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
-    File[] autolist = dir.listFiles();
-    if (autolist != null) {
-      for (var file : autolist) {
-        String name = file.getName().replace(".auto", "");
-        m_hallwayChooser.addOption(name, name);
-      }
-    }
-    dashboard.add("Hallway Tests", m_hallwayChooser).withSize(2, 1).withPosition(8, 1);
   }
 
   /**
@@ -366,7 +360,7 @@ public class RobotContainer {
       case sideLongAmpRed -> new sideLongAmpRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case pathPlannerExample -> new PathPlannerAuto("New Auto");
       case pathPlannerStraight -> new PathPlannerAuto("New New Auto");
-      case hallway -> new PathPlannerAuto((m_hallwayChooser.getSelected()));
+      case hallway -> m_commandChooser.runAuto("Hallway");
     };
   }
 }

@@ -1,0 +1,98 @@
+package frc.robot.pathplanner;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FilenameFilter;
+import java.util.HashMap;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
+
+public class CommandChooser {
+  private HashMap<String, SendableChooser<String>> m_choosers = new HashMap<>();
+
+  public CommandChooser() {
+
+  }
+
+
+
+  private String getFolderForAuto(File file) {
+    try (BufferedReader br = new BufferedReader(
+        new FileReader(
+            file))) {
+      StringBuilder fileContentBuilder = new StringBuilder();
+      String line;
+      while ((line = br.readLine()) != null) {
+        fileContentBuilder.append(line);
+      }
+
+      String fileContent = fileContentBuilder.toString();
+      JSONObject json = (JSONObject) new JSONParser().parse(fileContent);
+      var folder = json.get("folder");
+      if (folder == null || !(folder instanceof String)) {
+        return "";
+      }
+      return (String) folder;
+    } catch (Exception e) {
+      return "";
+    }
+  }
+
+  public SendableChooser<String> createChooser(String key, String folder) {
+    SendableChooser<String> chooser = new SendableChooser<>();
+    File dir = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
+    File[] autolist = dir.listFiles(new FilenameFilter() {
+      @Override
+      public boolean accept(File dir, String name) {
+        return name.endsWith(".auto");
+      }
+    });
+
+    if (autolist != null) {
+      boolean defaultChosen = false;
+      for (var file : autolist) {
+        String folderName = getFolderForAuto(file);
+        if (!folder.equals(folderName)) {
+          continue;
+        }
+
+        String name = file.getName().replace(".auto", "");
+        if (!defaultChosen) {
+          chooser.setDefaultOption(name, name);
+        } else {
+          chooser.addOption(name, name);
+        }
+      }
+    }
+
+    m_choosers.put(key, chooser);
+    return chooser;
+  }
+
+  public Command runAuto(String key) {
+    var chooser = m_choosers.get(key);
+    if (chooser == null) {
+      System.out.println("No chooser found for key: " + key);
+      return new Command() {
+        // do nothing
+      };
+    }
+
+    try {
+      return new PathPlannerAuto(chooser.getSelected());
+    } catch (Exception e) {
+      System.out.println("Cannot run auto " + key + ":" + e.getStackTrace().toString());
+      return new Command() {
+        // do nothing
+      };
+    }
+  }
+}
