@@ -19,10 +19,42 @@ public class CommandChooser {
   private HashMap<String, SendableChooser<String>> m_choosers = new HashMap<>();
 
   public CommandChooser() {
+    try {
+      File dir = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
+      File[] autolist = dir.listFiles(new FilenameFilter() {
+        @Override
+        public boolean accept(File dir, String name) {
+          return name.endsWith(".auto");
+        }
+      });
 
+      if (autolist != null) {
+        for (var file : autolist) {
+          String folderName = getFolderForAuto(file);
+          if (folderName.isEmpty()) {
+            // Ignore autos that aren't in a folder.
+            continue;
+          }
+
+          String name = file.getName().replace(".auto", "");
+          if (!m_choosers.containsKey(folderName)) {
+            SendableChooser<String> chooser = new SendableChooser<>();
+            chooser.setDefaultOption(name, name);
+            m_choosers.put(folderName, chooser);
+          } else {
+            m_choosers.get(folderName).addOption(name, name);
+          }
+        }
+      }
+    } catch (Exception e) {
+      System.out.println("Failed to read path planner folder structure: " + e.getMessage());
+      e.printStackTrace();
+    }
   }
 
-
+  public HashMap<String, SendableChooser<String>> getChoosers() {
+    return m_choosers;
+  }
 
   private String getFolderForAuto(File file) {
     try (BufferedReader br = new BufferedReader(
@@ -46,6 +78,7 @@ public class CommandChooser {
     }
   }
 
+  // FIXME: Remove this method?
   public SendableChooser<String> createChooser(String key, String folder) {
     SendableChooser<String> chooser = new SendableChooser<>();
     File dir = new File(Filesystem.getDeployDirectory(), "pathplanner/autos");
