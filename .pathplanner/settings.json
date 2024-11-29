@@ -8,8 +8,8 @@
   "autoFolders": [
     "hallPathTests"
   ],
-  "defaultMaxVel": 0.25,
-  "defaultMaxAccel": 0.25,
+  "defaultMaxVel": 0.5,
+  "defaultMaxAccel": 1.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 4.5

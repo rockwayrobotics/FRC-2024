@@ -85,7 +85,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_robotContainer.m_angler.resetAngleEncoder();
-    //m_robotContainer.m_drivebase.resetPose(new Pose2d(2,7, new Rotation2d(0))); 
+    m_robotContainer.setPathplannerDrivekP();
+    // m_robotContainer.m_drivebase.resetPose(new Pose2d(2,7, new Rotation2d(0)));
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -93,12 +94,13 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
 
-    //m_robotContainer.m_angler.angleSetpointWidget.setDouble(Constants.Angler.AUTO_SPEAKER_SETPOINT);
+    // m_robotContainer.m_angler.angleSetpointWidget.setDouble(Constants.Angler.AUTO_SPEAKER_SETPOINT);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    m_robotContainer.actualkPWidget.setDouble(m_robotContainer.m_drivebase.m_leftPid.getP());
   }
 
   @Override
@@ -118,14 +120,15 @@ public class Robot extends TimedRobot {
     m_robotContainer.onTeleopInit();
     m_robotContainer.m_angler.angleSetpointWidget.setDouble(Constants.Angler.SPEAKER_SETPOINT);
 
-   // m_robotContainer.m_drivebaseSubsystem.setDrivebaseIdle(DrivebaseSubsystem.IdleMode.kCoast);
+    // m_robotContainer.m_drivebaseSubsystem.setDrivebaseIdle(DrivebaseSubsystem.IdleMode.kCoast);
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // if (!m_robotContainer.m_intake.intakeLoad && m_robotContainer.m_intake.isNoteLoaded()){
-    //   m_robotContainer.noteStage();
+    // if (!m_robotContainer.m_intake.intakeLoad &&
+    // m_robotContainer.m_intake.isNoteLoaded()){
+    // m_robotContainer.noteStage();
     // }
   }
 

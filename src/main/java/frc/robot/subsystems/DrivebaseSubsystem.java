@@ -53,8 +53,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
   RelativeEncoder m_leftDriveEncoder;
   RelativeEncoder m_rightDriveEncoder;
 
-  private PIDController m_leftPid;
-  private PIDController m_rightPid;
+  public PIDController m_leftPid;
+  public PIDController m_rightPid;
 
   SlewRateLimiter filter = new SlewRateLimiter(0);
 
@@ -157,8 +157,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveEncoder.setPosition(0);
 
     // When we had no velocity, we liked kp=0.2
-    m_leftPid = new PIDController(1.7, 0, 0);
-    m_rightPid = new PIDController(1.7, 0, 0);
+    m_leftPid = new PIDController(1.0, 0, 0);
+    m_rightPid = new PIDController(1.0, 0, 0);
 
     rotationScaleWidget = dashboardTab.addPersistent("Driving Rotation Scale Factor", 0.76)
         .getEntry();
@@ -316,6 +316,13 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   public void drive(ChassisSpeeds speeds) {
     setPathPlannerSpeed(speeds);
+  }
+
+  public void setPathplannerDrivekP(double kp) {
+    // m_leftPid.setP(kp);
+    // m_rightPid.setP(kp);
+    m_leftPid.setP(0.6);
+    m_rightPid.setP(0.6);
   }
 
   /**

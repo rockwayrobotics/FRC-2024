@@ -93,6 +93,11 @@ public class RobotContainer {
   GenericEntry driveMoreOffsetEntry = dashboard.addPersistent("Drive More Offset", 0.07)
       .getEntry();
 
+  GenericEntry pathPlannerDrivekP = dashboard.addPersistent("path planner drive kP", 1.0)
+      .getEntry();
+
+  public GenericEntry actualkPWidget = dashboard.add("actual kP", 1.0).getEntry();
+
   /**
    * 
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -303,6 +308,10 @@ public class RobotContainer {
   // .schedule();
   // }
 
+  public void setPathplannerDrivekP() {
+    m_drivebase.setPathplannerDrivekP(pathPlannerDrivekP.getDouble(1.0));
+  }
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -329,9 +338,11 @@ public class RobotContainer {
       case "sideTwoPieceRed" -> new sideTwoPieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case "sideTwoPieceBlue" -> new sideTwoPieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case "sideThreePieceRed" -> new sideThreePieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case "sideThreePieceBlue" -> new sideThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case "sideThreePieceBlue" ->
+        new sideThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case "sideLongSourceRed" -> new sideLongSourceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case "sideLongSourceBlue" -> new sideLongSourceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case "sideLongSourceBlue" ->
+        new sideLongSourceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case "sideLongAmpBlue" -> new sideLongAmpBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case "sideLongAmpRed" -> new sideLongAmpRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case "pathPlannerExample" -> new PathPlannerAuto("New Auto");
