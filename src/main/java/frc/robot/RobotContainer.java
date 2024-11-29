@@ -93,11 +93,6 @@ public class RobotContainer {
   GenericEntry driveMoreOffsetEntry = dashboard.addPersistent("Drive More Offset", 0.07)
       .getEntry();
 
-  GenericEntry pathPlannerDrivekP = dashboard.addPersistent("path planner drive kP", 1.0)
-      .getEntry();
-
-  public GenericEntry actualkPWidget = dashboard.add("actual kP", 1.0).getEntry();
-
   /**
    * 
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -307,10 +302,6 @@ public class RobotContainer {
   // .withTimeout(1.5).andThen(new OperatorPullback(m_shooter, m_intake, m_led))
   // .schedule();
   // }
-
-  public void setPathplannerDrivekP() {
-    m_drivebase.setPathplannerDrivekP(pathPlannerDrivekP.getDouble(1.0));
-  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

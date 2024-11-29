@@ -1,16 +1,25 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.List;
+
+import javax.net.ssl.TrustManagerFactorySpi;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -28,6 +37,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
@@ -55,6 +66,30 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   public PIDController m_leftPid;
   public PIDController m_rightPid;
+
+  /*
+   * LTVUnicycleController has default values copied here:
+   * It provides a linear time-varying unicycle controller with default maximum
+   * desired error tolerances of (0.0625 m, 0.125 m, 2 rad) and default maximum
+   * desired control effort of (1 m/s, 2 rad/s).
+   */
+  private static final double DEFAULT_X_TOLERANCE_M = 0.0625;
+  private static final double DEFAULT_Y_TOLERANCE_M = 0.125;
+  private static final double DEFAULT_HEADING_TOLERANCE_RAD = 2.0;
+  private static final double DEFAULT_HEADING_TOLERANCE_DEG = Math.toDegrees(DEFAULT_HEADING_TOLERANCE_RAD);
+  private static final double DEFAULT_LINEAR_CONTROL_M_S = 1.0;
+  private static final double DEFAULT_ANGULAR_CONTROL_RAD_S = 2.0;
+  private static final double DEFAULT_ANGULAR_CONTROL_DEG_S = Math.toDegrees(DEFAULT_ANGULAR_CONTROL_RAD_S);
+  private static final double DEFAULT_DT_S = 0.02;
+
+  // LTV error tolerances are errors in x and y in meters, and in radians for
+  // heading.
+  private Vector<N3> m_ltvTolerance = VecBuilder.fill(DEFAULT_X_TOLERANCE_M, DEFAULT_Y_TOLERANCE_M,
+      DEFAULT_HEADING_TOLERANCE_RAD);
+  // LTV control effort values are in m/s and rad/s respectively.
+  private Vector<N2> m_ltvControlEffort = VecBuilder.fill(DEFAULT_LINEAR_CONTROL_M_S, DEFAULT_ANGULAR_CONTROL_RAD_S);
+  // LTV discretization step in seconds.
+  private double m_ltvDt = DEFAULT_DT_S;
 
   SlewRateLimiter filter = new SlewRateLimiter(0);
 
@@ -92,8 +127,20 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   ShuffleboardTab dashboardTab = Shuffleboard.getTab("Drivebase");
 
-  // Turn on LTV path building instead of ramsete.
-  private boolean m_experimentalLTV = true;
+  // Put widgets meant for drivebase tuning here
+  private ShuffleboardTab m_tuningTab = Shuffleboard.getTab("Drivebase Tuning");
+  private GenericEntry m_ltvXTolerance;
+  private GenericEntry m_ltvYTolerance;
+  private GenericEntry m_ltvHeadingTolerance;
+  private GenericEntry m_ltvLinearControl;
+  private GenericEntry m_ltvAngularControl;
+  private GenericEntry m_ltvDtEntry;
+  private GenericEntry m_pidKpEntry;
+  private GenericEntry m_pidKiEntry;
+  private GenericEntry m_pidKdEntry;
+  private GenericEntry m_usePidEntry;
+  private GenericEntry m_syncedEntry;
+
   // Use PIDs in before calling tankDrive.
   private boolean m_experimentalPID = true;
 
@@ -157,8 +204,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
     m_rightDriveEncoder.setPosition(0);
 
     // When we had no velocity, we liked kp=0.2
-    m_leftPid = new PIDController(1.0, 0, 0);
-    m_rightPid = new PIDController(1.0, 0, 0);
+    m_leftPid = new PIDController(0.6, 0, 0);
+    m_rightPid = new PIDController(0.6, 0, 0);
 
     rotationScaleWidget = dashboardTab.addPersistent("Driving Rotation Scale Factor", 0.76)
         .getEntry();
@@ -181,13 +228,112 @@ public class DrivebaseSubsystem extends SubsystemBase {
     PathPlannerLogging.setLogActivePathCallback(this::saveActivePath);
     PathPlannerLogging.setLogTargetPoseCallback(this::saveTargetPose);
 
-    if (m_experimentalLTV) {
+    setupTuningTab();
+
+    AutoBuilder.configureLTV(
+        this::getPose, // Robot pose supplier
+        this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getCurrentSpeeds, // Current ChassisSpeeds supplier
+        this::drive, // Method that will drive the robot given ChassisSpeeds
+        m_ltvTolerance,
+        m_ltvControlEffort,
+        m_ltvDt,
+        new ReplanningConfig(),
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
+  }
+
+  private void setupTuningTab() {
+    m_ltvXTolerance = m_tuningTab.add("x err (m)", DEFAULT_X_TOLERANCE_M)
+        .withPosition(0, 0)
+        .getEntry();
+    m_ltvXTolerance.setDouble(m_ltvTolerance.get(0));
+
+    m_ltvYTolerance = m_tuningTab.add("y err (m)", DEFAULT_Y_TOLERANCE_M)
+        .withPosition(1, 0)
+        .getEntry();
+    m_ltvYTolerance.setDouble(m_ltvTolerance.get(1));
+
+    m_ltvHeadingTolerance = m_tuningTab.add("angle err (deg)", DEFAULT_HEADING_TOLERANCE_DEG)
+        .withPosition(2, 0)
+        .getEntry();
+    m_ltvHeadingTolerance.setDouble(Math.toDegrees(m_ltvTolerance.get(2)));
+
+    m_ltvLinearControl = m_tuningTab.add("speed (m_s)", DEFAULT_LINEAR_CONTROL_M_S)
+        .withPosition(0, 1)
+        .getEntry();
+    m_ltvLinearControl.setDouble(m_ltvControlEffort.get(0));
+
+    m_ltvAngularControl = m_tuningTab
+        .add("rotation (deg_s)", DEFAULT_ANGULAR_CONTROL_DEG_S)
+        .withPosition(1, 1)
+        .getEntry();
+    m_ltvAngularControl.setDouble(Math.toDegrees(m_ltvControlEffort.get(1)));
+
+    m_ltvDtEntry = m_tuningTab.add("dt (s)", DEFAULT_DT_S)
+        .withPosition(0, 2)
+        .getEntry();
+    m_ltvDtEntry.setDouble(m_ltvDt);
+
+    m_pidKpEntry = m_tuningTab.add("PID kP", 1.0)
+        .withPosition(0, 3)
+        .getEntry();
+    m_pidKpEntry.setDouble(m_leftPid.getP());
+
+    m_pidKiEntry = m_tuningTab.add("PID kI", 0.0)
+        .withPosition(1, 3)
+        .getEntry();
+    m_pidKiEntry.setDouble(m_leftPid.getI());
+
+    m_pidKdEntry = m_tuningTab.add("PID kD", 0.0)
+        .withPosition(2, 3)
+        .getEntry();
+    m_pidKdEntry.setDouble(m_leftPid.getD());
+
+    m_usePidEntry = m_tuningTab.add("Use PID", true)
+        .withPosition(3, 3)
+        .withWidget(BuiltInWidgets.kToggleSwitch)
+        .getEntry();
+    m_usePidEntry.setBoolean(m_experimentalPID);
+
+    m_syncedEntry = m_tuningTab.add("Synced", false).withPosition(1, 4).getEntry();
+    m_syncedEntry.setBoolean(false);
+
+    var syncCommand = new InstantCommand(() -> {
+      if (!RobotState.isDisabled()) {
+        System.out.println("Ignoring sync, please disable the robot first!");
+        m_syncedEntry.setBoolean(false);
+        return;
+      }
+
+      System.out.println("Synchronizing tuning parameters, please ignore error about reconfiguration.");
+      double xTolerance = m_ltvXTolerance.getDouble(DEFAULT_X_TOLERANCE_M);
+      double yTolerance = m_ltvYTolerance.getDouble(DEFAULT_Y_TOLERANCE_M);
+      double headingToleranceDeg = m_ltvHeadingTolerance.getDouble(DEFAULT_HEADING_TOLERANCE_DEG);
+      double linearControlEffort = m_ltvLinearControl.getDouble(DEFAULT_LINEAR_CONTROL_M_S);
+      double angularControlDeg = m_ltvAngularControl.getDouble(DEFAULT_ANGULAR_CONTROL_DEG_S);
+      double dt = m_ltvDtEntry.getDouble(DEFAULT_DT_S);
+
       AutoBuilder.configureLTV(
           this::getPose, // Robot pose supplier
           this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
           this::getCurrentSpeeds, // Current ChassisSpeeds supplier
           this::drive, // Method that will drive the robot given ChassisSpeeds
-          0.02, // duration in seconds between update loop calls, defaults to 0.02s = 20ms
+          VecBuilder.fill(xTolerance, yTolerance, Math.toRadians(headingToleranceDeg)),
+          VecBuilder.fill(linearControlEffort, Math.toRadians(angularControlDeg)),
+          dt,
           new ReplanningConfig(),
           () -> {
             // Boolean supplier that controls when the path will be mirrored for the red
@@ -203,28 +349,26 @@ public class DrivebaseSubsystem extends SubsystemBase {
           },
           this // Reference to this subsystem to set requirements
       );
-    } else {
-      AutoBuilder.configureRamsete(
-          this::getPose, // Robot pose supplier
-          this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-          this::getCurrentSpeeds, // Current ChassisSpeeds supplier
-          this::drive, // Method that will drive the robot given ChassisSpeeds
-          new ReplanningConfig(),
-          () -> {
-            // Boolean supplier that controls when the path will be mirrored for the red
-            // alliance
-            // This will flip the path being followed to the red side of the field.
-            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Red;
-            }
-            return false;
-          },
-          this // Reference to this subsystem to set requirements
-      );
-    }
+      double kP = m_pidKpEntry.getDouble(1.0);
+      double kI = m_pidKiEntry.getDouble(0.0);
+      double kD = m_pidKdEntry.getDouble(0.0);
+      boolean usePid = m_usePidEntry.getBoolean(true);
+      m_leftPid.setP(kP);
+      m_rightPid.setP(kP);
+      m_leftPid.setI(kI);
+      m_rightPid.setI(kI);
+      m_leftPid.setD(kD);
+      m_rightPid.setD(kD);
+      m_experimentalPID = usePid;
+      if (m_experimentalPID) {
+        System.out.printf("Using PID with values %f, %f, and %f%n", kP, kI, kD);
+      } else {
+        System.out.println("PID disabled");
+      }
+      m_syncedEntry.setBoolean(true);
+    }, this).ignoringDisable(true).withName("Sync Now");
+    m_tuningTab.add("Sync", syncCommand).withPosition(0, 4);
   }
 
   private void saveActivePath(List<Pose2d> activePath) {
@@ -316,13 +460,6 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
   public void drive(ChassisSpeeds speeds) {
     setPathPlannerSpeed(speeds);
-  }
-
-  public void setPathplannerDrivekP(double kp) {
-    // m_leftPid.setP(kp);
-    // m_rightPid.setP(kp);
-    m_leftPid.setP(0.6);
-    m_rightPid.setP(0.6);
   }
 
   /**
