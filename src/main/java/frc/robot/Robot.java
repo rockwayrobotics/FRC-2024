@@ -85,7 +85,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_robotContainer.m_angler.resetAngleEncoder();
-    m_robotContainer.setPathplannerDrivekP();
     // m_robotContainer.m_drivebase.resetPose(new Pose2d(2,7, new Rotation2d(0)));
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -100,7 +99,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    m_robotContainer.actualkPWidget.setDouble(m_robotContainer.m_drivebase.m_leftPid.getP());
   }
 
   @Override
