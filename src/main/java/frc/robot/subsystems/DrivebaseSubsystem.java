@@ -140,9 +140,10 @@ public class DrivebaseSubsystem extends SubsystemBase {
   private GenericEntry m_pidKdEntry;
   private GenericEntry m_usePidEntry;
   private GenericEntry m_syncedEntry;
+  private GenericEntry m_speedEntry;
 
   // Use PIDs in before calling tankDrive.
-  private boolean m_experimentalPID = true;
+  private boolean m_experimentalPID = false;
 
   public DrivebaseSubsystem() {
     m_leftDriveMotorF = new CANSparkMax(Constants.CAN.LEFT_DRIVE_MOTOR_F, MotorType.kBrushless);
@@ -234,6 +235,8 @@ public class DrivebaseSubsystem extends SubsystemBase {
         this::getPose, // Robot pose supplier
         this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
         this::getCurrentSpeeds, // Current ChassisSpeeds supplier
+
+
         this::drive, // Method that will drive the robot given ChassisSpeeds
         m_ltvTolerance,
         m_ltvControlEffort,
@@ -302,7 +305,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
         .getEntry();
     m_pidKdEntry.setDouble(m_leftPid.getD());
 
-    m_usePidEntry = m_tuningTab.add("Use PID", true)
+    m_usePidEntry = m_tuningTab.add("Use PID", false)
         .withPosition(3, 3)
         .withWidget(BuiltInWidgets.kToggleSwitch)
         .getEntry();
@@ -310,6 +313,12 @@ public class DrivebaseSubsystem extends SubsystemBase {
 
     m_syncedEntry = m_tuningTab.add("Synced", false).withPosition(1, 4).getEntry();
     m_syncedEntry.setBoolean(false);
+
+    m_speedEntry = m_tuningTab.add("speed", 0.0)
+        .withPosition(4, 3)
+        .getEntry();
+
+    m_speedEntry.setDouble(m_leftDriveEncoder.getVelocity());
 
     var syncCommand = new InstantCommand(() -> {
       if (!RobotState.isDisabled()) {
@@ -569,6 +578,7 @@ public class DrivebaseSubsystem extends SubsystemBase {
       counter = 0;
     }
     counterWidget.setDouble(counter);
+    m_speedEntry.setDouble(m_leftDriveEncoder.getVelocity());
   }
 
   public void onSimulationInit() {
