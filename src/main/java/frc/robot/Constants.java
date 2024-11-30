@@ -24,9 +24,9 @@ public final class Constants {
     // Since the default joystick has negative as forward, this scale is negative
     // when MASTER_ORIENTATION_REVERSED is false; you should probably never have to
     // change this, swap the CAN ids instead.
-    public static final double JOY_SPEED_SCALE = -0.15;
+    public static final double JOY_SPEED_SCALE = -1;
     // to be tested
-    public static final double JOY_ROTATE_SCALE = -0.15;
+    public static final double JOY_ROTATE_SCALE = -0.3;
   }
 
   public static final class CAN {
