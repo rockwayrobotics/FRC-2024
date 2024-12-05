@@ -3,6 +3,7 @@
   "robotLength": 0.99,
   "holonomicMode": false,
   "pathFolders": [
+    "chee",
     "hallPathTests"
   ],
   "autoFolders": [

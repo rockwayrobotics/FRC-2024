@@ -14,7 +14,7 @@ public class ShootSequenceFull extends ParallelRaceGroup {
   LedSubsystem m_led; 
 
 
-  private ShootSequenceFull(ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led) {
+  public ShootSequenceFull(ShooterSubsystem shooter, IntakeSubsystem intake, LedSubsystem led) {
     m_shooter = shooter;
     m_intake = intake;
     m_led = led;

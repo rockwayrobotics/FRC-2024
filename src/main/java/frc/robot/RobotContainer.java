@@ -47,6 +47,8 @@ import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -76,7 +78,7 @@ public class RobotContainer {
 
   SendableChooser<String> m_autoChooser = new SendableChooser<>();
 
-  private CommandChooser m_commandChooser = new CommandChooser();
+  private CommandChooser m_commandChooser = new CommandChooser();  
 
   ShuffleboardTab dashboard = Shuffleboard.getTab("RobotContainer");
   // Configure the trigger bindings
@@ -116,6 +118,8 @@ public class RobotContainer {
     m_autoChooser.addOption("Side Long Amp Blue", "sideLongAmpBlue");
     m_autoChooser.addOption("Side Long Amp Red", "sideLongAmpRed");
     m_autoChooser.addOption("Path Planner Straight", "pathPlannerStraight");
+
+    NamedCommands.registerCommand("shoot!", new ShootSequenceFull(m_shooter, m_intake, m_led));
 
     var commandChoosers = m_commandChooser.getChoosers();
     int rowIndex = 1;
