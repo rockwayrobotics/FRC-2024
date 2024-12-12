@@ -4,9 +4,11 @@
   "holonomicMode": false,
   "pathFolders": [
     "fourPieceTest",
+    "chee",
     "hallPathTests"
   ],
   "autoFolders": [
+    "New Folder",
     "hallPathTests"
   ],
   "defaultMaxVel": 0.5,

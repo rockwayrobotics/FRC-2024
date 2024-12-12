@@ -22,6 +22,55 @@
           "data": {
             "pathName": "straightBack"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "topNoteForward"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "topNoteReverse"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "bottomNoteForward"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "bottomNoteReverse"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "testlog"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "straightForward"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "straightBack"
+          }
         }
       ]
     }
