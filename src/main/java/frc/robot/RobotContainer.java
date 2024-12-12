@@ -24,6 +24,7 @@ import frc.robot.commands.OperatorPullback;
 import frc.robot.commands.OperatorPullupSensor;
 import frc.robot.commands.OperatorRevThenPullback;
 import frc.robot.commands.ShootSequenceFull;
+import frc.robot.commands.TestLogCommand;
 import frc.robot.commands.autoSequences.driveForward;
 import frc.robot.commands.autoSequences.middleFourPieceBlue;
 import frc.robot.commands.autoSequences.middleFourPieceRed;
@@ -120,6 +121,8 @@ public class RobotContainer {
     m_autoChooser.addOption("Path Planner Straight", "pathPlannerStraight");
 
     NamedCommands.registerCommand("shoot!", new ShootSequenceFull(m_shooter, m_intake, m_led));
+    NamedCommands.registerCommand("testlog", new TestLogCommand());
+  
 
     var commandChoosers = m_commandChooser.getChoosers();
     int rowIndex = 1;
