@@ -119,6 +119,7 @@ public class RobotContainer {
     m_autoChooser.addOption("Side Long Amp Blue", "sideLongAmpBlue");
     m_autoChooser.addOption("Side Long Amp Red", "sideLongAmpRed");
     m_autoChooser.addOption("Path Planner Straight", "pathPlannerStraight");
+    m_autoChooser.addOption("Path Planner 4Piece", "pathPlanner4Piece");
 
     NamedCommands.registerCommand("shoot!", new ShootSequenceFull(m_shooter, m_intake, m_led));
     NamedCommands.registerCommand("testlog", new TestLogCommand());
@@ -345,6 +346,7 @@ public class RobotContainer {
       case "sideLongAmpRed" -> new sideLongAmpRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case "pathPlannerExample" -> new PathPlannerAuto("New Auto");
       case "pathPlannerStraight" -> new PathPlannerAuto("New New Auto");
+      case "pathPlanner4Piece" -> new PathPlannerAuto("testSeq");
       default -> m_commandChooser.runAuto(m_autoChooser.getSelected());
     };
   }
