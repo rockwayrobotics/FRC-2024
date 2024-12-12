@@ -56,8 +56,8 @@ public final class Constants {
 
     public final static double WHEEL_CIRCUM = 46.8;
     public final static double WHEEL_GEAR_RATIO = 8.46;
-    public final static double LEFT_SCALING = (1509 / 1509) / 100;
-    public final static double RIGHT_SCALING = (1509 / 1509) / 100;
+    public final static double LEFT_SCALING = (1509 / 1509.0) / 100;
+    public final static double RIGHT_SCALING = (1509 / 1509.0) / 100;
     public final static double WHEEL_ENCODER_SCALING = WHEEL_CIRCUM / WHEEL_GEAR_RATIO;
 
     // you probably never need to change this, swap the ids for left and right motor
