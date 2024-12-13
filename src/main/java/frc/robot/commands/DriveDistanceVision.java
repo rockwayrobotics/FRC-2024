@@ -52,6 +52,7 @@ public class DriveDistanceVision extends Command {
   @Override
   public void execute() {
     if (m_vision.VisionCheck){
+      System.out.println("Vision Check Succeeded");
       m_drivebase.set(0,0);
     }
     else {
@@ -67,7 +68,7 @@ public class DriveDistanceVision extends Command {
     double m_leftDist = m_drivebase.getLDistance() - m_leftBase;
     double m_rightDist = m_drivebase.getRDistance() - m_rightBase;
     double distance = (m_leftDist + m_rightDist) / 2.0;
-    return (Math.abs(distance) >= m_distance);
+    return (Math.abs(distance) >= m_distance) || m_vision.VisionCheck;
   }
 
   @Override

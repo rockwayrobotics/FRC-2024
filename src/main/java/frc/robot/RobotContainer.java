@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Gamepads;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.DriveDistanceVision;
 import frc.robot.commands.DriverPullupIntake;
 import frc.robot.commands.OperatorManualLoad;
 import frc.robot.commands.OperatorPullback;
@@ -66,6 +67,7 @@ enum AutoOption {
   sideLongAmpBlue,
   sideLongAmpRed,
   pathPlannerExample,
+  driveVision,
 }
 
 /**
@@ -142,6 +144,7 @@ public class RobotContainer {
     m_autoChooser.addOption("Side Long Source Blue", AutoOption.sideLongSourceBlue);
     m_autoChooser.addOption("Side Long Amp Blue", AutoOption.sideLongAmpBlue);
     m_autoChooser.addOption("Side Long Amp Red", AutoOption.sideLongAmpRed);
+    m_autoChooser.addOption("Drive Vision", AutoOption.driveVision);
     dashboard.add("Auto Routine", m_autoChooser).withSize(2, 1).withPosition(8, 0);
 
 
@@ -317,6 +320,7 @@ public class RobotContainer {
       case sideLongSourceBlue -> new sideLongSourceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case sideLongAmpBlue -> new sideLongAmpBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case sideLongAmpRed -> new sideLongAmpRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+      case driveVision -> new DriveDistanceVision(m_drivebase, 0.5, 2, m_visionster);
       case pathPlannerExample -> new PathPlannerAuto("New Auto");
     };
   }
