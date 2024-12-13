@@ -74,6 +74,7 @@ public class DriveDistanceVision extends Command {
   @Override
   public void end(boolean cancelled) {
     m_drivebase.stop(); // Resets the drivebase to 0, ends command
+    m_vision.VisionCheck = false;
     System.out.printf("Moved: %.3f, %.3f%n", m_leftDist, m_rightDist);
   }
 }

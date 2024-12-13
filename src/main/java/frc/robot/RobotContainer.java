@@ -320,7 +320,7 @@ public class RobotContainer {
       case sideLongSourceBlue -> new sideLongSourceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case sideLongAmpBlue -> new sideLongAmpBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
       case sideLongAmpRed -> new sideLongAmpRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case driveVision -> new DriveDistanceVision(m_drivebase, 0.5, 2, m_visionster);
+      case driveVision -> new DriveDistanceVision(m_drivebase, 0.5, 5, m_visionster);
       case pathPlannerExample -> new PathPlannerAuto("New Auto");
     };
   }
