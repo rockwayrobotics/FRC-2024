@@ -46,6 +46,7 @@ import frc.robot.subsystems.DrivebaseSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LedSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.Visionster;
 
 enum AutoOption {
   driveForward,
@@ -90,6 +91,7 @@ public class RobotContainer {
       Constants.CAN.RIGHT_INTAKE, m_led);
 
   public final AnglerPIDSubsystem m_angler = new AnglerPIDSubsystem(); 
+  public final Visionster m_visionster = new Visionster();
   
   private double anglerIncrementValue = 0.25;
 

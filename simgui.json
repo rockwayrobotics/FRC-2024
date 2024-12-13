@@ -1,0 +1,33 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Drivebase/Field2d": "Field2d",
+      "/Shuffleboard/RobotContainer/Auto Routine": "String Chooser",
+      "/SmartDashboard/Put Back To Zero": "Command",
+      "/SmartDashboard/Reset Climber Encoder": "Command",
+      "/SmartDashboard/Setpoint 1": "Command",
+      "/SmartDashboard/Setpoint 2": "Command"
+    }
+  },
+  "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
+    "Transitory Values": {
+      "open": false
+    }
+  },
+  "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Server": {
+      "Publishers": {
+        "open": true
+      },
+      "open": true
+    },
+    "visible": true
+  }
+}

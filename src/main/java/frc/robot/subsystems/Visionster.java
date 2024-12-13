@@ -1,17 +1,19 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class Visionster extends TimedRobot {
+public class Visionster extends SubsystemBase {
     // Create a reference to the table and entries
     private NetworkTable table;
     private NetworkTableEntry exampleEntry;
+    double counter = 0;
+    public boolean VisionCheck;
 
-    @Override
-    public void robotInit() {
+    public Visionster() {
         // Get the default instance of NetworkTables and the table "datatable"
         NetworkTableInstance inst = NetworkTableInstance.getDefault();
         table = inst.getTable("datatable");
@@ -24,12 +26,13 @@ public class Visionster extends TimedRobot {
     }
 
     @Override
-    public void teleopPeriodic() {
+    public void periodic() {
         // Example: setting a value
-        exampleEntry.setDouble(123.45);
+        counter += 0.01;
+        exampleEntry.setDouble(counter);
 
         // Example: getting a value and printing it
-        double receivedValue = exampleEntry.getDouble(0.0); // Default to 0.0 if not set
+        double receivedValue = exampleEntry.getDouble(1); // Default to 0.0 if not set
         System.out.println("Received value: " + receivedValue);
 
         // You can add logic here to use the received value in your robot code
