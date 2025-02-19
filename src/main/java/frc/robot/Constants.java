@@ -25,8 +25,10 @@ public final class Constants {
 
   // CAN IDs for motor controllers 
   public static final class CAN {
-    public static final int TALON_MOTOR = 1;
-    public static final int SPARK_MOTOR = 2;
+    public static final int TOP_RIGHT = 1;
+    public static final int TOP_LEFT = 2;
+    public static final int BOTTOM_RIGHT = 3;
+    public static final int BOTTOM_LEFT = 4;
   }
 
   // Constants for digitals pins on the roboRIO 

@@ -54,8 +54,10 @@ public class MotorSubsystem extends SubsystemBase{
     //---------------------------
     public MotorSubsystem() {
       // Initialize motor controllers
-      m_talon = new TalonSRX(Constants.CAN.TALON_MOTOR);
-      m_spark = new CANSparkMax(Constants.CAN.SPARK_MOTOR, MotorType.kBrushless); 
+      m_spark1 = new CANSparkMax(Constants.CAN.TOP_RIGHT, MotorType.kBrushless); 
+      m_spark2 = new CANSparkMax(Constants.CAN.TOP_LEFT, MotorType.kBrushless);
+      m_spark3 = new CANSparkMax(Constants.CAN.BOTTOM_RIGHT, MotorType.kBrushless);
+      m_spark4 = new CANSparkMax(Constants.CAN.BOTTOM_LEFT, MotorType.kBrushless);
 
       vMotorTopic = visiontable.getBooleanTopic("motor");
       vXTopic = visiontable.getIntegerTopic("tag-x");
@@ -72,8 +74,12 @@ public class MotorSubsystem extends SubsystemBase{
 
   public void setSparkSpeed(double speed) {
     // Set the motor speed using the Spark MAX
-    m_spark.set(speed); 
+    m_spark1.set(speed);
+    m_spark2.set(speed);
+    m_spark3.set(speed);
+    m_spark4.set(speed);
   }
+}
 
 
   // public void periodic(){
