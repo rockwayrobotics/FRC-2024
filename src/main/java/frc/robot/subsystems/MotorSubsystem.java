@@ -24,7 +24,10 @@ import frc.robot.Constants;
 public class MotorSubsystem extends SubsystemBase{
   
     TalonSRX m_talon;
-    CANSparkMax m_spark;
+    CANSparkMax m_spark1;
+    CANSparkMax m_spark2;
+    CANSparkMax m_spark3;
+    CANSparkMax m_spark4;
 
     ShuffleboardTab motors = Shuffleboard.getTab("Motors");
 
@@ -79,10 +82,13 @@ public class MotorSubsystem extends SubsystemBase{
     m_spark3.set(speed);
     m_spark4.set(speed);
   }
+
+  public void periodic(){
+      setSparkSpeed(0.3);
+  }
 }
 
 
-  // public void periodic(){
   //   Boolean motorOn = vMotor.get();
   //   Integer xValue = (int) vX.get();
 
@@ -93,4 +99,3 @@ public class MotorSubsystem extends SubsystemBase{
   //     setTalonSpeed(0);
   //   }
   // }
-}
