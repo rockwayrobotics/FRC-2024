@@ -79,7 +79,10 @@ public class RobotContainer {
 
   SendableChooser<String> m_autoChooser = new SendableChooser<>();
 
-  private CommandChooser m_commandChooser = new CommandChooser();  
+  private String m_autoCommand = "";
+  private Command m_autonomousCommand;
+
+  private CommandChooser m_commandChooser = new CommandChooser();
 
   ShuffleboardTab dashboard = Shuffleboard.getTab("RobotContainer");
   // Configure the trigger bindings
@@ -123,7 +126,6 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("shoot!", new ShootSequenceFull(m_shooter, m_intake, m_led));
     NamedCommands.registerCommand("testlog", new TestLogCommand());
-  
 
     var commandChoosers = m_commandChooser.getChoosers();
     int rowIndex = 1;
@@ -317,37 +319,54 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // The selected command will be run in autonomous
-    return switch (m_autoChooser.getSelected()) {
-      case "driveForward" -> new driveForward(m_drivebase);
-      case "shootMove" ->
-        new shootMove(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case "moveNoShoot" ->
-        new moveNoShoot(m_drivebase, m_shooter, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case "middleTwoPiece" ->
-        new middleTwoPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
-      case "middleThreePieceRed" -> new middleThreePieceRed(m_drivebase, m_shooter, m_intake, m_led,
-          waittime.getDouble(0), drivedistance.getDouble(1));
-      case "middleThreePieceBlue" -> new middleThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led,
-          waittime.getDouble(0), drivedistance.getDouble(1));
-      case "middleFourPieceRed" ->
-        new middleFourPieceRed(m_drivebase, m_shooter, m_intake, m_led, driveMoreOffsetEntry.getDouble(0.07));
-      case "middleFourPieceBlue" ->
-        new middleFourPieceBlue(m_drivebase, m_shooter, m_intake, m_led, driveMoreOffsetEntry.getDouble(0.07));
-      case "sideTwoPieceRed" -> new sideTwoPieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case "sideTwoPieceBlue" -> new sideTwoPieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case "sideThreePieceRed" -> new sideThreePieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case "sideThreePieceBlue" ->
-        new sideThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case "sideLongSourceRed" -> new sideLongSourceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case "sideLongSourceBlue" ->
-        new sideLongSourceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case "sideLongAmpBlue" -> new sideLongAmpBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case "sideLongAmpRed" -> new sideLongAmpRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
-      case "pathPlannerExample" -> new PathPlannerAuto("New Auto");
-      case "pathPlannerStraight" -> new PathPlannerAuto("New New Auto");
-      case "pathPlanner4Piece" -> new PathPlannerAuto("testSeq");
-      default -> m_commandChooser.runAuto(m_autoChooser.getSelected());
-    };
+    // If we can guarantee that we only change commands during disabled then we don't need
+    // to potentially run updateAuto here and can just return the stored autonomous command.
+    String autoCommand = m_autoChooser.getSelected();
+    if (!m_autoCommand.equals(autoCommand) || m_commandChooser.hasCommandChanged(autoCommand)) {
+      this.updateAuto();
+    }
+    return m_autonomousCommand;
+  }
+
+  void updateAuto() {
+    String autoCommand = m_autoChooser.getSelected();
+    if (!m_autoCommand.equals(autoCommand) || m_commandChooser.hasCommandChanged(autoCommand)) {
+      m_autoCommand = autoCommand;
+      // The selected command will be run in autonomous
+      m_autonomousCommand = switch (autoCommand) {
+        case "driveForward" -> new driveForward(m_drivebase);
+        case "shootMove" ->
+          new shootMove(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
+        case "moveNoShoot" ->
+          new moveNoShoot(m_drivebase, m_shooter, m_led, waittime.getDouble(0), drivedistance.getDouble(1));
+        case "middleTwoPiece" ->
+          new middleTwoPiece(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0),
+              drivedistance.getDouble(1));
+        case "middleThreePieceRed" -> new middleThreePieceRed(m_drivebase, m_shooter, m_intake, m_led,
+            waittime.getDouble(0), drivedistance.getDouble(1));
+        case "middleThreePieceBlue" -> new middleThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led,
+            waittime.getDouble(0), drivedistance.getDouble(1));
+        case "middleFourPieceRed" ->
+          new middleFourPieceRed(m_drivebase, m_shooter, m_intake, m_led, driveMoreOffsetEntry.getDouble(0.07));
+        case "middleFourPieceBlue" ->
+          new middleFourPieceBlue(m_drivebase, m_shooter, m_intake, m_led, driveMoreOffsetEntry.getDouble(0.07));
+        case "sideTwoPieceRed" -> new sideTwoPieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+        case "sideTwoPieceBlue" -> new sideTwoPieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+        case "sideThreePieceRed" ->
+          new sideThreePieceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+        case "sideThreePieceBlue" ->
+          new sideThreePieceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+        case "sideLongSourceRed" ->
+          new sideLongSourceRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+        case "sideLongSourceBlue" ->
+          new sideLongSourceBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+        case "sideLongAmpBlue" -> new sideLongAmpBlue(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+        case "sideLongAmpRed" -> new sideLongAmpRed(m_drivebase, m_shooter, m_intake, m_led, waittime.getDouble(0));
+        case "pathPlannerExample" -> new PathPlannerAuto("New Auto");
+        case "pathPlannerStraight" -> new PathPlannerAuto("New New Auto");
+        case "pathPlanner4Piece" -> new PathPlannerAuto("testSeq");
+        default -> m_commandChooser.setupAuto(autoCommand);
+      };
+    }
   }
 }

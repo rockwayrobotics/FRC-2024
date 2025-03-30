@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class CommandChooser {
   private HashMap<String, SendableChooser<String>> m_choosers = new HashMap<>();
+  private String m_commandKey;
+  private String m_subCommandKey;
 
   public CommandChooser() {
     try {
@@ -78,7 +80,7 @@ public class CommandChooser {
     }
   }
 
-  public Command runAuto(String key) {
+  public Command setupAuto(String key) {
     var chooser = m_choosers.get(key);
     if (chooser == null) {
       System.out.println("No chooser found for key: " + key);
@@ -88,12 +90,28 @@ public class CommandChooser {
     }
 
     try {
-      return new PathPlannerAuto(chooser.getSelected());
+      String subCommandKey = chooser.getSelected();
+      m_subCommandKey = subCommandKey;
+      m_commandKey = key;
+      return new PathPlannerAuto(subCommandKey);
     } catch (Exception e) {
       System.out.println("Cannot run auto " + key + ":" + e.getStackTrace().toString());
       return new Command() {
         // do nothing
       };
     }
+  }
+
+  public boolean hasCommandChanged(String key) {
+    if (m_commandKey != null && !m_commandKey.equals(key)) {
+      return true;
+    }
+
+    var chooser = m_choosers.get(key);
+    if (chooser == null) {
+      return false;
+    }
+
+    return m_subCommandKey.equals(chooser.getSelected());
   }
 }
